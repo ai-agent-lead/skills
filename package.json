@@ -4,9 +4,14 @@
   "description": "Install AI agent skills for Claude Code, Codex, and Antigravity",
   "main": "bin/install.js",
   "bin": {
-    "install-skills": "./bin/install.js"
+    "install-skills": "bin/install.js"
   },
   "type": "module",
+  "files": [
+    "bin/",
+    "skills/",
+    "README.md"
+  ],
   "engines": {
     "node": ">=16.0.0"
   },
@@ -21,6 +26,9 @@
     "skills",
     "ai-agent"
   ],
-  "author": "Google DeepMind",
-  "license": "Apache-2.0"
+  "author": "ai-agent-lead",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  }
 }
