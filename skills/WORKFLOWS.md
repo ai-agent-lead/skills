@@ -22,6 +22,11 @@ Got a task? Pick by what you have in front of you:
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature in existing system      │ /feature-doc  (Workflow 1 or 2)  │
 ├─────────────────────────────────────┼──────────────────────────────────┤
+│ Milestone with >1 feature (MVP,     │ /phase  (Workflow 7)             │
+│   beta, quarter, launch bundle)     │                                  │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Closing out a milestone after launch│ /phase-cleanup  (utility)        │
+├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature, direction unclear      │ /investigate  (Workflow 3)       │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Refactor existing code              │ /improve-codebase-architecture   │
@@ -301,6 +306,49 @@ This workflow runs **once per system**, not per feature. After it, each feature 
 
 ---
 
+## Workflow 7 — Phase (milestone containing multiple features)
+
+For a release / MVP / quarter where >1 feature ships under one rollup goal.
+
+```
+   [user names a milestone — MVP, beta, Q3, launch bundle]
+            │
+            ▼
+       (optional) investigate  ──── if the phase's direction is unclear
+            │
+            ▼
+        phase  ──── produces: docs/phases/<phase-name>.md
+            │       (Goal, Success Criteria, Features, Timeline, Non-Goals)
+            │
+            ▼
+   [phase scope reviewed; feature list stable]
+            │
+            ▼
+   ┌────── for each feature in the phase ──────┐
+   │   feature-doc  (with Phase: link)         │
+   │        │                                  │
+   │        ▼                                  │
+   │   [→ Workflow 1 or 2 per feature]         │
+   │        │                                  │
+   │        ▼                                  │
+   │   feature Status: Shipped                 │
+   └─────────────┬─────────────────────────────┘
+                 │
+                 ▼
+   [all Success Criteria checked OR phase stopped]
+                 │
+                 ▼
+       phase-cleanup  ──── archives doc, triages drafts,
+            │              verifies two-way links
+            │              produces: docs/phases/archive/<name>.md
+            ▼
+       [next phase begins]
+```
+
+The phase doc runs **once per phase**, not per feature. Each feature inside follows its own Workflow 1 or 2.
+
+---
+
 ## Utility — `/zoom-out`
 
 ```
@@ -353,6 +401,8 @@ A few things that happen across all workflows:
 
     | Location | Produced by | Type |
     |---|---|---|
+    | `docs/phases/<name>.md` | `phase` | One per active phase (rollup of its features) |
+    | `docs/phases/archive/<name>.md` | `phase-cleanup` | One per closed phase (read-only history) |
     | `docs/features/<name>.md` | `feature-doc` | One per feature |
     | `docs/features/<name>.design.md` | `design` (optional) | One per feature with non-trivial module shape |
     | `docs/research/<topic>.md` | `investigate`, `debug` (optional) | One per investigation or non-trivial bug |
