@@ -391,6 +391,8 @@ A few things that happen across all workflows:
 
 10. **`system-design` runs once per system, not per feature.** It's the greenfield precursor to Workflows 1 and 2. Once the topology is set, individual features run their own Workflow 1 or 2 inside it.
 
+15. **`phase` sits above features, not in place of them.** A phase is the milestone-scoped rollup containing N `feature-doc`s; each feature inside still runs its own Workflow 1 or 2. Phases are optional — skip entirely for one-off features or bug fixes. `phase-cleanup` closes the loop after Shipped. Term-collision note: "phase" the artifact (this skill) is distinct from `## Phases` the SKILL.md heading used by `debug` / `investigate` / `security-review` to label internal steps.
+
 11. **Vocabulary is shared.** All architecture-talking skills (`design`, `system-design`, `improve-codebase-architecture`, `pr-review`, `grill-plan`) read from [`skills/LANGUAGE.md`](./LANGUAGE.md). Format references (ADRs, CONTEXT.md) live in [`skills/formats/`](./formats/). Domain vocabulary (Customer, Order, etc.) lives in `docs/CONTEXT.md`. Keep them distinct.
 
 13. **Bootstrap mode for greenfield repos** is documented in one place — [`grill-plan/BOOTSTRAP.md`](./grill-plan/BOOTSTRAP.md). `feature-doc` and `system-design` defer there rather than re-explaining the rules.

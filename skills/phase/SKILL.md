@@ -9,6 +9,8 @@ expected_duration: 15 minutes
 
 A **phase** is a milestone-sized container — a release, a quarter, an MVP, a beta cut — that groups multiple `feature-doc`s under one goal. The phase doc lives at `docs/phases/<phase-name>.md` and is the rollup contract: it names the goal, the features inside, and the success criteria that close the phase.
 
+> **Term note.** "Phase" here is the *project artifact* — a noun naming a milestone. Distinct from the `## Phases` heading used inside some SKILL.md files (e.g. [`debug`](../debug/SKILL.md), [`investigate`](../investigate/SKILL.md), [`security-review`](../security-review/SKILL.md)), which refers to internal *steps* of that skill's workflow. Same word, different scope — milestone vs. skill-internal process.
+
 ## Why this skill exists
 
 Without a phase, three failure modes are common:
@@ -33,7 +35,7 @@ The phase doc is short — one page, like `feature-doc`. The discipline is choos
 - Pure refactor with no user-facing surface change — use [`improve-codebase-architecture`](../improve-codebase-architecture/SKILL.md) instead.
 - Direction not yet picked — run [`investigate`](../investigate/SKILL.md) first.
 
-## Steps
+## Process
 
 1. Copy [`templates/phase-template.md`](templates/phase-template.md) to `docs/phases/<phase-name>.md`. Use a stable, short, kebab-case name (`mvp-auth`, `q3-onboarding`, `beta-launch`) — it will appear in every feature doc that belongs to the phase.
 2. Fill in **Goal** (one paragraph), **Success Criteria** (rollup — how you'll know the phase closed), **Timeline** (start/target end), **Features** (list of feature docs, even if some are stubs).

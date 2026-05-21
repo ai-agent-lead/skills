@@ -14,6 +14,7 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 | --- | --- | --- | --- |
 | `bootstrap` | Starting a new project or service | `docs/` structure + `docs/CONTEXT.md` | [bootstrap/](./bootstrap/) |
 | `phase` | Planning a milestone / MVP / quarter containing >1 feature | `docs/phases/<phase-name>.md` | [phase/](./phase/) |
+| `phase-cleanup` | Closing a phase — archive doc, triage drafts, verify links | `docs/phases/archive/<phase-name>.md` + status flips | [phase-cleanup/](./phase-cleanup/) |
 | `feature-doc` | Before any non-trivial feature or bug fix | `docs/features/<short-name>.md` | [feature-doc/](./feature-doc/) |
 | `investigate` | Open-ended research, proposals, or "options before code" | `docs/research/<topic>.md` | [investigate/](./investigate/) |
 | `grill-plan` | Stress-test a **chosen** plan against existing terminology and decisions | Updates to `docs/CONTEXT.md` and `docs/adr/` | [grill-plan/](./grill-plan/) |
@@ -46,7 +47,6 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 | `security-review` | Surface-changing work — new entry points, identity flows, authz, sensitive data, external deps | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
 | `verify-real-deps` | Pre-tag smoke test against real third-party APIs | `docs/known-issues.md` bug ledger; fix-rounds until clean | [verify-real-deps/](./verify-real-deps/) |
-| `phase-cleanup` | Closing a phase — archive doc, triage drafts, verify links | `docs/phases/archive/<phase-name>.md` + status flips | [phase-cleanup/](./phase-cleanup/) |
 
 ## Index — by role
 
@@ -56,14 +56,15 @@ Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; 
 | --- | --- | --- |
 | **Doc-producing** (writes a durable artifact under `docs/`) | `phase`, `feature-doc`, `investigate`, `system-design`, `grill-plan`, `debug` (optional), `security-review` (optional), `verify-real-deps` | Output survives the conversation. The discipline of writing it is the value. |
 | **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify` | Diff-producing. Always behind a contract (feature doc + ACs). |
-| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps`, `phase-cleanup` | Pre-merge, pre-tag, or pre-phase-close — refuse to advance until the checklist passes. |
+| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
+| **Lifecycle** (opens or closes a phase) | `phase`, `phase-cleanup` | Milestone-scoped rollup above `feature-doc`. Opens at scope-lock; closes at archive. |
 | **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out`, `sync-check` | Run *before* a build skill when the input isn't yet clear. |
 | **Shape** (decides module / topology) | `design`, `system-design`, `improve-codebase-architecture` | Greenfield-module / greenfield-system / brownfield. Same vocabulary ([`LANGUAGE.md`](./LANGUAGE.md)). |
 | **Lens** (applied during other skills, not invoked alone) | `code-hygiene` | Five principles you carry into `simplify`, `pr-review`, and any code-reading session. |
 
 ## Skill relationship map
 
-The 16 skills + their dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow.
+The core skills + their dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow. (Not every skill in the index appears below — the map shows the spine, not the full set.)
 
 ```
                      ┌─────────────────────────────────────────────┐

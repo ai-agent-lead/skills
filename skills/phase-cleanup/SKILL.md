@@ -32,7 +32,7 @@ This skill is the single exit ramp for a phase. After it runs, the phase doc is 
 - No phase doc exists — there's nothing to clean up. Run [`phase`](../phase/SKILL.md) first if a phase is implicit but undocumented.
 - Bug-fix / one-feature workflows that never used a phase.
 
-## Steps
+## Process
 
 1. **Verify Success Criteria.** Open `docs/phases/<phase-name>.md`. Confirm every box under **Success Criteria** is checked, or document why the phase is closing without meeting them (a "Stopped" note — phase is still archived, but with a one-paragraph explanation).
 2. **Reconcile the feature table.** For every row in the phase doc's **Features** table:
