@@ -31,6 +31,7 @@ By default, the installer runs in an interactive console wizard allowing you to 
 - `--claude`            Install skills only for Claude Code
 - `--codex`             Install skills only for Codex
 - `--antigravity`, `-agy` Install skills only for Antigravity
+- `--opencode`          Install skills only for OpenCode
 - `--all`               Install skills for all supported assistants (default)
 - `--force`, `-f`         Overwrite files without confirmation
 - `--help`, `-h`          Show the help menu with all options

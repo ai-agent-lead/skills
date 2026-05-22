@@ -52,6 +52,7 @@ function printHelp() {
   console.log(`  ${CYAN}--claude${RESET}            Install skills only for Claude Code`);
   console.log(`  ${CYAN}--codex${RESET}             Install skills only for Codex`);
   console.log(`  ${CYAN}--antigravity, -agy${RESET} Install skills only for Antigravity`);
+  console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
@@ -105,6 +106,7 @@ async function run() {
     claude: false,
     codex: false,
     antigravity: false,
+    opencode: false,
     all: false,
     force: false,
     help: false
@@ -116,6 +118,7 @@ async function run() {
     else if (arg === '--claude') flags.claude = true;
     else if (arg === '--codex') flags.codex = true;
     else if (arg === '--antigravity' || arg === '--agy' || arg === '-agy') flags.antigravity = true;
+    else if (arg === '--opencode') flags.opencode = true;
     else if (arg === '--all') flags.all = true;
     else if (arg === '--force' || arg === '-f') flags.force = true;
     else if (arg === '--help' || arg === '-h') flags.help = true;
@@ -154,22 +157,26 @@ async function run() {
     console.log(``);
 
     console.log(`${BOLD}2. Select Targets:${RESET}`);
-    console.log(`   [1] All Assistants (Claude, Codex, Antigravity)`);
+    console.log(`   [1] All Assistants (Claude, Codex, Antigravity, OpenCode)`);
     console.log(`   [2] Claude Code only`);
     console.log(`   [3] Codex only`);
     console.log(`   [4] Antigravity only`);
-    const targetAns = await askQuestion(`${BOLD}${CYAN}? Choose target [1-4] (Default: 1): ${RESET}`);
-    
+    console.log(`   [5] OpenCode only`);
+    const targetAns = await askQuestion(`${BOLD}${CYAN}? Choose target [1-5] (Default: 1): ${RESET}`);
+
     if (targetAns === '2') {
       flags.claude = true;
     } else if (targetAns === '3') {
       flags.codex = true;
     } else if (targetAns === '4') {
       flags.antigravity = true;
+    } else if (targetAns === '5') {
+      flags.opencode = true;
     } else {
       flags.claude = true;
       flags.codex = true;
       flags.antigravity = true;
+      flags.opencode = true;
     }
     console.log(``);
   } else {
@@ -179,11 +186,12 @@ async function run() {
       flags.global = true; // Default to global
     }
 
-    const hasAssistantFlag = flags.claude || flags.codex || flags.antigravity;
+    const hasAssistantFlag = flags.claude || flags.codex || flags.antigravity || flags.opencode;
     if (!hasAssistantFlag) {
       flags.claude = true;
       flags.codex = true;
       flags.antigravity = true;
+      flags.opencode = true;
     }
   }
 
@@ -205,6 +213,9 @@ async function run() {
       destinations.push({ name: 'Antigravity CLI (Global)', path: path.join(home, '.gemini', 'antigravity-cli', 'skills') });
       destinations.push({ name: 'Antigravity Config (Global)', path: path.join(home, '.gemini', 'config', 'skills') });
     }
+    if (flags.opencode) {
+      destinations.push({ name: 'OpenCode (Global)', path: path.join(home, '.config', 'opencode', 'skills') });
+    }
   }
 
   if (flags.local) {
@@ -218,6 +229,9 @@ async function run() {
       destinations.push({ name: 'Antigravity Agents (Local)', path: path.join(cwd, '.agents', 'skills') });
       destinations.push({ name: 'Antigravity Agent (Local)', path: path.join(cwd, '.agent', 'skills') });
       destinations.push({ name: 'Antigravity CLI (Local)', path: path.join(cwd, '.antigravitycli', 'skills') });
+    }
+    if (flags.opencode) {
+      destinations.push({ name: 'OpenCode (Local)', path: path.join(cwd, '.opencode', 'skills') });
     }
   }
 

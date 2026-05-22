@@ -10,8 +10,6 @@ If a phrase appears in multiple rows, the disambiguation column names how to cho
 | --- | --- | --- |
 | "investigate", "research", "give me a proposal", "what are our options", "how would we approach", "let's explore", "should we…" | [`investigate`](investigate/SKILL.md) | Direction not yet chosen. If a direction *is* chosen and you want to stress-test it → `grill-plan`. |
 | "new project", "initialize", "bootstrap", "start new repo" | [`bootstrap`](bootstrap/SKILL.md) | Only for project start. |
-| "phase", "milestone", "MVP", "beta", "GA", "this quarter's initiative", scoping ≥3 features that ship together | [`phase`](phase/SKILL.md) | For one feature use `feature-doc` directly. For closing a phase → `phase-cleanup`. |
-| "close the phase", "wrap up Phase N", "archive this milestone", "phase is done", post-launch tidy-up | [`phase-cleanup`](phase-cleanup/SKILL.md) | Skip if no `docs/phases/<name>.md` exists yet; use `phase` first. |
 | "before any non-trivial feature", "let's spec this out", "write a feature doc" | [`feature-doc`](feature-doc/SKILL.md) | Skip for typo / dep bump / pure refactor. |
 | "grill me on this", "stress-test this plan", "walk me through this", "is this consistent with our model" | [`grill-plan`](grill-plan/SKILL.md) | A plan exists; you want it pressure-tested. |
 | "benchmark", "performance test", "measure latency", "profile" | [`bench`](bench/SKILL.md) | Performance verification. |
