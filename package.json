@@ -1,7 +1,7 @@
 {
   "name": "@ai-agent-lead/skills",
   "version": "1.1.0",
-  "description": "Install AI agent skills for Claude Code, Codex, and Antigravity",
+  "description": "Install AI agent skills for Claude Code, Codex, Antigravity, and OpenCode",
   "main": "bin/install.js",
   "bin": {
     "install-skills": "bin/install.js"
@@ -23,6 +23,7 @@
     "claude",
     "codex",
     "antigravity",
+    "opencode",
     "skills",
     "ai-agent"
   ],
