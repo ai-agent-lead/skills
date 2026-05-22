@@ -2,6 +2,8 @@
 
 A library of Claude Code skills that encode engineering discipline so Claude follows it by default.
 
+**Website:** [AgentLead.Dev](https://AgentLead.Dev)
+
 ## Why
 
 Out of the box Claude writes code competently, but shipping well needs more than that: investigate before building, design the interface before writing, test-first, review at PR boundaries, and verify before merge.
@@ -19,7 +21,7 @@ The goal: turn engineering discipline from something I have to enforce into some
 You can install all the skills in this repository directly using `npx`:
 
 ```bash
-npx github:ai-agent-lead/skills
+npx @ai-agent-lead/skills
 ```
 
 ### Options and Customization

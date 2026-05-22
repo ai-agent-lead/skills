@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentLead's Skills — Engineering discipline for Claude Code</title>
+  <meta name="description" content="AgentLead's Skills — pick by what you have in front of you. Each path is a flow of skills that fire automatically." />
+  <link rel="canonical" href="https://AgentLead.Dev/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="#top"><span class="brand-mark">▮</span> AgentLead<span class="brand-dim">.Dev</span></a>
+      <nav class="nav-links">
+        <a href="#start">Where to start</a>
+        <a href="#flows">Flows</a>
+        <a href="#cross">Lenses &amp; gates</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/ai-agent-lead/skills" target="_blank" rel="noopener">GitHub ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap">
+        <p class="eyebrow">AgentLead's Skills · Claude Code · Codex · Antigravity · OpenCode</p>
+        <h1>Pick by what's<br />in front of you.</h1>
+        <p class="lede">
+          AgentLead's Skills encode engineering discipline so Claude follows it by default. You don't
+          choose a skill — you describe the task and the right <strong>flow</strong> fires:
+          investigate before building, design the interface first, test-first, review at the
+          boundary, verify before merge.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#start">Where to start</a>
+          <a class="btn btn-ghost" href="#flows">See the flows</a>
+        </div>
+      </div>
+      <div class="hero-legend wrap">
+        <span class="lg"><i class="dot-doc"></i>doc — writes a contract</span>
+        <span class="lg"><i class="dot-shape"></i>shape — decides structure</span>
+        <span class="lg"><i class="dot-build"></i>build — writes code</span>
+        <span class="lg"><i class="dot-gate"></i>gate — verifies before merge</span>
+        <span class="lg"><i class="dot-diag"></i>diagnose — analyses first</span>
+      </div>
+    </section>
+
+    <!-- WHERE TO START -->
+    <section id="start" class="block">
+      <div class="wrap">
+        <h2 class="block-title">Where to start</h2>
+        <p class="block-sub">Match your situation to an entry point. The flow takes it from there.</p>
+
+        <div class="start-list">
+          <a class="start-row" href="#flow-feature">
+            <span class="situation">New feature in an existing system</span>
+            <span class="entry"><code>feature-doc</code></span>
+            <span class="goto">Standard feature →</span>
+          </a>
+          <a class="start-row" href="#flow-large">
+            <span class="situation">Large feature — many ACs or multi-package</span>
+            <span class="entry"><code>feature-doc</code> + <code>tdd-rounds</code></span>
+            <span class="goto">Large feature →</span>
+          </a>
+          <a class="start-row" href="#flow-investigate">
+            <span class="situation">New feature, direction still unclear</span>
+            <span class="entry"><code>investigate</code></span>
+            <span class="goto">Investigation →</span>
+          </a>
+          <a class="start-row" href="#flow-bug-clear">
+            <span class="situation">Bug — root cause obvious from the trace</span>
+            <span class="entry"><code>tdd</code></span>
+            <span class="goto">Bug fix →</span>
+          </a>
+          <a class="start-row" href="#flow-bug-unclear">
+            <span class="situation">Bug — intermittent, flaky, or cause unclear</span>
+            <span class="entry"><code>debug</code> → <code>tdd</code></span>
+            <span class="goto">Debug flow →</span>
+          </a>
+          <a class="start-row" href="#flow-refactor">
+            <span class="situation">Refactor / improve existing architecture</span>
+            <span class="entry"><code>improve-codebase-architecture</code></span>
+            <span class="goto">Refactor →</span>
+          </a>
+          <a class="start-row" href="#flow-system">
+            <span class="situation">New multi-module system from scratch</span>
+            <span class="entry"><code>system-design</code></span>
+            <span class="goto">Greenfield system →</span>
+          </a>
+          <a class="start-row" href="#flow-review">
+            <span class="situation">Reviewing someone else's PR</span>
+            <span class="entry"><code>pr-review</code></span>
+            <span class="goto">Review →</span>
+          </a>
+          <div class="start-row plain">
+            <span class="situation">Typo, dep bump, one-line config</span>
+            <span class="entry">just fix it</span>
+            <span class="goto">no skill needed</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FLOWS -->
+    <section id="flows" class="block alt">
+      <div class="wrap">
+        <h2 class="block-title">The flows</h2>
+        <p class="block-sub">Each is a chain of skills. Doc steps write a contract; gate steps refuse to advance until they pass.</p>
+
+        <article id="flow-feature" class="flow-card">
+          <div class="flow-head"><h3>Standard feature</h3><span class="badge">single package</span></div>
+          <p class="flow-desc">A single-package feature with a manageable acceptance-criteria count.</p>
+          <div class="chain">
+            <span class="step s-doc"><b>feature-doc</b><i>ACs → test list</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-shape"><b>design</b><i>optional</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>tdd</b><i>red·green·refactor</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>simplify</b><i>tighten sweep</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b><i>pre-merge</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>PR</b></span>
+          </div>
+        </article>
+
+        <article id="flow-large" class="flow-card">
+          <div class="flow-head"><h3>Large feature</h3><span class="badge">≥10 ACs · multi-package</span></div>
+          <p class="flow-desc">Orchestrated across rounds — the parent dispatches Builder sub-agents and holds state.</p>
+          <div class="chain">
+            <span class="step s-doc"><b>feature-doc</b><i>many ACs</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>tdd-rounds</b><i>design·tdd·simplify per round</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>verify-real-deps</b><i>real upstreams</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>tag vN.0</b></span>
+          </div>
+        </article>
+
+        <article id="flow-investigate" class="flow-card">
+          <div class="flow-head"><h3>Investigation before commitment</h3><span class="badge">structural decision</span></div>
+          <p class="flow-desc">For new dependency, framework choice, or a cross-cutting refactor — options before code.</p>
+          <div class="chain">
+            <span class="step s-doc"><b>investigate</b><i>2–3 options</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-doc"><b>grill-plan</b><i>stress-test → ADR</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-doc"><b>feature-doc</b><i>capture direction</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-next"><b>→ feature flow</b></span>
+          </div>
+        </article>
+
+        <article id="flow-bug-clear" class="flow-card">
+          <div class="flow-head"><h3>Bug fix — cause obvious</h3><span class="badge">clear trace</span></div>
+          <p class="flow-desc">The symptom and stack trace point straight at the bug.</p>
+          <div class="chain">
+            <span class="step s-build"><b>tdd</b><i>failing test → fix</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b><i>if infra / auth / DB</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>PR</b></span>
+          </div>
+        </article>
+
+        <article id="flow-bug-unclear" class="flow-card">
+          <div class="flow-head"><h3>Bug fix — cause unclear</h3><span class="badge">flaky · intermittent</span></div>
+          <p class="flow-desc">Environment-specific, a regression, or you don't yet know what to assert.</p>
+          <div class="chain">
+            <span class="step s-diag"><b>debug</b><i>reproduce → name cause</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>tdd</b><i>repro = failing test</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b><i>if surface-changing</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>PR</b></span>
+          </div>
+        </article>
+
+        <article id="flow-refactor" class="flow-card">
+          <div class="flow-head"><h3>Refactor existing code</h3><span class="badge">brownfield</span></div>
+          <p class="flow-desc">Improve architecture — turn shallow modules into deep ones. One candidate at a time.</p>
+          <div class="chain">
+            <span class="step s-diag"><b>zoom-out</b><i>if unfamiliar</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-shape"><b>improve-codebase-architecture</b><i>candidate list</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-shape"><b>design</b><i>deepen interface</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>tdd</b><i>tests stay green</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b></span>
+          </div>
+        </article>
+
+        <article id="flow-system" class="flow-card">
+          <div class="flow-head"><h3>Greenfield system</h3><span class="badge">once per system</span></div>
+          <p class="flow-desc">A new multi-module project. After topology is set, each feature runs its own flow.</p>
+          <div class="chain">
+            <span class="step s-doc"><b>investigate</b><i>optional</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-shape"><b>system-design</b><i>modules · seams</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-shape"><b>design</b><i>per module</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-doc"><b>feature-doc</b><i>first feature</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-next"><b>→ feature flow</b></span>
+          </div>
+        </article>
+
+        <article id="flow-review" class="flow-card">
+          <div class="flow-head"><h3>Review someone else's PR</h3><span class="badge">utility</span></div>
+          <p class="flow-desc">Runs whenever you read a diff — classifies findings by severity.</p>
+          <div class="chain">
+            <span class="step s-diag"><b>sync-check</b><i>drift scan, optional</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>pr-review</b><i>blocker · suggestion · nit</i></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CROSS-CUTTING -->
+    <section id="cross" class="block">
+      <div class="wrap">
+        <h2 class="block-title">Lenses &amp; gates that apply across</h2>
+        <p class="block-sub">These don't have a flow of their own — they hook into the ones above.</p>
+        <div class="cross-grid">
+          <div class="cross">
+            <h4>code-hygiene <span class="kind k-lens">lens</span></h4>
+            <p>Boring code, naming as the primary refactor, YAGNI, rule of 3, locality. Carried into <code>simplify</code> and <code>pr-review</code>.</p>
+          </div>
+          <div class="cross">
+            <h4>security-review <span class="kind k-gate">gate</span></h4>
+            <p>Fires on surface-changing work — new entry points, identity flows, authz, sensitive data, external deps. Runs alongside <code>tdd</code>.</p>
+          </div>
+          <div class="cross">
+            <h4>zoom-out <span class="kind k-util">utility</span></h4>
+            <p>Interrupts any flow when you're lost in unfamiliar code. Maps the relevant modules and callers, then hands back.</p>
+          </div>
+          <div class="cross">
+            <h4>bench <span class="kind k-meas">measure</span></h4>
+            <p>Performance benchmarking discipline — measures latency and throughput when a flow carries a performance AC.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section id="install" class="block alt">
+      <div class="wrap install-wrap">
+        <h2 class="block-title">Install</h2>
+        <p class="block-sub">One command. Works for Claude Code, Codex, Antigravity, and OpenCode.</p>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
+            <span class="terminal-title">install</span>
+          </div>
+          <pre class="terminal-body"><code><span class="comment"># interactive — pick assistants &amp; scope</span>
+<span class="prompt">$</span> npx @ai-agent-lead/skills
+
+<span class="comment"># everything, no prompts</span>
+<span class="prompt">$</span> npx @ai-agent-lead/skills --all --force</code></pre>
+        </div>
+        <p class="install-note">
+          Scope it with <code>--global</code> (<code>~/.claude/skills</code>) or <code>--local</code>
+          (<code>./.claude/skills</code>); target one assistant with <code>--claude</code>,
+          <code>--codex</code>, <code>--antigravity</code>, or <code>--opencode</code>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <span class="brand"><span class="brand-mark">▮</span> AgentLead<span class="brand-dim">.Dev</span></span>
+        <span class="footer-tag">AgentLead's Skills — discipline Claude reaches for automatically.</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://AgentLead.Dev" target="_blank" rel="noopener">AgentLead.Dev</a>
+        <a href="https://github.com/ai-agent-lead/skills" target="_blank" rel="noopener">GitHub</a>
+        <span class="license">Apache-2.0</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
