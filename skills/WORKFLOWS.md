@@ -22,11 +22,6 @@ Got a task? Pick by what you have in front of you:
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature in existing system      │ /feature-doc  (Workflow 1 or 2)  │
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Milestone with >1 feature (MVP,     │ /phase  (Workflow 7)             │
-│   beta, quarter, launch bundle)     │                                  │
-├─────────────────────────────────────┼──────────────────────────────────┤
-│ Closing out a milestone after launch│ /phase-cleanup  (utility)        │
-├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature, direction unclear      │ /investigate  (Workflow 3)       │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Refactor existing code              │ /improve-codebase-architecture   │
@@ -306,49 +301,6 @@ This workflow runs **once per system**, not per feature. After it, each feature 
 
 ---
 
-## Workflow 7 — Phase (milestone containing multiple features)
-
-For a release / MVP / quarter where >1 feature ships under one rollup goal.
-
-```
-   [user names a milestone — MVP, beta, Q3, launch bundle]
-            │
-            ▼
-       (optional) investigate  ──── if the phase's direction is unclear
-            │
-            ▼
-        phase  ──── produces: docs/phases/<phase-name>.md
-            │       (Goal, Success Criteria, Features, Timeline, Non-Goals)
-            │
-            ▼
-   [phase scope reviewed; feature list stable]
-            │
-            ▼
-   ┌────── for each feature in the phase ──────┐
-   │   feature-doc  (with Phase: link)         │
-   │        │                                  │
-   │        ▼                                  │
-   │   [→ Workflow 1 or 2 per feature]         │
-   │        │                                  │
-   │        ▼                                  │
-   │   feature Status: Shipped                 │
-   └─────────────┬─────────────────────────────┘
-                 │
-                 ▼
-   [all Success Criteria checked OR phase stopped]
-                 │
-                 ▼
-       phase-cleanup  ──── archives doc, triages drafts,
-            │              verifies two-way links
-            │              produces: docs/phases/archive/<name>.md
-            ▼
-       [next phase begins]
-```
-
-The phase doc runs **once per phase**, not per feature. Each feature inside follows its own Workflow 1 or 2.
-
----
-
 ## Utility — `/zoom-out`
 
 ```
@@ -391,8 +343,6 @@ A few things that happen across all workflows:
 
 10. **`system-design` runs once per system, not per feature.** It's the greenfield precursor to Workflows 1 and 2. Once the topology is set, individual features run their own Workflow 1 or 2 inside it.
 
-15. **`phase` sits above features, not in place of them.** A phase is the milestone-scoped rollup containing N `feature-doc`s; each feature inside still runs its own Workflow 1 or 2. Phases are optional — skip entirely for one-off features or bug fixes. `phase-cleanup` closes the loop after Shipped. Term-collision note: "phase" the artifact (this skill) is distinct from `## Phases` the SKILL.md heading used by `debug` / `investigate` / `security-review` to label internal steps.
-
 11. **Vocabulary is shared.** All architecture-talking skills (`design`, `system-design`, `improve-codebase-architecture`, `pr-review`, `grill-plan`) read from [`skills/LANGUAGE.md`](./LANGUAGE.md). Format references (ADRs, CONTEXT.md) live in [`skills/formats/`](./formats/). Domain vocabulary (Customer, Order, etc.) lives in `docs/CONTEXT.md`. Keep them distinct.
 
 13. **Bootstrap mode for greenfield repos** is documented in one place — [`grill-plan/BOOTSTRAP.md`](./grill-plan/BOOTSTRAP.md). `feature-doc` and `system-design` defer there rather than re-explaining the rules.
@@ -403,8 +353,6 @@ A few things that happen across all workflows:
 
     | Location | Produced by | Type |
     |---|---|---|
-    | `docs/phases/<name>.md` | `phase` | One per active phase (rollup of its features) |
-    | `docs/phases/archive/<name>.md` | `phase-cleanup` | One per closed phase (read-only history) |
     | `docs/features/<name>.md` | `feature-doc` | One per feature |
     | `docs/features/<name>.design.md` | `design` (optional) | One per feature with non-trivial module shape |
     | `docs/research/<topic>.md` | `investigate`, `debug` (optional) | One per investigation or non-trivial bug |

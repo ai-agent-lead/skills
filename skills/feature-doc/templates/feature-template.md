@@ -1,9 +1,8 @@
 # <Feature Name>
 
-**Status:** Draft | Approved | In Progress | Shipped | Abandoned
+**Status:** Draft | Approved | In Progress | Shipped
 **Owner:** <name — primary author and point of contact for follow-up>
 **Date:** YYYY-MM-DD
-**Phase:** [`<phase-name>`](../phases/<phase-name>.md) <!-- omit if standalone; required when the feature is part of a phase -->
 
 <!--
 Status values:
@@ -11,7 +10,6 @@ Status values:
 - Approved    — reviewed; ready to start implementation
 - In Progress — implementation underway
 - Shipped     — all acceptance criteria checked AND merged to main
-- Abandoned   — phase-cleanup decided not to ship; reason recorded below
 -->
 
 ## Problem
