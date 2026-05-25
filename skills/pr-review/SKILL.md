@@ -104,6 +104,7 @@ The doc-map is small enough to walk in 2–3 minutes. Skip it and you're trading
 
 Apply `code-hygiene` as a lens here, not as a primary phase:
 
+- **Comment churn**: new WHAT-comments, stale "used by X" references, citation grammar that doesn't match the repo's comment style doc ([`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md)). These are nits individually; in aggregate they're a signal the author didn't run `simplify`. Flag as suggestions, not blockers.
 - Names that mislead (boolean returning non-bool, `getX` that mutates, `Manager`/`Helper` suffixes hiding what the thing is).
 - Cleverness that earns its cost? Or could be boring?
 - YAGNI — "in case we need it" parameters / interfaces / classes? Strip.

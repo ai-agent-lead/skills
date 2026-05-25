@@ -66,9 +66,11 @@ Duplicate twice; extract on the third occurrence — not the second.
 The first occurrence is unique. The second might be coincidence. The third is a pattern. Extracting at two reveals only one axis of variation; extracting at three reveals the *real* axis.
 
 **Why**: premature abstractions calcify. Once a wrong abstraction exists, callers shape themselves to it, and rewriting becomes expensive. Three concrete copies are cheap; one wrong abstraction is not.
+5. **Locality of behavior** — related code lives together; don't split by category.
+6. **Comments earn their keep** — default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot.
 
-**Smell**: a helper function with one caller, or a base class with one subclass. That's an abstraction in search of a use.
-
+## When to use
+...
 ## Principle 5: Locality of behavior
 
 Related code lives close together. Don't split a system by *type of code* (`controllers/`, `services/`, `repositories/`) — split by *responsibility* (`orders/`, `billing/`, `auth/`).
@@ -77,6 +79,18 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 **Smell**: changing one feature requires editing 5 files in 5 directories. That's a sign the structure separates *type* of code, not *responsibility*. (This is a `improve-codebase-architecture` issue at scale, but at smaller scale you can fix it inline by colocating files.)
 
+## Principle 6: Comments earn their keep
+
+Default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot. Delete WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, and commented-out code on sight.
+
+**Smells**:
+- A comment that restates the next line of code.
+- A comment naming a caller — that reference rots the moment someone renames or removes the caller. Use `grep`.
+- A TODO / FIXME / HACK with no owner, ticket, ADR, or date.
+- Commented-out code "in case we need it again". Git has it.
+
+**Project-specific conventions** (package docstrings, provenance grammar) live in the repo's comment style doc — usually [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md).
+
 ## Done when
 
 - Names communicate intent — a stranger reads them and forms the right mental model.
@@ -84,6 +98,7 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 - No "in case we need it" parameters, classes, or interfaces remain.
 - Duplications either survived the 2-occurrence test (left as-is) or proved themselves at the 3rd occurrence (extracted).
 - Related code lives near related code.
+- Every surviving comment names a why, an invariant, a trade-off, or a provenance link. None restates the code.
 
 ## Pairing with other skills
 

@@ -41,6 +41,7 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
+| `sync-check` | Before pr-review or after refactor | Terminology/ADR drift report | [sync-check/](./sync-check/) |
 | `prod-ready` | After tdd green, before merge | Verified pre-merge checklist (incl. doc drift) | [prod-ready/](./prod-ready/) |
 | `security-review` | Surface-changing work — new entry points, identity flows, authz, sensitive data, external deps | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
@@ -52,16 +53,16 @@ Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; 
 
 | Role | Skills | What they have in common |
 | --- | --- | --- |
-| **Doc-producing** (writes a durable artifact under `docs/`) | `feature-doc`, `investigate`, `system-design`, `grill-plan`, `debug` (optional), `security-review` (optional), `verify-real-deps` | Output survives the conversation. The discipline of writing it is the value. |
+| **Doc-producing** (writes a durable artifact under `docs/`) | `feature-doc`, `investigate`, `system-design`, `grill-plan`, `debug` (optional), `security-review` (optional), `verify-real-deps`, `bench`, `bootstrap` | Output survives the conversation. The discipline of writing it is the value. |
 | **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify` | Diff-producing. Always behind a contract (feature doc + ACs). |
-| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
+| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps`, `sync-check` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
 | **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out`, `sync-check` | Run *before* a build skill when the input isn't yet clear. |
 | **Shape** (decides module / topology) | `design`, `system-design`, `improve-codebase-architecture` | Greenfield-module / greenfield-system / brownfield. Same vocabulary ([`LANGUAGE.md`](./LANGUAGE.md)). |
-| **Lens** (applied during other skills, not invoked alone) | `code-hygiene` | Five principles you carry into `simplify`, `pr-review`, and any code-reading session. |
+| **Lens** (applied during other skills, not invoked alone) | `code-hygiene`, `caveman` | Principles you carry into any turn to maintain quality or efficiency. |
 
 ## Skill relationship map
 
-The 16 skills + their dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow.
+The 20 skills + their dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow.
 
 ```
                      ┌─────────────────────────────────────────────┐
@@ -80,16 +81,16 @@ The 16 skills + their dependencies. Lateral edges are vocabulary / lens; vertica
    │       │              ▲                │          │     prod-ready│
    │       │              │                │          │          │   │
    │       └──────────────┘                │          │          ▼   │
-   │                                       │          │     pr-review │
+   │                                       │          │      sync-check │
    │   system-design ──► design (per mod) ─┘          │          │   │
    │       │                                          │          ▼   │
-   │       ▼                                          │  verify-real-deps │
+   │       ▼                                          │      pr-review │
    │  docs/architecture.md                            │          │   │
    │                                                  │          ▼   │
-   │   improve-codebase-architecture ─────────────────┘     [merge]  │
-   │       ▲                                                          │
-   │       │                                                          │
-   │   tdd-rounds (orchestrator) ── dispatches Builders ──────────────│
+   │   improve-codebase-architecture ─────────────────┘  verify-real-deps│
+   │       ▲                                                     │   │
+   │       │                                                     ▼   │
+   │   tdd-rounds (orchestrator) ── dispatches Builders ────── [merge]│
    │       │      ▲   ▲     ▲                                         │
    │       │      │   │     │                                         │
    │       │   debug security-review                                  │
@@ -97,7 +98,7 @@ The 16 skills + their dependencies. Lateral edges are vocabulary / lens; vertica
    │                                                                  │
    │   ┌────────────── LENSES & UTILITIES ──────────────┐             │
    │   │  code-hygiene ──► applied during simplify,    │             │
-   │   │                   pr-review, any code reading  │             │
+   │   │  caveman     ──► pr-review, any code reading  │             │
    │   │                                                │             │
    │   │  zoom-out ──► interrupts any workflow,        │             │
    │   │              maps unfamiliar areas             │             │
@@ -105,14 +106,16 @@ The 16 skills + their dependencies. Lateral edges are vocabulary / lens; vertica
    └──────────────────────────────────────────────────────────────────┘
 ```
 
-**Six things the map shows:**
+**Seven things the map shows:**
 
-1. `code-hygiene` and `zoom-out` are not nodes in any flow — they're lenses / utilities applied across.
+1. `code-hygiene`, `caveman`, and `zoom-out` are not nodes in any flow — they're lenses / utilities applied across.
 2. `grill-plan` is the only skill invoked from three upstreams (`investigate`, `feature-doc`, `improve-codebase-architecture`) — it's the shared pressure-test step.
 3. `tdd-rounds` is the only multi-callee orchestrator — dispatches `design`, `tdd`, `simplify`, `prod-ready`, `verify-real-deps` to Builders.
 4. `pr-review` is the reviewer-side mirror of `prod-ready` — Section 7 doc-drift covered in both.
-5. `system-design` and `improve-codebase-architecture` are duals — same [LANGUAGE.md](./LANGUAGE.md), greenfield vs brownfield.
-6. The shared substrate ([LANGUAGE.md](./LANGUAGE.md), [formats/](./formats/), [TRIGGERS.md](./TRIGGERS.md)) is referenced everywhere — never copy-paste the content into a skill.
+5. `sync-check` sits before `pr-review` as a final terminology and ADR audit.
+6. `system-design` and `improve-codebase-architecture` are duals — same [LANGUAGE.md](./LANGUAGE.md), greenfield vs brownfield.
+7. The shared substrate ([LANGUAGE.md](./LANGUAGE.md), [formats/](./formats/), [TRIGGERS.md](./TRIGGERS.md)) is referenced everywhere — never copy-paste the content into a skill.
+
 
 ## Workflows
 
