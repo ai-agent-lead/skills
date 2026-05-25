@@ -1,6 +1,6 @@
 # Workflows
 
-How the 16 skills compose into the common paths users actually walk.
+How the 20 skills compose into the common paths users actually walk.
 
 The skills aren't a flat menu — they form a workflow with branching. This file maps the canonical paths so you can see where to enter, what to expect, and what produces what.
 
@@ -31,6 +31,8 @@ Got a task? Pick by what you have in front of you:
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Surface-changing work (auth, public │ /security-review (gate, runs     │
 │   API, sensitive data, new entry pt)│  alongside Workflow 1/2/6)       │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Audit terminology or ADR compliance │ /sync-check (gate)               │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Lost in unfamiliar area, mid-task   │ /zoom-out  (utility, anytime)    │
 └─────────────────────────────────────┴──────────────────────────────────┘
@@ -71,6 +73,9 @@ For a single-package feature with a manageable acceptance-criteria count.
             │
             ▼
        prod-ready  ──── 7-section checklist
+            │
+            ▼
+       sync-check  ──── terminology and ADR audit
             │
             ▼
        (optional) pr-review  ── self-check against the diff before opening
@@ -331,19 +336,21 @@ A few things that happen across all workflows:
 
 4. **`code-hygiene` is a lens, not a phase.** Apply it during the simplify sweep that follows TDD green, during `pr-review`, or whenever you re-read code and pause to understand it. Especially relevant in Workflows 1, 2, 4, and 5.
 
-5. **`debug` runs *before* `tdd` for non-trivial bugs.** Workflow 5b makes this explicit. The reproduction from `debug` becomes the failing test for `tdd`. Skip for bugs whose root cause is obvious from the trace (Workflow 5a).
+5. **`caveman` is an efficiency lens.** Apply it whenever token optimization is needed, particularly in Builder reports or long sessions. It doesn't change the workflow but compresses the communication.
 
-6. **`security-review` is a gate, not a workflow.** Fires when a change is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
+6. **`debug` runs *before* `tdd` for non-trivial bugs.** Workflow 5b makes this explicit. The reproduction from `debug` becomes the failing test for `tdd`. Skip for bugs whose root cause is obvious from the trace (Workflow 5a).
 
-7. **`pr-review` is a utility workflow.** Runs when reviewing someone else's PR. Also runs (lighter form) as a self-check before opening the PR. The `tdd-rounds` parent's per-round verification borrows from it.
+7. **`security-review` is a gate, not a workflow.** Fires when a change is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
 
-8. **`prod-ready` is the universal pre-merge gate** for Workflows 1, 2, 4, and sometimes 5. Single exit ramp before opening a PR.
+8. **`pr-review` is a utility workflow.** Runs when reviewing someone else's PR. Also runs (lighter form) as a self-check before opening the PR. The `tdd-rounds` parent's per-round verification borrows from it.
 
-9. **`verify-real-deps` fires whenever a workflow ends in a tagged release that touches a third-party API.** Most commonly that's Workflow 2 (large feature → tag), but it also applies when Workflow 1, 4, or 6 culminates in a release whose code path talks to an upstream you don't control. It does **not** fire for pure-internal services with database-only state, or for continuous-deploy environments that don't tag.
+9. **`prod-ready` is the universal pre-merge gate** for Workflows 1, 2, 4, and sometimes 5. Single exit ramp before opening a PR.
 
-10. **`system-design` runs once per system, not per feature.** It's the greenfield precursor to Workflows 1 and 2. Once the topology is set, individual features run their own Workflow 1 or 2 inside it.
+10. **`verify-real-deps` fires whenever a workflow ends in a tagged release that touches a third-party API.** Most commonly that's Workflow 2 (large feature → tag), but it also applies when Workflow 1, 4, or 6 culminates in a release whose code path talks to an upstream you don't control. It does **not** fire for pure-internal services with database-only state, or for continuous-deploy environments that don't tag.
 
-11. **Vocabulary is shared.** All architecture-talking skills (`design`, `system-design`, `improve-codebase-architecture`, `pr-review`, `grill-plan`) read from [`skills/LANGUAGE.md`](./LANGUAGE.md). Format references (ADRs, CONTEXT.md) live in [`skills/formats/`](./formats/). Domain vocabulary (Customer, Order, etc.) lives in `docs/CONTEXT.md`. Keep them distinct.
+11. **`system-design` runs once per system, not per feature.** It's the greenfield precursor to Workflows 1 and 2. Once the topology is set, individual features run their own Workflow 1 or 2 inside it.
+
+12. **Vocabulary is shared.** All architecture-talking skills (`design`, `system-design`, `improve-codebase-architecture`, `pr-review`, `grill-plan`) read from [`skills/LANGUAGE.md`](./LANGUAGE.md). Format references (ADRs, CONTEXT.md) live in [`skills/formats/`](./formats/). Domain vocabulary (Customer, Order, etc.) lives in `docs/CONTEXT.md`. Keep them distinct.
 
 13. **Bootstrap mode for greenfield repos** is documented in one place — [`grill-plan/BOOTSTRAP.md`](./grill-plan/BOOTSTRAP.md). `feature-doc` and `system-design` defer there rather than re-explaining the rules.
 

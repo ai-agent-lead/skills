@@ -25,6 +25,12 @@ If a phrase appears in multiple rows, the disambiguation column names how to cho
 | "simpler", "boring", "naming", "YAGNI", "premature abstraction", "over-engineered", "clean this up at line level" | [`code-hygiene`](code-hygiene/SKILL.md) | Lens, not phase — applies during simplify, pr-review, or whenever you re-read code. |
 | "I'm lost", "give me higher-level context", "zoom out", "I don't know this area" | [`zoom-out`](zoom-out/SKILL.md) | User-invoked utility (`disable-model-invocation`). |
 
+## Utilities & efficiency
+
+| Phrase / situation | Routes to | Disambiguator |
+| --- | --- | --- |
+| "caveman mode", "be concise", "save tokens", "ooga booga" | [`caveman`](caveman/SKILL.md) | Token optimization lens. |
+
 ## Implementation
 
 | Phrase / situation | Routes to | Disambiguator |
