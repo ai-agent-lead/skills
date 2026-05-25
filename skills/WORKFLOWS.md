@@ -366,7 +366,9 @@ A few things that happen across all workflows:
     | `docs/adr/<n>-<topic>.md` | `grill-plan`, `improve-codebase-architecture` | One per architectural decision |
     | `docs/CONTEXT.md` | `grill-plan`, `improve-codebase-architecture` (inline updates) | One per repo / context |
     | `docs/architecture.md` | `system-design` | One per system (the system map) |
-    | `docs/STATE.md` | `tdd-rounds` parent (append-only) | One per multi-round project |
+    | `docs/features/<name>/state/snapshot.md` | `tdd-rounds` parent | Living snapshot per feature |
+    | `docs/features/<name>/state/rounds/*.md` | `tdd-rounds` Builder | Immutable round logs |
+    | `docs/STATE.md` | `tdd-rounds` parent | Global manifest (index only) |
     | `docs/security/<feature>.md` | `security-review` (high-stakes only) | One per surface-changing feature where a feature-doc section isn't enough |
     | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
     | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record) |
