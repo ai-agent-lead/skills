@@ -77,15 +77,11 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 ## Principle 6: Comments earn their keep
 
-Default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot. Delete WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, and commented-out code on sight.
+**The bar:** [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md). Apply it *while writing*, not only during the `simplify` sweep.
 
-**Smells**:
-- A comment that restates the next line of code.
-- A comment naming a caller — that reference rots the moment someone renames or removes the caller. Use `grep`.
-- A TODO / FIXME / HACK with no owner, ticket, ADR, or date.
-- Commented-out code "in case we need it again". Git has it.
+**Default: NONE.** If you're unsure whether a comment earns its line, delete it. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot — and only if the next reader would otherwise reattempt the rejected alternative.
 
-**Project-specific conventions** (package docstrings, provenance grammar) live in the repo's comment style doc — usually [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md).
+**Delete on sight**: WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, commented-out code, in-function section headers (`// validate`, `// build response`), and docstrings on exports whose contract is obvious from the signature.
 
 ## Done when
 
