@@ -94,16 +94,4 @@ When the final round completes:
 1. Run `verify-real-deps`. Capture surfaced bugs into `docs/known-issues.md`.
 2. Iterate fix-rounds until clean, or document deferrals to vN.1 with rationale.
 3. Tag and publish via whatever release / distribution channel applies.
-hape the Builder returns.
 
-## Supporting docs
-
-- [`COMMITS.md`](COMMITS.md) — commit cadence and message style (per-AC slicing, `R<N>:` prefix, when single-commit is OK, honesty rule). Builders read this before the first commit.
-
-## Handoff
-
-When the final round completes:
-
-1. Run `verify-real-deps`. Capture surfaced bugs into `docs/known-issues.md`.
-2. Iterate fix-rounds until clean, or document deferrals to vN.1 with rationale.
-3. Tag and publish via whatever release / distribution channel applies.

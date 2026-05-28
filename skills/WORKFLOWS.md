@@ -373,6 +373,4 @@ A few things that happen across all workflows:
     | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
     | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record) |
     All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.
-s/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record) |
 
-    All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.

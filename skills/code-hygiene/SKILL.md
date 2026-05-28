@@ -66,11 +66,7 @@ Duplicate twice; extract on the third occurrence — not the second.
 The first occurrence is unique. The second might be coincidence. The third is a pattern. Extracting at two reveals only one axis of variation; extracting at three reveals the *real* axis.
 
 **Why**: premature abstractions calcify. Once a wrong abstraction exists, callers shape themselves to it, and rewriting becomes expensive. Three concrete copies are cheap; one wrong abstraction is not.
-5. **Locality of behavior** — related code lives together; don't split by category.
-6. **Comments earn their keep** — default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot.
 
-## When to use
-...
 ## Principle 5: Locality of behavior
 
 Related code lives close together. Don't split a system by *type of code* (`controllers/`, `services/`, `repositories/`) — split by *responsibility* (`orders/`, `billing/`, `auth/`).
