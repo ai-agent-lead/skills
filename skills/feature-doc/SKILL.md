@@ -111,3 +111,4 @@ Once the doc is reviewed and ACs are stable:
 - Non-Goals is non-empty (or explicitly "none — see scope in Problem").
 - One reviewer has signed off.
 - Status is `Approved` and the next skill (`tdd` / `tdd-rounds` / `grill-plan` / `security-review`) is named.
+- A feature branch (e.g. `feat/<short-name>` or `fix/<short-name>`) is checked out and the contract doc is committed on it, **not on `main`**.
