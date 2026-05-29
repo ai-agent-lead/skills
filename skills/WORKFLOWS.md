@@ -356,7 +356,7 @@ A few things that happen across all workflows:
 
 14. **`simplify` is the end-of-slice / end-of-round sweep.** Runs after every `tdd` slice goes green; in `tdd-rounds`, lands as its own commit per [`tdd-rounds/COMMITS.md` rule 4](./tdd-rounds/COMMITS.md). Applies the `code-hygiene` lens to the changed files, plus a test-relevance check. Distinct from `code-hygiene` (the lens) and from `improve-codebase-architecture` (the structural escalation when simplify finds bigger issues).
 
-12. **Artifacts accumulate in `docs/`:**
+15. **Artifacts accumulate in `docs/`:**
 
     | Location | Produced by | Type |
     |---|---|---|
@@ -366,11 +366,12 @@ A few things that happen across all workflows:
     | `docs/adr/<n>-<topic>.md` | `grill-plan`, `improve-codebase-architecture` | One per architectural decision |
     | `docs/CONTEXT.md` | `grill-plan`, `improve-codebase-architecture` (inline updates) | One per repo / context |
     | `docs/architecture.md` | `system-design` | One per system (the system map) |
-    | `docs/features/<name>/state/snapshot.md` | `tdd-rounds` parent | Living snapshot per feature |
-    | `docs/features/<name>/state/rounds/*.md` | `tdd-rounds` Builder | Immutable round logs |
-    | `docs/STATE.md` | `tdd-rounds` parent | Global manifest (index only) |
+    | `docs/features/<name>/state/snapshot.md` | `tdd-rounds` parent | Living snapshot per feature (target end-state per ADR-0001; not yet wired through `tdd-rounds` skill text) |
+    | `docs/features/<name>/state/rounds/*.md` | `tdd-rounds` Builder | Immutable round logs (target end-state per ADR-0001) |
+    | `docs/STATE.md` | `tdd-rounds` parent | Currently the single running summary; ADR-0001 demotes it to a global manifest after migration. |
     | `docs/security/<feature>.md` | `security-review` (high-stakes only) | One per surface-changing feature where a feature-doc section isn't enough |
     | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
-    | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record) |
+    | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record); also holds follow-up tracking for accepted-but-unimplemented ADRs. |
+    | `CHANGELOG.md` | `prod-ready` Section 7 | One per repo; `[Unreleased]` accumulates between releases. |
     All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.
 

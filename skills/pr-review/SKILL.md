@@ -93,6 +93,7 @@ This is the second line of defense for `prod-ready` Section 7. Author may have m
 - **New or changed domain term** → has [`docs/CONTEXT.md`](../../docs/CONTEXT.md) been updated? Are `_Avoid_:` aliases listed if there's risk of confusion?
 - **New / removed package, changed public interface, shifted module boundary** → is the feature's design note (`docs/features/<feature>.design.md`) updated? Module map, file layout, public-interface signatures, test boundaries.
 - **Changed acceptance criteria** → does the feature doc reflect what was actually built? Silently-dropped or silently-added behavior is the most common drift class — flag and don't accept "we'll fix in a follow-up".
+- **User-visible change** → does `CHANGELOG.md` have an entry under `[Unreleased]`, grouped by `Added / Changed / Fixed / Removed`? Skip only for formatter-only / lint-only / test-only / internal-refactor-with-no-behavior-change / dep-bump-with-no-runtime-impact diffs. Missing entry on a user-visible change = finding.
 
 If any answer is "no" without `n/a + reason`, that's a finding. Severity:
 - **Blocker** — the missing doc is load-bearing for the next reader (ADR for a hard-to-reverse decision; CONTEXT.md entry for a term other PRs will use; AC drift hiding behavior).
@@ -100,7 +101,7 @@ If any answer is "no" without `n/a + reason`, that's a finding. Severity:
 
 The doc-map is small enough to walk in 2–3 minutes. Skip it and you're trading 3 minutes now for an hour of orientation in 3 months.
 
-#### 3e. Hygiene (line level)
+#### 3f. Hygiene (line level)
 
 Apply `code-hygiene` as a lens here, not as a primary phase:
 

@@ -24,7 +24,7 @@ A package that is what it says it is (a thin utility, a generated stub, a glue a
 Skip the docstring on getters, simple constructors, and any function whose name + types already convey the contract. Write one only when:
 - The call is **not** cheap, idempotent, or safe under concurrency, and the next reader would assume it was.
 - The function may be invoked multiple times per request (e.g. retried) and that matters.
-- A parameter or return has non-obvious zero-value semantics (`0 = "unknown"`).
+- A parameter or return has non-obvious zero-value or nil semantics (`0 = "unknown"`, `(nil, nil) = "not found"`).
 
 When you write one, start with the identifier name (`// Cache stores …`, not `// Stores …`).
 
@@ -32,10 +32,10 @@ When you write one, start with the identifier name (`// Cache stores …`, not `
 
 A comment whose absence would let the next maintainer write the bug, reattempt the rejected alternative, or "fix" the deliberate choice. If the next reader would just say "OK, sure" and move on, the comment is not earning its line.
 
-- `// Zero means 'unknown'` (and re-stated where the bug would bite).
-- `// Selector must be cheap and side-effect-free; ServeHTTP may invoke Pick multiple times on 429 retry.`
-- `// Cold-cache choice (documented for the next reader): an account whose (pk, model) is not yet in the cache is treated as INELIGIBLE.`
-- `// Manual SQL instead of ORM — see ADR-007 §"Query shape".`
+- **Invariant** — `// Zero means 'unknown'` (and re-stated where the bug would bite).
+- **Constraint** — `// Selector must be cheap and side-effect-free; ServeHTTP may invoke Pick multiple times on 429 retry.`
+- **Trade-off** — `// Cold-cache choice: an account whose (pk, model) is not yet in the cache is treated as INELIGIBLE.`
+- **Provenance** — `// Manual SQL instead of ORM — see ADR-007 §"Query shape".`
 
 ---
 

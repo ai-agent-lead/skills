@@ -33,7 +33,8 @@ Distills the pattern of a parent agent driving Builder sub-agents through a feat
 
 When dispatched for a round, the Builder:
 
-1. Verifies the current branch is **not** `main` / `master` — refuses and reports if so. Reads the brief, the plan file, `docs/STATE.md`, and any ADRs / feature docs the brief cites.
+0. **Pre-flight.** Verifies the current branch is **not** `main` / `master`. If it is, refuses immediately and returns a blocking report — does not proceed to step 1.
+1. Reads the brief, the plan file, `docs/STATE.md`, and any ADRs / feature docs the brief cites.
 2. **Executes the listed skills sequentially in this single invocation.** When a brief says "Skills (in order): design, tdd, simplify" — that means run all three in this run, not return to the parent between them. This rule is non-obvious; the brief template makes it explicit.
 3. Commits per AC slice (or per behavior slice for refactor rounds), prefix `R<N>:`. **Read [`COMMITS.md`](COMMITS.md) before the first commit** — it captures the seven rules (`R<N>:` prefix, `#<X>` for bug fixes, per-AC slicing, separate simplify-pass commit, separate doc commits, single-commit-with-justification, honest messages) and the message-body shape. The parent reads commits as the review surface; a clean sequence is reviewable one diff at a time, a mono-commit isn't.
 4. Returns the structured report from `templates/builder-report.md`.

@@ -9,18 +9,19 @@ expected_duration: 5 minutes
 
 Day-to-day discipline that keeps a codebase readable, navigable, and easy to change. Smaller in scope than `design` (which shapes module interfaces) — these are line-level and function-level habits.
 
-Five principles.
+Six principles.
 
 1. **Boring code beats clever code** — prefer the obvious solution over the elegant trick.
 2. **Naming is the primary refactor** — a bad name misleads longer than a bad implementation.
 3. **YAGNI** — don't build for hypothetical futures.
 4. **Rule of 3 before extracting** — duplicate twice; extract on the third occurrence, not the second.
 5. **Locality of behavior** — related code lives together; don't split by category.
+6. **Comments earn their keep** — default NONE; keep only why-comments tied to an invariant, trade-off, or provenance the next reader would otherwise miss.
 
 ## When to use
 
 - Writing new code, line by line — keep these in mind as you type.
-- Reviewing a PR — these are five common smell categories.
+- Reviewing a PR — these are six common smell categories.
 - After `tdd` reaches green, during the [`simplify`](../simplify/SKILL.md) sweep — `code-hygiene` is the lens you apply.
 - When you read code and pause to figure out what it's doing — that pause is a smell.
 
