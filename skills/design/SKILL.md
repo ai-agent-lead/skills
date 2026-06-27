@@ -136,4 +136,4 @@ Most of the time `design` is guidance only — the shape lives in the code that 
 - The interface decisions are load-bearing for downstream rounds of `tdd-rounds`.
 - A `prod-ready` reviewer will need to verify "module map / public-interface signatures / test boundaries" against something explicit (per [prod-ready Section 7](../prod-ready/SKILL.md)).
 
-When captured, save as a sibling to the feature doc: `docs/features/<feature>.design.md`. Skip when the interface is small enough that the code is the design.
+When captured, save as a sibling to the feature doc: `docs/features/<feature>.design.md`, opening with OKF frontmatter (`type: design`) per [`skills/formats/OKF.md`](../formats/OKF.md). Skip when the interface is small enough that the code is the design.

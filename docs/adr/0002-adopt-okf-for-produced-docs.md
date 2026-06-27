@@ -10,7 +10,6 @@ status: accepted
 # Adopt OKF frontmatter for skill-produced docs
 
 **Status:** accepted
-**Date:** 2026-06-27
 
 The skills in this repo are *producers* of documentation — `feature-doc` emits `docs/features/*.md`, `investigate` emits `docs/research/*.md`, `bootstrap`/`grill-plan` emit `docs/CONTEXT.md` and ADRs, and so on. We decided those produced docs should carry [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) (OKF v0.1) YAML frontmatter, so the `docs/` tree is a consumable OKF bundle that any OKF-aware agent or tool can ingest without bespoke parsing.
 
@@ -20,8 +19,8 @@ OKF is a vendor-neutral spec (Apache-2.0, Google Cloud, June 2026) for represent
 
 ## Decision
 
-1. A new substrate doc, [`/skills/formats/OKF.md`](../../skills/formats/OKF.md), defines the frontmatter contract and the `type` vocabulary for our doc kinds (`adr`, `feature`, `research`, `context`, `convention`, `known-issues`, `benchmark`, `state`).
-2. Every produced-doc template and format (`feature-template`, `research-note`, `ADR-FORMAT`, `CONTEXT-FORMAT`, `benchmark-report`, `verify-real-deps/known-issues`, the `tdd-rounds` state templates) opens with a filled-in OKF frontmatter block.
+1. A new substrate doc, [`skills/formats/OKF.md`](../../skills/formats/OKF.md), defines the frontmatter contract and the `type` vocabulary for our doc kinds (`adr`, `feature`, `research`, `context`, `context-map`, `convention`, `known-issues`, `benchmark`, `design`, `state`).
+2. Every produced-doc template and format (`feature-template`, `research-note`, `ADR-FORMAT`, `CONTEXT-FORMAT`, `benchmark-report`, `verify-real-deps/known-issues`) opens with a filled-in OKF frontmatter block. The `tdd-rounds` state templates (`type: state`) do not exist yet — they ship with the pending ADR-0001 migration (tracked in [`docs/known-issues.md`](../known-issues.md)).
 3. Frontmatter is canonical for `type` / `title` / `description` / `tags` / `timestamp`. The redundant `**Date:**` bold line folds into `timestamp`; `**Status:**` and `**Owner:**` stay as human-facing lines (and `status` / `owner` as extension keys) because OKF does not model them.
 4. `docs/` is the bundle root; `CHANGELOG.md` serves as the bundle's `log.md`; a `docs/index.md` provides the OKF directory listing.
 
@@ -39,5 +38,5 @@ OKF is a vendor-neutral spec (Apache-2.0, Google Cloud, June 2026) for represent
 
 ## Related
 
-- Substrate: [`/skills/formats/OKF.md`](../../skills/formats/OKF.md)
+- Substrate: [`skills/formats/OKF.md`](../../skills/formats/OKF.md)
 - Convention: [`docs/CONVENTIONS.md`](../CONVENTIONS.md) §OKF

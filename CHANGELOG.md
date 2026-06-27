@@ -18,7 +18,8 @@ to the new version and a fresh `[Unreleased]` block is opened.
   `tags` / `timestamp` — making `docs/` a consumable OKF bundle.
   - New substrate `skills/formats/OKF.md` defines the frontmatter contract and
     the `type` vocabulary (`adr`, `feature`, `research`, `context`,
-    `convention`, `known-issues`, `benchmark`, `state`).
+    `context-map`, `convention`, `known-issues`, `benchmark`, `design`,
+    `state`).
   - Producer templates/formats now emit the block: `ADR-FORMAT`, `CONTEXT-FORMAT`,
     `feature-template`, `research-note`, `benchmark-report`, and
     `verify-real-deps/known-issues`.
