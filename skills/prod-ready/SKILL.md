@@ -1,8 +1,6 @@
 ---
 name: prod-ready
 description: Pre-merge production-readiness checklist — operational, infrastructure, and consistency checks that tests alone don't surface. Use after `tdd` reaches green; before opening a PR or merging to main; after significant infra changes (new DB, new deployment target, new auth flow); or when the user mentions "shipping", "ready to merge", "before deploy", "production readiness", or "prod-ready". Pairs with the `tdd` skill — tdd proves the feature works; this catches what tests can't see (server timeouts, DB pragmas, error-response consistency, secrets at rest).
-complexity: low
-expected_duration: 10 minutes
 ---
 
 # Prod-Readiness Checklist
@@ -54,16 +52,16 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 
 ### 7. Documentation (the doc-map)
 
-Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". One question per doc type: *did this work change X? Then update Y.* Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
+Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — **author lens**: tick each `✓`, `✗ + remediation`, or `n/a + reason`, and fix the drift inline before the PR (don't kick it to a follow-up). Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
 
-- [ ] **New decision with viable alternatives** → ADR exists in `docs/adr/`, names what it supersedes (if anything), and is referenced from code where the decision is load-bearing.
-- [ ] **New or changed domain term** → `CONTEXT.md` entry created or updated. Includes `_Avoid_:` aliases if the term is at risk of being confused with an existing one.
-- [ ] **New/removed package, changed public interface, or shifted module boundary** → the feature's design note (e.g., `docs/features/<feature>.design.md`) updated. Specifically: Module map, File layout, public-interface signatures, Test boundaries.
-- [ ] **Changed acceptance criteria** → the feature doc reflects what was actually built. Silently-dropped or silently-added behavior is the most common drift class — fix here, don't kick to a follow-up.
-- [ ] **User-visible change** → `CHANGELOG.md` has an entry under `[Unreleased]`, grouped by `Added / Changed / Fixed / Removed`. Skip only if the diff is formatter-only, lint-only, test-only, internal refactor with no behavior change, or a dependency bump with no runtime impact. (Overlaps but is **not identical** to `feature-doc`'s skip list — that one also waives the *doc* for typo fixes and one-line config tweaks. A typo fix can still merit a one-liner here.)
-- [ ] **New or changed doc under `docs/`** → it opens with OKF frontmatter carrying a non-empty `type` from [`skills/formats/OKF.md`](../formats/OKF.md) §2. A produced doc with no `type` breaks the bundle's conformance — fix here.
+- [ ] ADR for any new decision with viable alternatives (and no active ADR is contradicted).
+- [ ] `CONTEXT.md` updated for any new/changed domain term, with `_Avoid_:` aliases where confusion is likely.
+- [ ] Design note updated for any new/removed package, changed public interface, or shifted module boundary.
+- [ ] Feature doc reflects what was actually built (no silently-dropped or silently-added behavior).
+- [ ] `CHANGELOG.md` `[Unreleased]` entry for any user-visible change.
+- [ ] Every new/changed `docs/` file opens with OKF `type` frontmatter.
 
-If a doc type isn't relevant to this work, write "n/a" — explicit beats implicit.
+Per-check definitions, skip lists, and severity live in [`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — this is the same audit `pr-review` §3e runs from the reviewer side.
 
 ## When to skip
 

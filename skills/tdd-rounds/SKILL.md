@@ -1,8 +1,6 @@
 ---
 name: tdd-rounds
 description: Multi-round TDD orchestration. Use when delivering a feature larger than one TDD slice — typically 5-15 acceptance criteria across multiple packages — by dispatching Builder sub-agents per round, with the parent maintaining state and verifying. Triggered when the user mentions "drive the sub-agent team", "multi-round TDD", "orchestrate rounds", "Builder agents", or when a plan from `feature-doc` lists more ACs than one agent should reasonably tackle in a single invocation. Pairs with `tdd` (Builders invoke that skill per round) and `prod-ready` (final round before tag).
-complexity: high
-expected_duration: 1 hour
 ---
 
 # Multi-Round TDD Orchestration

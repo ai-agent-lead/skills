@@ -28,6 +28,8 @@ The `description` is the routing signal. It should:
 
 A `description` that names only the happy path will route falsely. Always name what to skip.
 
+**Optional frontmatter.** Add `disable-model-invocation: true` for a user-only utility that should never auto-fire (e.g. `zoom-out`); the skill then runs only on explicit invocation. No other keys are read by the harness — `name` and `description` are the whole routing contract. Don't add decorative metadata (`complexity`, `expected_duration`, etc.); it isn't consumed and only drifts.
+
 ## Canonical body shape
 
 ```md
@@ -98,7 +100,7 @@ A `description` that names only the happy path will route falsely. Always name w
 
 ## Voice and length
 
-- **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility / lens skills run short (tdd-rounds, simplify, code-hygiene). Don't pad an orchestration skill to match a teaching skill — it adds noise.
+- **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility skills run short (tdd-rounds, simplify, caveman). Don't pad an orchestration skill to match a teaching skill — it adds noise.
 - **No hedging.** "Sometimes consider maybe doing X" is dead text. Pick a recommendation.
 - **No corporate voice.** Direct sentences. The reader is a fast-reading senior engineer or an LLM, not an executive.
 - **Cite paths**: `path:line` or `[link](relative/path.md)`. Don't say "see the auth module"; say `src/auth/session.go:42`.

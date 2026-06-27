@@ -1,8 +1,6 @@
 ---
 name: improve-codebase-architecture
 description: Find deepening opportunities in EXISTING code, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable. Use for EXISTING code; for designing the shape of a new module from scratch, use `design`. Skip for single-module local refactors with no cross-module impact — use `design` or just refactor inline.
-complexity: high
-expected_duration: 45 minutes
 ---
 
 # Improve Codebase Architecture
@@ -20,7 +18,7 @@ Surface architectural friction and propose **deepening opportunities** — refac
 - Designing the shape of a new module from scratch — use [`design`](../design/SKILL.md).
 - Greenfield system topology — use [`system-design`](../system-design/SKILL.md).
 - Single-module local refactor with no cross-module impact — use `design` or refactor inline.
-- Line-level cleanup (renames, dead-code removal) — use [`code-hygiene`](../code-hygiene/SKILL.md) + [`simplify`](../simplify/SKILL.md).
+- Line-level cleanup (renames, dead-code removal) — use the [`code-hygiene`](../formats/CODE-HYGIENE.md) lens + [`simplify`](../simplify/SKILL.md).
 
 ## Glossary
 

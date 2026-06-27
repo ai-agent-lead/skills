@@ -1,8 +1,6 @@
 ---
 name: bootstrap
 description: Initializes a greenfield repository. Creates the docs/ directory, the initial CONTEXT.md, and the first ADR. Triggered by phrases like "new project", "initialize", "bootstrap".
-complexity: low
-expected_duration: 10 minutes
 ---
 
 # Bootstrap

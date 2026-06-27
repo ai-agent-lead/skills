@@ -1,8 +1,6 @@
 ---
 name: simplify
-description: Single end-of-round sweep that tightens what `tdd` just left green — review every changed file for reuse, quality, efficiency, and test relevance. Use after `tdd` reaches green and before opening a PR (or before a Builder closes a round in `tdd-rounds`). Triggered by phrases like "simplify pass", "tighten this", "clean up before commit", "end-of-round sweep", or appearing as a step in a Builder brief. Skip for trivial diffs (typo, dep bump, doc-only). Pairs with `tdd` (runs immediately after green), `code-hygiene` (the lens applied during the sweep), and `pr-review` (a self-check after this).
-complexity: low
-expected_duration: 10 minutes
+description: Single end-of-round sweep that tightens what `tdd` just left green — review every changed file for reuse, quality, efficiency, and test relevance. Use after `tdd` reaches green and before opening a PR (or before a Builder closes a round in `tdd-rounds`). Triggered by phrases like "simplify pass", "tighten this", "clean up before commit", "end-of-round sweep", or appearing as a step in a Builder brief. Skip for trivial diffs (typo, dep bump, doc-only). Pairs with `tdd` (runs immediately after green), the `code-hygiene` lens (`formats/CODE-HYGIENE.md`, applied during the sweep), and `pr-review` (a self-check after this).
 ---
 
 # Simplify
@@ -34,7 +32,7 @@ The simplify pass catches these once, deliberately, before the diff lands. Witho
 - Slices where the diff is one or two lines and there's nothing to sweep.
 - During red phase — never refactor while red. See [`tdd/SKILL.md`](../tdd/SKILL.md).
 
-## The four lenses
+## The five lenses
 
 Walk every changed file. Apply each lens in order. Fix what you find inline.
 
@@ -49,14 +47,7 @@ Walk every changed file. Apply each lens in order. Fix what you find inline.
 - Names that read clearly out of context — would a stranger guess what `result`, `data`, `value` referred to? If not, rename.
 - Error messages that name the failing input — `"could not parse: <value>"` beats `"parse error"`.
 - Abstractions that haven't earned their keep — a base class with one subclass, an interface with one implementation. Inline.
-- Comments — **default during the sweep is DELETE**:
-  - Delete WHAT-comments (the code already says it).
-  - Delete docstrings on exports whose contract is obvious from the signature.
-  - Delete "used by X" / "added for Y" caller references — these rot; use grep.
-  - Delete commented-out code (git has it).
-  - Delete banner / ASCII-art dividers and in-function section headers (`// validate`, `// build response`).
-  - KEEP only why-comments — constraint, invariant, trade-off, provenance — and only when the next reader would otherwise reattempt the rejected alternative.
-  - If a kept comment cites a round / ADR / AC / snapshot, normalize to [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md) §3 (`ADR-007 §7`, `R6 AC-3`, `v0.3 R1b2`, `snapshot §"Invariants"`).
+- Comments — **default during the sweep is DELETE.** Apply [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) Principle 6 and the bar in [`STYLE-comments.md`](../formats/STYLE-comments.md): delete WHAT-comments, obvious-from-signature docstrings, "used by X" caller references, commented-out code, banners, and in-function section headers (`// validate`, `// build response`); keep only why-comments the next reader would otherwise reattempt. Normalize any kept citation (`ADR-007 §7`, `R6 AC-3`, `v0.3 R1b2`) to [`STYLE-comments.md`](../formats/STYLE-comments.md) §3.
 
 ### 3. Efficiency — dead code, redundant work, premature defensive checks
 
@@ -100,7 +91,7 @@ In single-feature flow (no rounds), the sweep can land as a separate commit befo
 ## Pairing with other skills
 
 - **`tdd`** runs first. Simplify runs after green. Never simplify while red.
-- **`code-hygiene`** is the lens — its 5 principles (boring code, naming, YAGNI, rule of 3, locality) are what you apply during the sweep. Read it once; apply it many times.
+- **[`code-hygiene`](../formats/CODE-HYGIENE.md)** is the lens — its six principles (boring code, naming, YAGNI, rule of 3, locality, comments) are what you apply during the sweep. Read it once; apply it many times.
 - **`pr-review`** comes after — a self-check against the diff. Some of the same lenses, applied as a reviewer rather than an author.
 - **`improve-codebase-architecture`** is the escalation — when simplify surfaces structural issues bigger than a sweep can fix.
 

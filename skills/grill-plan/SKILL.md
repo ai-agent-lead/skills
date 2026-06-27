@@ -1,8 +1,6 @@
 ---
 name: grill-plan
 description: Grilling session that stress-tests a chosen plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use AFTER a direction has been picked (post-`investigate` or post-`feature-doc`), when the user wants to pressure-test the plan — triggered by phrases like "grill me on this", "stress-test this plan", "walk me through this", "is this consistent with our model". Skip if the direction is still being explored — use `investigate` instead.
-complexity: medium
-expected_duration: 20 minutes
 ---
 
 ## When to use
@@ -98,7 +96,7 @@ If any of the three is missing, skip the ADR. Use the format in [`../formats/ADR
 ## Pairing with other skills
 
 - **[`investigate`](../investigate/SKILL.md)** — runs *before* when direction is unclear. Once a direction is chosen, hand off here.
-- **[`sync-check`](../sync-check/SKILL.md)** — escalates here when a terminology collision or ADR contradiction is found in existing code.
+- **[`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md)** — the terminology/ADR audit (formerly the `sync-check` skill) escalates here when it finds a terminology collision or ADR contradiction in existing code.
 - **[`feature-doc`](../feature-doc/SKILL.md)** — runs *before* when a feature doc is the input to grilling, or *after* when grilling refines the plan into a feature doc.
 - **[`system-design`](../system-design/SKILL.md)** — defers here for hard-to-reverse topology decisions.
 - **[`improve-codebase-architecture`](../improve-codebase-architecture/SKILL.md)** — borrows this skill's grilling discipline in its own grilling loop.

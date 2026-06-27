@@ -1,8 +1,6 @@
 ---
 name: pr-review
-description: Discipline for reviewing someone else's pull request — the inverse of `prod-ready` (which is the author's pre-merge gate). Use when the user asks to "review this PR", "look over the diff", "check this change", "give feedback on", or invokes a code-review slash command. Reviews against the linked feature doc / ADRs / domain vocabulary, classifies findings by severity (blocker / suggestion / nit), and returns a structured report. Skip for trivial PRs (typo, dep bump, lint-only) — approve directly. Pairs with `prod-ready` (the author's checklist; the reviewer verifies it landed honestly), `security-review` (escalation when the diff is surface-changing), and `code-hygiene` (the line-level lens applied during the read).
-complexity: medium
-expected_duration: 20 minutes
+description: Discipline for reviewing someone else's pull request — the inverse of `prod-ready` (which is the author's pre-merge gate). Use when the user asks to "review this PR", "look over the diff", "check this change", "give feedback on", or invokes a code-review slash command. Reviews against the linked feature doc / ADRs / domain vocabulary, classifies findings by severity (blocker / suggestion / nit), and returns a structured report. Skip for trivial PRs (typo, dep bump, lint-only) — approve directly. Pairs with `prod-ready` (the author's checklist; the reviewer verifies it landed honestly), `security-review` (escalation when the diff is surface-changing), and the `code-hygiene` lens (`formats/CODE-HYGIENE.md`, applied line-level during the read).
 ---
 
 # PR Review
@@ -87,24 +85,11 @@ For non-surface-changing diffs: walk `prod-ready` Section 3 (defense-in-depth) b
 
 #### 3e. Doc-drift audit
 
-This is the second line of defense for `prod-ready` Section 7. Author may have missed it; reviewer catches what's left. Walk these questions against the diff:
-
-- **New decision with viable alternatives** → does an ADR exist in `docs/adr/` for it? Does it name what it supersedes? If load-bearing, is it referenced from the code?
-- **New or changed domain term** → has [`docs/CONTEXT.md`](../../docs/CONTEXT.md) been updated? Are `_Avoid_:` aliases listed if there's risk of confusion?
-- **New / removed package, changed public interface, shifted module boundary** → is the feature's design note (`docs/features/<feature>.design.md`) updated? Module map, file layout, public-interface signatures, test boundaries.
-- **Changed acceptance criteria** → does the feature doc reflect what was actually built? Silently-dropped or silently-added behavior is the most common drift class — flag and don't accept "we'll fix in a follow-up".
-- **User-visible change** → does `CHANGELOG.md` have an entry under `[Unreleased]`, grouped by `Added / Changed / Fixed / Removed`? Skip only for formatter-only / lint-only / test-only / internal-refactor-with-no-behavior-change / dep-bump-with-no-runtime-impact diffs. Missing entry on a user-visible change = finding.
-- **New or changed produced doc under `docs/`** → does it open with OKF frontmatter carrying a non-empty `type` from [`skills/formats/OKF.md`](../formats/OKF.md) §2? A produced doc with no `type` breaks bundle conformance = finding.
-
-If any answer is "no" without `n/a + reason`, that's a finding. Severity:
-- **Blocker** — the missing doc is load-bearing for the next reader (ADR for a hard-to-reverse decision; CONTEXT.md entry for a term other PRs will use; AC drift hiding behavior).
-- **Suggestion** — the doc would help but the diff is self-explanatory in isolation.
-
-The doc-map is small enough to walk in 2–3 minutes. Skip it and you're trading 3 minutes now for an hour of orientation in 3 months.
+Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) against the diff — **reviewer lens**. This is the second line of defense for `prod-ready` Section 7: the author may have missed it; you catch what's left. Any check that resolves to "no" without `n/a + reason` is a finding, at the severity that reference defines — **Blocker** for load-bearing drift (a missing ADR for a hard-to-reverse decision, a `CONTEXT.md` entry for a term other PRs will use, AC drift hiding behavior, a direct ADR contradiction), **Suggestion** when the diff is self-explanatory in isolation.
 
 #### 3f. Hygiene (line level)
 
-Apply `code-hygiene` as a lens here, not as a primary phase:
+Apply the [`code-hygiene`](../formats/CODE-HYGIENE.md) lens here, not as a primary phase:
 
 - **Comment noise**: new WHAT-comments, docstrings on exports whose contract is obvious from the signature, in-function section headers (`// validate`, `// build response`), stale "used by X" references, citation grammar that doesn't match the repo's comment style doc ([`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md)). Flag as **nits by default**; promote to a suggestion only when cumulative comment noise obscures the diff (signal the author skipped `simplify`).
 - Names that mislead (boolean returning non-bool, `getX` that mutates, `Manager`/`Helper` suffixes hiding what the thing is).
@@ -186,9 +171,9 @@ The classification (blocker / suggestion / nit) lives in the parent's notes; onl
 ## Pairing with other skills
 
 - **`prod-ready`** is the author's pre-merge checklist. Reviewer verifies it landed.
-- **`sync-check`** is the diagnostic context auditor. Reviewer runs it (or verifies it was run) to catch terminology drift and ADR contradictions early.
+- **[`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md)** is the shared terminology/ADR/doc-map audit run from §3e — the former `sync-check` skill, now single-sourced and shared with `prod-ready` Section 7.
 - **`security-review`** is the surface-change escalation. Reviewer flags when required.
-- **`code-hygiene`** is the line-level lens applied during the read.
+- **[`code-hygiene`](../formats/CODE-HYGIENE.md)** is the line-level lens applied during the read (§3f).
 - **`grill-plan`** is where load-bearing disagreements go (a new ADR, not a PR comment thread).
 - **`debug`** if a finding turns out to be "this PR introduces a bug" — switch to debug to characterise it before recommending a change.
 
