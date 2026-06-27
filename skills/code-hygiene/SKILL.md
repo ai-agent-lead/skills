@@ -9,18 +9,19 @@ expected_duration: 5 minutes
 
 Day-to-day discipline that keeps a codebase readable, navigable, and easy to change. Smaller in scope than `design` (which shapes module interfaces) — these are line-level and function-level habits.
 
-Five principles.
+Six principles.
 
 1. **Boring code beats clever code** — prefer the obvious solution over the elegant trick.
 2. **Naming is the primary refactor** — a bad name misleads longer than a bad implementation.
 3. **YAGNI** — don't build for hypothetical futures.
 4. **Rule of 3 before extracting** — duplicate twice; extract on the third occurrence, not the second.
 5. **Locality of behavior** — related code lives together; don't split by category.
+6. **Comments earn their keep** — default NONE; keep only why-comments tied to an invariant, trade-off, or provenance the next reader would otherwise miss.
 
 ## When to use
 
 - Writing new code, line by line — keep these in mind as you type.
-- Reviewing a PR — these are five common smell categories.
+- Reviewing a PR — these are six common smell categories.
 - After `tdd` reaches green, during the [`simplify`](../simplify/SKILL.md) sweep — `code-hygiene` is the lens you apply.
 - When you read code and pause to figure out what it's doing — that pause is a smell.
 
@@ -66,11 +67,7 @@ Duplicate twice; extract on the third occurrence — not the second.
 The first occurrence is unique. The second might be coincidence. The third is a pattern. Extracting at two reveals only one axis of variation; extracting at three reveals the *real* axis.
 
 **Why**: premature abstractions calcify. Once a wrong abstraction exists, callers shape themselves to it, and rewriting becomes expensive. Three concrete copies are cheap; one wrong abstraction is not.
-5. **Locality of behavior** — related code lives together; don't split by category.
-6. **Comments earn their keep** — default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot.
 
-## When to use
-...
 ## Principle 5: Locality of behavior
 
 Related code lives close together. Don't split a system by *type of code* (`controllers/`, `services/`, `repositories/`) — split by *responsibility* (`orders/`, `billing/`, `auth/`).
@@ -81,15 +78,11 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 ## Principle 6: Comments earn their keep
 
-Default to none. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot. Delete WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, and commented-out code on sight.
+**The bar:** [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md). Apply it *while writing*, not only during the `simplify` sweep.
 
-**Smells**:
-- A comment that restates the next line of code.
-- A comment naming a caller — that reference rots the moment someone renames or removes the caller. Use `grep`.
-- A TODO / FIXME / HACK with no owner, ticket, ADR, or date.
-- Commented-out code "in case we need it again". Git has it.
+**Default: NONE.** If you're unsure whether a comment earns its line, delete it. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot — and only if the next reader would otherwise reattempt the rejected alternative.
 
-**Project-specific conventions** (package docstrings, provenance grammar) live in the repo's comment style doc — usually [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md).
+**Delete on sight**: WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, commented-out code, in-function section headers (`// validate`, `// build response`), and docstrings on exports whose contract is obvious from the signature.
 
 ## Done when
 

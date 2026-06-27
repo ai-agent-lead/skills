@@ -22,6 +22,7 @@ Distills the pattern of a parent agent driving Builder sub-agents through a feat
 
 ## The parent's contract
 
+- **Dispatch on a feature branch, never `main`.** Verify the current branch before dispatching the first Builder; if it's `main` / `master`, create `feat/<short-name>` first. The whole multi-round delivery lives on one feature branch (or a stack of feature branches), merged to `main` only at the end.
 - **Plan once.** The plan file lists rounds, each round's ACs, the dependency order, and the skills cadence per round (which rounds need `design`; when to invoke `improve-codebase-architecture` mid-project; when to invoke `prod-ready`).
 - **Brief per round.** A self-contained brief — the Builder shouldn't need conversation history. 
   - **Briefing Sub-agent**: For complex rounds, invoke a sub-agent to autonomously generate the brief by analyzing `docs/STATE.md`, the `feature-doc`, and the results of the previous round. See `templates/builder-brief.md` for the schema.
@@ -32,6 +33,7 @@ Distills the pattern of a parent agent driving Builder sub-agents through a feat
 
 When dispatched for a round, the Builder:
 
+0. **Pre-flight.** Verifies the current branch is **not** `main` / `master`. If it is, refuses immediately and returns a blocking report — does not proceed to step 1.
 1. Reads the brief, the plan file, `docs/STATE.md`, and any ADRs / feature docs the brief cites.
 2. **Executes the listed skills sequentially in this single invocation.** When a brief says "Skills (in order): design, tdd, simplify" — that means run all three in this run, not return to the parent between them. This rule is non-obvious; the brief template makes it explicit.
 3. Commits per AC slice (or per behavior slice for refactor rounds), prefix `R<N>:`. **Read [`COMMITS.md`](COMMITS.md) before the first commit** — it captures the seven rules (`R<N>:` prefix, `#<X>` for bug fixes, per-AC slicing, separate simplify-pass commit, separate doc commits, single-commit-with-justification, honest messages) and the message-body shape. The parent reads commits as the review surface; a clean sequence is reviewable one diff at a time, a mono-commit isn't.
@@ -94,16 +96,4 @@ When the final round completes:
 1. Run `verify-real-deps`. Capture surfaced bugs into `docs/known-issues.md`.
 2. Iterate fix-rounds until clean, or document deferrals to vN.1 with rationale.
 3. Tag and publish via whatever release / distribution channel applies.
-hape the Builder returns.
 
-## Supporting docs
-
-- [`COMMITS.md`](COMMITS.md) — commit cadence and message style (per-AC slicing, `R<N>:` prefix, when single-commit is OK, honesty rule). Builders read this before the first commit.
-
-## Handoff
-
-When the final round completes:
-
-1. Run `verify-real-deps`. Capture surfaced bugs into `docs/known-issues.md`.
-2. Iterate fix-rounds until clean, or document deferrals to vN.1 with rationale.
-3. Tag and publish via whatever release / distribution channel applies.

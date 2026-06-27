@@ -156,4 +156,3 @@ Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investi
 5. Add the skill to **both** index tables above (by trigger phase AND by role).
 6. Add an entry to [TRIGGERS.md](./TRIGGERS.md) for routing.
 7. Update [WORKFLOWS.md](./WORKFLOWS.md) if the skill participates in a canonical workflow or as a cross-workflow pattern.
-. Update [WORKFLOWS.md](./WORKFLOWS.md) if the skill participates in a canonical workflow or as a cross-workflow pattern.

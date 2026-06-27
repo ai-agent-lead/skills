@@ -19,6 +19,11 @@ expected_duration: 20 minutes
 - Trivial getters / setters with no behavior.
 - Bug whose root cause isn't yet known — run [`debug`](../debug/SKILL.md) first; the reproduction crystallises into the failing test.
 
+## Pre-conditions
+
+- **Current branch is not `main` / `master`.** If it is, stop and run `git checkout -b feat/<short-name>` (or `fix/...`) before writing the first test. Code lands on a feature branch; `main` receives merges, not commits.
+- A feature doc (`docs/features/<short-name>.md`) exists with testable ACs — or a `debug` reproduction names the root cause.
+
 ## Philosophy
 
 Tests verify **behavior through public interfaces**, not implementation details. Code can change entirely; tests shouldn't.
