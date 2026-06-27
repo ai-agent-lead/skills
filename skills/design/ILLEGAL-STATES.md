@@ -4,6 +4,15 @@ The single highest-leverage application of the type system: prevent bad states a
 
 The pattern: take a runtime invariant ("a verified user must have a verification timestamp") and encode it in the types. The bad state can no longer be constructed.
 
+## This is simplicity, not ceremony — bounded by "boring beats clever"
+
+If you prefer simple code, this principle is *on your side*. Constructive typing **deletes** code: the `if (!x) throw` guards repeated across call sites, the `// invariant:` comments that rot. Making a bad state uncompilable is fewer moving parts than defending against it at runtime, not more.
+
+The tension people feel is with *defensive* typing — casts, assertions, validate-everywhere, generics for their own sake. That's not this. The rule that keeps the two apart is [`CODE-HYGIENE`](../formats/CODE-HYGIENE.md) Principle 1, applied at the type level:
+
+- **Reach for the boring tools first:** sum types / discriminated unions, a narrow domain type where the distinction earns its keep (`Email` vs raw `string`), parse-at-the-boundary then trust, exhaustive matching.
+- **Treat the clever tools as advanced:** phantom types, conditional / mapped-type gymnastics, deep generics, type-level programming. Reach for them only when the invariant is load-bearing *and* the boring encoding can't carry it — the same "is this worth the puzzle?" bar as any clever code. When in doubt, validate at construction (see "Limits" below) instead.
+
 ## Example 1 — Optional fields that should move together
 
 WEAK
@@ -34,7 +43,9 @@ type User =
 
 Each state names itself. Pattern matching is exhaustive. The fourth (incoherent) state cannot compile.
 
-## Example 2 — Phantom types for pipeline stages
+## Example 2 — Phantom types for pipeline stages *(advanced — reach for only when load-bearing)*
+
+Phantom types are the "clever" end of the spectrum: powerful, but a tax on every reader. Use this only when the *ordering* invariant is genuinely load-bearing (a security-sensitive sanitize-before-persist flow) and the cost of getting the order wrong is high. For an ordinary pipeline, a sum type plus validation at the boundary is the boring, sufficient choice.
 
 When the same data flows through stages (e.g. `RawInput` → `Validated` → `Sanitized`), encode the stage in the type:
 

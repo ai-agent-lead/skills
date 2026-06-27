@@ -4,7 +4,7 @@ The line-level and function-level lens this skill set carries into any turn that
 
 This is a **shared reference**, not a standalone skill. It is the lens applied *while writing*, during the [`simplify`](../simplify/SKILL.md) sweep after `tdd` reaches green, and during [`pr-review`](../pr-review/SKILL.md) (§3f). Read it once; apply it many times.
 
-Six principles.
+Seven principles.
 
 1. **Boring code beats clever code** — prefer the obvious solution over the elegant trick.
 2. **Naming is the primary refactor** — a bad name misleads longer than a bad implementation.
@@ -12,6 +12,7 @@ Six principles.
 4. **Rule of 3 before extracting** — duplicate twice; extract on the third occurrence, not the second.
 5. **Locality of behavior** — related code lives together; don't split by category.
 6. **Comments earn their keep** — default NONE; keep only why-comments tied to an invariant, trade-off, or provenance the next reader would otherwise miss.
+7. **Constants live where they're used** — narrowest honest scope; no `constants.ts` dumping ground.
 
 ## Principle 1: Boring code beats clever code
 
@@ -66,6 +67,17 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 **Delete on sight**: WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, commented-out code, in-function section headers (`// validate`, `// build response`), and docstrings on exports whose contract is obvious from the signature.
 
+## Principle 7: Constants live where they're used
+
+A constant belongs at the **narrowest honest scope** — next to the code that uses it, not in a far-off catch-all file.
+
+- **Default to local.** Define it in the function or module that uses it. Widen the scope only when a *second* caller genuinely shares the same value (rule of 3) or it's a single-source-of-truth domain value (a timeout, a retry limit, a page size, an external URL) that must not diverge between call sites.
+- **Reject the dumping ground.** A `constants.ts` / `config.ts` / `utils.ts` god-file of unrelated constants breaks locality — you bounce across files to understand one feature. Group constants by the *responsibility* they serve, not by the fact that they're all constants.
+- **Name a literal only when its meaning is non-obvious.** `MAX_RETRIES = 3` earns its name; `index + 1` and `slice(0, 1)` don't. A magic number whose *meaning* a reader can't infer is a naming problem (Principle 2); a self-evident one isn't.
+- **Environment-varying values are config from env, not constants in source.** A timeout you tune per environment, an API base URL, a feature flag — those come from the env / secret store ([`prod-ready`](../prod-ready/SKILL.md) §3), not a hardcoded literal. Centralizing constants and hardcoding env values are opposite mistakes; don't make both.
+
+**Smell**: a top-level `constants.ts` that grows every feature, imported by half the codebase. Each import is a caller reaching across the codebase for one value that probably belonged next to its single use.
+
 ## The bar — clean when
 
 - Names communicate intent — a stranger reads them and forms the right mental model.
@@ -74,6 +86,7 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 - Duplications either survived the 2-occurrence test (left as-is) or proved themselves at the 3rd occurrence (extracted).
 - Related code lives near related code.
 - Every surviving comment names a why, an invariant, a trade-off, or a provenance link. None restates the code.
+- Constants sit at their narrowest honest scope — no unrelated-constants dumping ground; env-varying values come from config, not source literals.
 
 ## Scope boundaries
 

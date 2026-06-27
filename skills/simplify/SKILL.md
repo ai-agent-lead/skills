@@ -91,7 +91,7 @@ In single-feature flow (no rounds), the sweep can land as a separate commit befo
 ## Pairing with other skills
 
 - **`tdd`** runs first. Simplify runs after green. Never simplify while red.
-- **[`code-hygiene`](../formats/CODE-HYGIENE.md)** is the lens — its six principles (boring code, naming, YAGNI, rule of 3, locality, comments) are what you apply during the sweep. Read it once; apply it many times.
+- **[`code-hygiene`](../formats/CODE-HYGIENE.md)** is the lens — its seven principles (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement) are what you apply during the sweep. Read it once; apply it many times.
 - **`pr-review`** comes after — a self-check against the diff. Some of the same lenses, applied as a reviewer rather than an author.
 - **`improve-codebase-architecture`** is the escalation — when simplify surfaces structural issues bigger than a sweep can fix.
 

@@ -134,7 +134,7 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 
 - [`formats/ADR-FORMAT.md`](./formats/ADR-FORMAT.md) — ADR template, numbering, when-to-write criteria.
 - [`formats/CONTEXT-FORMAT.md`](./formats/CONTEXT-FORMAT.md) — `CONTEXT.md` structure, single-vs-multi-context layout, minimal example.
-- [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments). Applied during `simplify` and `pr-review` §3f.
+- [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement). Applied during `simplify` and `pr-review` §3f.
 - [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) — the terminology / ADR / doc-map audit. Run from `prod-ready` §7 (author), `pr-review` §3e (reviewer), or standalone (the former `sync-check`).
 - [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the comment bar.
 
