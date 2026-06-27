@@ -11,6 +11,8 @@ to the new version and a fresh `[Unreleased]` block is opened.
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-06-27
+
 ### Added
 - **OKF adoption for produced docs** ([ADR-0002](docs/adr/0002-adopt-okf-for-produced-docs.md)).
   Every doc a skill writes under `docs/` now carries [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
