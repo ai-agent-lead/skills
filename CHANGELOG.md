@@ -1,0 +1,115 @@
+# Changelog
+
+All notable changes to this skills library are recorded here.
+
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+Entries are grouped by `Added / Changed / Fixed / Removed / Deprecated`.
+`[Unreleased]` accumulates between releases; at release time it is renamed
+to the new version and a fresh `[Unreleased]` block is opened.
+
+## [Unreleased]
+
+### Added
+- `prod-ready` Section 7 now requires a `CHANGELOG.md` entry for any
+  user-visible change. Skip list (formatter-only / lint-only / test-only /
+  internal-refactor-with-no-behavior-change / dep-bump-with-no-runtime-impact)
+  is documented inline in `prod-ready` rather than cross-referenced; it
+  overlaps with but is not identical to `feature-doc`'s skip list.
+- `pr-review` §3e (doc-drift audit) gains a fifth check — missing
+  `CHANGELOG.md [Unreleased]` entry on a user-visible change is a finding,
+  mirroring the new `prod-ready` Section 7 item.
+- `docs/CONVENTIONS.md` documents branch naming (`feat/<short-name>` /
+  `fix/<short-name>`) and commit-message conventions, and points at
+  `skills/formats/STYLE-comments.md` as the comment bar.
+- `docs/known-issues.md` bootstrapped to track accepted-but-unimplemented
+  ADRs (currently: ADR-0001 distributed state).
+- ADR-0001 (distributed state) accepted: `tdd-rounds` state will move
+  from a single global `docs/STATE.md` to feature-scoped
+  `docs/features/<name>/state/{snapshot.md, rounds/*.md}`. Skill text
+  migration is tracked as a follow-up in `docs/known-issues.md`.
+
+### Changed
+- `STYLE-comments.md` rewritten to bias harder against comments by
+  default. Docstrings on exported identifiers are no longer required —
+  written only when the contract isn't obvious from the signature.
+  Trade-off and provenance comments are kept only when the next reader
+  would otherwise reattempt the rejected alternative. Net: ~20% shorter
+  guide, stronger default-no-comment bias.
+- `STYLE-comments.md` §2 tightened — adds a sixth "delete on sight"
+  pattern (in-function section headers `// validate`, `// build response`).
+- `STYLE-comments.md` §1.3 examples relabeled by kind (Invariant /
+  Constraint / Trade-off / Provenance) to match the four-noun section
+  title; restores the explicit Provenance label that was lost when the
+  old §1.5 was folded in.
+- `tdd`, `tdd-rounds`, and `feature-doc` tightened — require a non-`main`
+  feature branch before writing tests / committing the contract doc.
+  Code lands on `feat/<name>` or `fix/<name>`; `main` receives merges,
+  not commits. `tdd-rounds` Builder's branch verification promoted to a
+  dedicated pre-flight step (step 0), separate from context-loading.
+- `code-hygiene` Principle 6 sharpened — default is NONE, delete on
+  doubt; in-function section headers and obvious-from-signature
+  docstrings added to the "delete on sight" list. Top-of-file principle
+  count updated from five to six to match the body.
+- `simplify` Quality lens now defaults to DELETE for comments unless
+  the reader would otherwise reattempt the rejected alternative.
+- `pr-review` calibrates comment noise as a **nit** by default;
+  promoted to suggestion only when cumulative noise obscures the diff.
+- `pr-review` §3e renumbered to §3f (was a duplicate-`3e` collision with
+  the doc-drift audit above it).
+- `feature-doc` Done-when reordered — branch-check now precedes
+  reviewer sign-off (you can't review what isn't on a branch).
+
+### Fixed
+- `docs/CONVENTIONS.md` created to satisfy README cross-references.
+- Skill file corruption repaired (`tdd-rounds`, `code-hygiene`,
+  `WORKFLOWS.md`); repo docs (`docs/CONTEXT.md`,
+  `docs/adr/0001-distributed-state.md`,
+  `docs/features/distributed-state.md`) bootstrapped.
+- `skills/README.md` "Adding a skill" step 7 had an orphan duplicate
+  fragment; removed.
+- `skills/WORKFLOWS.md` cross-workflow item renumbered `12` → `15`
+  (was a duplicate of an earlier `12`); artifacts table gained a
+  `CHANGELOG.md` row and qualifies the `docs/STATE.md` /
+  feature-scoped-state rows as current-vs-target per ADR-0001.
+
+## [1.2.0] — 2026-05-25
+
+### Added
+- `caveman` skill (efficiency lens applied during code reading and review).
+- `sync-check` skill integrated into the pre-`pr-review` gate as a
+  terminology/ADR drift audit.
+- OpenCode support in the npx installer (`--opencode` flag).
+- [AgentLead.Dev](https://AgentLead.Dev) homepage; linked from root README.
+
+### Changed
+- Comment-style guide anchored in the global skills substrate
+  (`skills/formats/STYLE-comments.md`).
+- Skill counts and cross-references synced across READMEs.
+
+### Removed
+- `phase` and `phase-cleanup` skills (introduced in 1.1.0, reverted in
+  1.2.0 — milestone/phase tracking didn't fit the lazy-creation model).
+
+## [1.1.0] — 2026-05-22 [DEPRECATED]
+
+> This release introduced `phase` / `phase-cleanup` skills, which were
+> reverted before 1.2.0. Treat as a no-op; do not depend on it.
+
+### Added
+- `phase` and `phase-cleanup` skills (reverted in 1.2.0).
+
+## [1.0.0] — 2026-05-22
+
+### Added
+- Initial skills library: planning, design, implementation, and pre-merge
+  skills (`bootstrap`, `feature-doc`, `investigate`, `grill-plan`, `bench`,
+  `system-design`, `design`, `improve-codebase-architecture`, `code-hygiene`,
+  `zoom-out`, `debug`, `tdd`, `tdd-rounds`, `simplify`, `prod-ready`,
+  `security-review`, `pr-review`, `verify-real-deps`).
+- Shared substrate: `skills/LANGUAGE.md`, `skills/TRIGGERS.md`,
+  `skills/WORKFLOWS.md`, `skills/formats/`.
+- Root README explaining the library's purpose and installation.
+- `npx @ai-agent-lead/skills` installer with `--global`, `--local`,
+  `--claude`, `--codex`, `--antigravity`, `--all`, `--force` flags.
