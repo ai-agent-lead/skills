@@ -1,3 +1,14 @@
+---
+type: known-issues
+title: "Known issues — post-vN.0 smoke test findings"
+description: Bugs surfaced by the first end-to-end run against the real upstream.
+tags: [smoke-test, known-issues]
+timestamp: YYYY-MM-DD
+---
+
+<!-- Frontmatter is OKF per skills/formats/OKF.md (`type: known-issues`).
+     `timestamp` tracks the last edit; the Discovered line below pins the first run. -->
+
 # Known issues — post-vN.0 smoke test findings
 
 **Discovered:** YYYY-MM-DD (first end-to-end run against real <upstream>).

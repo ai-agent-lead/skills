@@ -1,7 +1,15 @@
+---
+type: adr
+title: Distributed and Feature-Scoped State
+description: tdd-rounds state moves from a global STATE.md to feature-scoped docs/features/<name>/state/.
+tags: [tdd-rounds, state, architecture]
+timestamp: 2026-05-25
+status: accepted
+---
+
 # Distributed and Feature-Scoped State
 
 **Status:** accepted
-**Date:** 2026-05-25
 
 We decided to move away from a single global `docs/STATE.md` for `tdd-rounds` and instead use feature-scoped state stored under `docs/features/<name>/state/`.
 

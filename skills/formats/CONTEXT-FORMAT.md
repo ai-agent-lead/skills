@@ -1,8 +1,18 @@
 # CONTEXT.md Format
 
+`CONTEXT.md` is a produced doc, so it opens with OKF frontmatter per [`OKF.md`](OKF.md) (`type: context`; a `CONTEXT-MAP.md` uses `type: context-map`).
+
 ## Structure
 
 ```md
+---
+type: context
+title: {Context Name}
+description: {one sentence on what this context is and why it exists}
+tags: [{area}]
+timestamp: YYYY-MM-DD
+---
+
 # {Context Name}
 
 {One or two sentence description of what this context is and why it exists.}
@@ -52,6 +62,14 @@ _Avoid_: Client, buyer, account
 The opening example uses an Ordering/Billing domain to show cross-context structure. For a smaller project a `CONTEXT.md` may be just a handful of terms and no relationships:
 
 ```md
+---
+type: context
+title: Todo App
+description: Vocabulary used across internal/auth and internal/todos.
+tags: [auth, todos]
+timestamp: 2026-05-22
+---
+
 # Todo App
 
 Vocabulary used across `internal/auth` and `internal/todos`.
@@ -85,6 +103,14 @@ An item on a User's personal list — text plus a done flag. Owned by exactly on
 **Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
 
 ```md
+---
+type: context-map
+title: Context Map
+description: Lists the bounded contexts in this repo and how they relate.
+tags: [architecture]
+timestamp: 2026-05-22
+---
+
 # Context Map
 
 ## Contexts

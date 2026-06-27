@@ -1,7 +1,16 @@
+---
+type: benchmark
+title: "Benchmark Report: <feature>"
+description: <one sentence — what was measured and the headline result>
+tags: [performance, <area>]
+timestamp: YYYY-MM-DD
+---
+
+<!-- Frontmatter is OKF per skills/formats/OKF.md (`type: benchmark`). -->
+
 # Benchmark Report
 
 **Feature:** <feature>
-**Date:** YYYY-MM-DD
 
 ## Environment
 - **Hardware:** <e.g., Apple M1 Max, 64GB RAM>

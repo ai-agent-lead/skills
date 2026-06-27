@@ -1,8 +1,20 @@
+---
+type: research
+title: "Research: <topic>"
+description: <one sentence — the question this note investigates>
+tags: [<area>]
+timestamp: YYYY-MM-DD
+status: Open
+owner: <user>
+---
+
+<!-- Frontmatter is OKF per skills/formats/OKF.md. `timestamp` is the canonical date;
+     `status`/`owner` mirror the human-facing lines below (OKF models neither). -->
+
 # Research: <topic>
 
 **Status:** Open | Decided | Superseded
 **Owner:** <user>
-**Date:** YYYY-MM-DD
 
 <!--
 Status values:
