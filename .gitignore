@@ -1,0 +1,9 @@
+# Secrets / auth — never commit
+.env
+.env.*
+.npmrc
+
+# Dependencies & logs
+node_modules/
+npm-debug.log*
+*.log
