@@ -108,6 +108,7 @@ Once the doc is reviewed and ACs are stable:
 
 - A feature branch (e.g. `feat/<short-name>` or `fix/<short-name>`) is checked out and the contract doc is committed on it, **not on `main`**.
 - `docs/features/<short-name>.md` exists with all four required sections.
+- The doc opens with OKF frontmatter (`type: feature`) per [`skills/formats/OKF.md`](../formats/OKF.md).
 - ACs are testable Given / When / Then statements.
 - Non-Goals is non-empty (or explicitly "none — see scope in Problem").
 - One reviewer has signed off.

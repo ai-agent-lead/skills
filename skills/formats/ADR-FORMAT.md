@@ -4,18 +4,28 @@ ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slu
 
 Create the `docs/adr/` directory lazily — only when the first ADR is needed.
 
+An ADR is a produced doc, so it opens with OKF frontmatter per [`OKF.md`](OKF.md) (`type: adr`).
+
 ## Template
 
 ```md
+---
+type: adr
+title: {Short title of the decision}
+description: {one sentence — what we decided and why}
+tags: [{area}]
+timestamp: YYYY-MM-DD
+status: accepted
+---
+
 # {Short title of the decision}
 
 **Status:** accepted
-**Date:** YYYY-MM-DD
 
 {1-3 sentences: what's the context, what did we decide, and why.}
 ```
 
-That's it. An ADR can be a single paragraph plus the two header lines. The value is in recording *that* a decision was made and *why* — not in filling out sections.
+That's it. An ADR can be a single paragraph plus the frontmatter and the `Status` line. The value is in recording *that* a decision was made and *why* — not in filling out sections. The date lives in `timestamp`; don't also keep a `**Date:**` line.
 
 ## Optional sections
 

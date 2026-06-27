@@ -1,8 +1,20 @@
+---
+type: feature
+title: <Feature Name>
+description: <one sentence — the user pain this feature solves>
+tags: [<area>]
+timestamp: YYYY-MM-DD
+status: Draft
+owner: <name>
+---
+
+<!-- Frontmatter is OKF per skills/formats/OKF.md. `timestamp` is the canonical date;
+     `status`/`owner` mirror the human-facing lines below (OKF models neither). -->
+
 # <Feature Name>
 
 **Status:** Draft | Approved | In Progress | Shipped
 **Owner:** <name — primary author and point of contact for follow-up>
-**Date:** YYYY-MM-DD
 
 <!--
 Status values:

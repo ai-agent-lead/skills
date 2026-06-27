@@ -61,6 +61,7 @@ Implementation lands → docs drift. The natural moment to catch drift is now, n
 - [ ] **New/removed package, changed public interface, or shifted module boundary** → the feature's design note (e.g., `docs/features/<feature>.design.md`) updated. Specifically: Module map, File layout, public-interface signatures, Test boundaries.
 - [ ] **Changed acceptance criteria** → the feature doc reflects what was actually built. Silently-dropped or silently-added behavior is the most common drift class — fix here, don't kick to a follow-up.
 - [ ] **User-visible change** → `CHANGELOG.md` has an entry under `[Unreleased]`, grouped by `Added / Changed / Fixed / Removed`. Skip only if the diff is formatter-only, lint-only, test-only, internal refactor with no behavior change, or a dependency bump with no runtime impact. (Overlaps but is **not identical** to `feature-doc`'s skip list — that one also waives the *doc* for typo fixes and one-line config tweaks. A typo fix can still merit a one-liner here.)
+- [ ] **New or changed doc under `docs/`** → it opens with OKF frontmatter carrying a non-empty `type` from [`skills/formats/OKF.md`](../formats/OKF.md) §2. A produced doc with no `type` breaks the bundle's conformance — fix here.
 
 If a doc type isn't relevant to this work, write "n/a" — explicit beats implicit.
 

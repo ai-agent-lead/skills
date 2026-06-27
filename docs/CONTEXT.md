@@ -1,3 +1,11 @@
+---
+type: context
+title: AI Agent Skills
+description: Vocabulary and system map for the skills set used to shape AI agent behavior.
+tags: [vocabulary, architecture]
+timestamp: 2026-06-27
+---
+
 # AI Agent Skills
 
 Vocabulary and system map for the skills set used to shape AI agent behavior.

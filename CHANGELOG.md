@@ -12,6 +12,22 @@ to the new version and a fresh `[Unreleased]` block is opened.
 ## [Unreleased]
 
 ### Added
+- **OKF adoption for produced docs** ([ADR-0002](docs/adr/0002-adopt-okf-for-produced-docs.md)).
+  Every doc a skill writes under `docs/` now carries [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
+  (OKF v0.1) YAML frontmatter — required `type` plus `title` / `description` /
+  `tags` / `timestamp` — making `docs/` a consumable OKF bundle.
+  - New substrate `skills/formats/OKF.md` defines the frontmatter contract and
+    the `type` vocabulary (`adr`, `feature`, `research`, `context`,
+    `context-map`, `convention`, `known-issues`, `benchmark`, `design`,
+    `state`).
+  - Producer templates/formats now emit the block: `ADR-FORMAT`, `CONTEXT-FORMAT`,
+    `feature-template`, `research-note`, `benchmark-report`, and
+    `verify-real-deps/known-issues`.
+  - Existing `docs/` retrofitted as the dogfooded worked example; added
+    `docs/index.md` (OKF bundle listing). `CHANGELOG.md` serves as the
+    bundle's `log.md`.
+  - `prod-ready` Section 7 and `pr-review` §3e doc-drift audits gain a check:
+    a produced doc missing `type` is a finding.
 - `prod-ready` Section 7 now requires a `CHANGELOG.md` entry for any
   user-visible change. Skip list (formatter-only / lint-only / test-only /
   internal-refactor-with-no-behavior-change / dep-bump-with-no-runtime-impact)
