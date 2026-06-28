@@ -11,6 +11,8 @@ to the new version and a fresh `[Unreleased]` block is opened.
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-06-28
+
 > **Heads-up:** `code-hygiene` and `sync-check` are no longer routable skills
 > (see Removed) — point anything that invoked them by name at the new
 > `formats/` references.
