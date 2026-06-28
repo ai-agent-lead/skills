@@ -2,6 +2,8 @@
 
 Canonical scaffold for every skill in this set. Copy the body below into a new `<skill-name>/SKILL.md`, fill it in, then prune sections that genuinely don't apply (rather than leaving placeholders).
 
+**Before you create one:** apply the test in [ADR-0003](../docs/adr/0003-lenses-as-shared-references.md). A discipline applied only *inside* other skills — a lens or diagnostic never invoked on its own — belongs in [`formats/`](formats/) as a shared reference, not a `SKILL.md`. A `SKILL.md` is earned by a routable phase a user or another skill invokes directly.
+
 The order is load-bearing. Claude scans top-to-bottom — `When to use` / `When to skip` should hit early so routing is decided before the reader gets to the body.
 
 ## Naming and placement

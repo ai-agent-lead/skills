@@ -28,6 +28,10 @@ to the new version and a fresh `[Unreleased]` block is opened.
   narrowest honest scope, no `constants.ts` dumping ground, env-varying values
   from config not source literals. Closes a gap (the set had zero guidance on
   constant placement).
+- [ADR-0003](docs/adr/0003-lenses-as-shared-references.md) records the rule
+  behind this release's consolidation: a discipline applied only inside other
+  skills is a `formats/` reference, not a routable skill. Referenced from
+  `SKILL-TEMPLATE.md` at the point of action.
 
 ### Changed
 - **`code-hygiene` demoted from a skill to a shared reference.** It was a lens
