@@ -11,10 +11,9 @@ to the new version and a fresh `[Unreleased]` block is opened.
 
 ## [Unreleased]
 
-> **Breaking for installs that reference the removed skills.** `code-hygiene`
-> and `sync-check` are no longer routable skills (see Removed). Anything that
-> invoked them by name should point at the new `formats/` references instead.
-> Warrants a major bump at release time.
+> **Heads-up:** `code-hygiene` and `sync-check` are no longer routable skills
+> (see Removed) — point anything that invoked them by name at the new
+> `formats/` references.
 
 ### Added
 - `skills/formats/CODE-HYGIENE.md` — the line-level lens (boring code, naming,

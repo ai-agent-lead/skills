@@ -31,7 +31,7 @@ The set had accumulated "lens" and "diagnostic" skills whose content was applied
 
 ## Consequences
 
-- Removing the two skills is **breaking** for installs that reference them by name (see `CHANGELOG.md`; warrants a major bump at release).
+- Removing the two skills affects installs that referenced them by name — point those at the new references (see `CHANGELOG.md` `Removed`). Shipped as a minor bump, consistent with the project's precedent for skill removals (1.2.0).
 - New contributor rule: before adding a `SKILL.md`, apply the test above. Captured at the point of action in [`skills/SKILL-TEMPLATE.md`](../../skills/SKILL-TEMPLATE.md).
 - Shared content gets a single home and one edit point; the doc-drift audit no longer has three copies to keep in sync.
 
