@@ -1,15 +1,10 @@
----
-name: code-hygiene
-description: Day-to-day coding discipline at the line and function level — boring code, naming as primary refactor, YAGNI, rule of 3, locality of behavior. Use when reviewing or writing code, when names feel wrong, when tempted to abstract too early, when a solution looks clever, when the simplify pass after `tdd` runs, or when the user mentions "simpler", "boring", "naming", "YAGNI", "premature abstraction", "over-engineered". Skip for module-level interface design — use `design` instead. Skip for whole-codebase architectural sweeps — use `improve-codebase-architecture`.
-complexity: low
-expected_duration: 5 minutes
----
-
 # Code Hygiene
 
-Day-to-day discipline that keeps a codebase readable, navigable, and easy to change. Smaller in scope than `design` (which shapes module interfaces) — these are line-level and function-level habits.
+The line-level and function-level lens this skill set carries into any turn that writes or reads code. Smaller in scope than [`design`](../design/SKILL.md) (which shapes module interfaces) — these are the day-to-day habits that keep a codebase readable, navigable, and easy to change.
 
-Six principles.
+This is a **shared reference**, not a standalone skill. It is the lens applied *while writing*, during the [`simplify`](../simplify/SKILL.md) sweep after `tdd` reaches green, and during [`pr-review`](../pr-review/SKILL.md) (§3f). Read it once; apply it many times.
+
+Seven principles.
 
 1. **Boring code beats clever code** — prefer the obvious solution over the elegant trick.
 2. **Naming is the primary refactor** — a bad name misleads longer than a bad implementation.
@@ -17,19 +12,7 @@ Six principles.
 4. **Rule of 3 before extracting** — duplicate twice; extract on the third occurrence, not the second.
 5. **Locality of behavior** — related code lives together; don't split by category.
 6. **Comments earn their keep** — default NONE; keep only why-comments tied to an invariant, trade-off, or provenance the next reader would otherwise miss.
-
-## When to use
-
-- Writing new code, line by line — keep these in mind as you type.
-- Reviewing a PR — these are six common smell categories.
-- After `tdd` reaches green, during the [`simplify`](../simplify/SKILL.md) sweep — `code-hygiene` is the lens you apply.
-- When you read code and pause to figure out what it's doing — that pause is a smell.
-
-## When to skip
-
-- Module-level shape (interface, depth, dependencies) — use `design`.
-- Whole-codebase sweeps for shallow modules — use `improve-codebase-architecture`.
-- The horizontal-vs-vertical TDD failure mode — that's `tdd`'s territory.
+7. **Constants live where they're used** — narrowest honest scope; no `constants.ts` dumping ground.
 
 ## Principle 1: Boring code beats clever code
 
@@ -74,17 +57,28 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 **Why**: a new contributor should be able to read one folder and understand one feature, not bounce across five folders to follow one request.
 
-**Smell**: changing one feature requires editing 5 files in 5 directories. That's a sign the structure separates *type* of code, not *responsibility*. (This is a `improve-codebase-architecture` issue at scale, but at smaller scale you can fix it inline by colocating files.)
+**Smell**: changing one feature requires editing 5 files in 5 directories. That's a sign the structure separates *type* of code, not *responsibility*. (This is an [`improve-codebase-architecture`](../improve-codebase-architecture/SKILL.md) issue at scale, but at smaller scale you can fix it inline by colocating files.)
 
 ## Principle 6: Comments earn their keep
 
-**The bar:** [`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md). Apply it *while writing*, not only during the `simplify` sweep.
+**The bar:** [`STYLE-comments.md`](STYLE-comments.md). Apply it *while writing*, not only during the `simplify` sweep.
 
 **Default: NONE.** If you're unsure whether a comment earns its line, delete it. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot — and only if the next reader would otherwise reattempt the rejected alternative.
 
 **Delete on sight**: WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, commented-out code, in-function section headers (`// validate`, `// build response`), and docstrings on exports whose contract is obvious from the signature.
 
-## Done when
+## Principle 7: Constants live where they're used
+
+A constant belongs at the **narrowest honest scope** — next to the code that uses it, not in a far-off catch-all file.
+
+- **Default to local.** Define it in the function or module that uses it. Widen the scope only when a *second* caller genuinely shares the same value (rule of 3) or it's a single-source-of-truth domain value (a timeout, a retry limit, a page size, an external URL) that must not diverge between call sites.
+- **Reject the dumping ground.** A `constants.ts` / `config.ts` / `utils.ts` god-file of unrelated constants breaks locality — you bounce across files to understand one feature. Group constants by the *responsibility* they serve, not by the fact that they're all constants.
+- **Name a literal only when its meaning is non-obvious.** `MAX_RETRIES = 3` earns its name; `index + 1` and `slice(0, 1)` don't. A magic number whose *meaning* a reader can't infer is a naming problem (Principle 2); a self-evident one isn't.
+- **Environment-varying values are config from env, not constants in source.** A timeout you tune per environment, an API base URL, a feature flag — those come from the env / secret store ([`prod-ready`](../prod-ready/SKILL.md) §3), not a hardcoded literal. Centralizing constants and hardcoding env values are opposite mistakes; don't make both.
+
+**Smell**: a top-level `constants.ts` that grows every feature, imported by half the codebase. Each import is a caller reaching across the codebase for one value that probably belonged next to its single use.
+
+## The bar — clean when
 
 - Names communicate intent — a stranger reads them and forms the right mental model.
 - The clever shortcut is replaced with the obvious version (or its cleverness is justified by a comment naming the constraint).
@@ -92,9 +86,10 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 - Duplications either survived the 2-occurrence test (left as-is) or proved themselves at the 3rd occurrence (extracted).
 - Related code lives near related code.
 - Every surviving comment names a why, an invariant, a trade-off, or a provenance link. None restates the code.
+- Constants sit at their narrowest honest scope — no unrelated-constants dumping ground; env-varying values come from config, not source literals.
 
-## Pairing with other skills
+## Scope boundaries
 
-- **`design`** sets module shape; `code-hygiene` polishes within the module. Different scopes; both apply.
-- **`tdd`** reaches green; `code-hygiene` is part of the simplify sweep that follows.
-- **`improve-codebase-architecture`** finds shallow modules; if the diagnosis is "shallow" but the fix is line-level (rename, inline, delete dead helper), this skill applies. If the fix is structural (deepen the module), that one does.
+- Module-level shape (interface, depth, dependencies) is [`design`](../design/SKILL.md)'s job, not this lens's.
+- Whole-codebase sweeps for shallow modules are [`improve-codebase-architecture`](../improve-codebase-architecture/SKILL.md). If the diagnosis is "shallow" but the fix is line-level (rename, inline, delete dead helper), this lens applies; if the fix is structural (deepen the module), that skill does.
+- Architecture vocabulary (module, interface, depth, seam) comes from [`LANGUAGE.md`](../LANGUAGE.md) — don't redefine.

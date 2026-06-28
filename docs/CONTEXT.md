@@ -29,7 +29,7 @@ The shared foundation of vocabulary (`LANGUAGE.md`) and formats (`formats/`) tha
 _Avoid_: base, common
 
 **Lens**:
-A skill that is applied during other skills to maintain quality (e.g., `code-hygiene`), rather than being invoked as a standalone phase.
+A discipline applied during other skills to maintain quality, rather than being invoked as a standalone phase. May be a skill (e.g., `caveman`) or a shared reference (e.g., the `code-hygiene` lens in `formats/`).
 _Avoid_: principle, guideline
 
 **Gate**:

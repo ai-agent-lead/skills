@@ -1,8 +1,6 @@
 ---
 name: investigate
 description: Use when the user asks for investigation, research, a proposal, or "options" before any code lands; or proactively for non-trivial structural decisions (new dependency, framework choice, API contract change, cross-cutting refactor). Triggered by phrases like "investigate X", "research Y", "give me a proposal", "what are our options", "how would we approach", "let's explore", "should we...". Produces a durable research note in `docs/research/<topic>.md`. Skip for tasks where one obvious approach exists (typo fixes, config tweaks, mechanical refactors). Pairs with `feature-doc` (captures *what* we're building once a direction is chosen) and `grill-plan` (stress-tests a chosen plan).
-complexity: medium
-expected_duration: 20 minutes
 ---
 
 # Investigation Workflow

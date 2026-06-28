@@ -13,7 +13,7 @@ If a phrase appears in multiple rows, the disambiguation column names how to cho
 | "before any non-trivial feature", "let's spec this out", "write a feature doc" | [`feature-doc`](feature-doc/SKILL.md) | Skip for typo / dep bump / pure refactor. |
 | "grill me on this", "stress-test this plan", "walk me through this", "is this consistent with our model" | [`grill-plan`](grill-plan/SKILL.md) | A plan exists; you want it pressure-tested. |
 | "benchmark", "performance test", "measure latency", "profile" | [`bench`](bench/SKILL.md) | Performance verification. |
-| "is the naming right?", "does this match our glossary?", "audit terminology", "sync check", "context audit" | [`sync-check`](sync-check/SKILL.md) | Before `pr-review` or after refactor. |
+| "is the naming right?", "does this match our glossary?", "audit terminology", "sync check", "context audit" | doc-drift audit ([`formats/DOC-DRIFT-AUDIT.md`](formats/DOC-DRIFT-AUDIT.md)) | The former `sync-check` skill — now a shared reference. Run standalone, or from `prod-ready` §7 / `pr-review` §3e. |
 
 ## Design & architecture
 
@@ -22,7 +22,7 @@ If a phrase appears in multiple rows, the disambiguation column names how to cho
 | "system architecture", "module boundaries", "service boundaries", "how should I structure this system", "draw the architecture", "topology" | [`system-design`](system-design/SKILL.md) | Greenfield, multi-module. For single-module work → `design`. For reorganising an existing codebase → `improve-codebase-architecture`. |
 | "how should I structure this", "deep modules", "testability", "API design", "design this module" | [`design`](design/SKILL.md) | Single module / public API, NEW code. For existing code → `improve-codebase-architecture`. |
 | "improve architecture", "find refactoring opportunities", "consolidate", "deepen these modules", "make this more testable" | [`improve-codebase-architecture`](improve-codebase-architecture/SKILL.md) | EXISTING code, cross-module. For local single-module refactor → `design` or just refactor inline. |
-| "simpler", "boring", "naming", "YAGNI", "premature abstraction", "over-engineered", "clean this up at line level" | [`code-hygiene`](code-hygiene/SKILL.md) | Lens, not phase — applies during simplify, pr-review, or whenever you re-read code. |
+| "simpler", "boring", "naming", "YAGNI", "premature abstraction", "over-engineered", "clean this up at line level" | [`code-hygiene`](formats/CODE-HYGIENE.md) lens (via `simplify`) | A shared reference, not a routable skill — applies during `simplify`, `pr-review` §3f, or whenever you re-read code. |
 | "I'm lost", "give me higher-level context", "zoom out", "I don't know this area" | [`zoom-out`](zoom-out/SKILL.md) | User-invoked utility (`disable-model-invocation`). |
 
 ## Utilities & efficiency
@@ -55,7 +55,7 @@ Some phrases overlap. Pick by the disambiguator:
 
 - **"design"** alone — almost always [`design`](design/SKILL.md). If the user means "system design", that phrase routes to [`system-design`](system-design/SKILL.md).
 - **"refactor"** — [`improve-codebase-architecture`](improve-codebase-architecture/SKILL.md) for cross-module; [`design`](design/SKILL.md) or just inline edits for one-module shape; [`simplify`](simplify/SKILL.md) for end-of-round line-level cleanup.
-- **"clean up"** — [`code-hygiene`](code-hygiene/SKILL.md) as a lens; [`simplify`](simplify/SKILL.md) as the end-of-round action; [`improve-codebase-architecture`](improve-codebase-architecture/SKILL.md) if the cleanup is structural.
+- **"clean up"** — the [`code-hygiene`](formats/CODE-HYGIENE.md) lens; [`simplify`](simplify/SKILL.md) as the end-of-round action; [`improve-codebase-architecture`](improve-codebase-architecture/SKILL.md) if the cleanup is structural.
 - **"test"** — [`tdd`](tdd/SKILL.md) for writing tests against new behavior; [`debug`](debug/SKILL.md) when the test you'd write isn't obvious yet (root cause unclear); [`simplify`](simplify/SKILL.md)'s lens 4 for assessing existing tests.
 - **"ship"** — [`prod-ready`](prod-ready/SKILL.md) for the gate; [`verify-real-deps`](verify-real-deps/SKILL.md) for tagged release with third-party APIs.
 

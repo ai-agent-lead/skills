@@ -1,8 +1,6 @@
 ---
 name: bench
 description: Performance benchmarking discipline. Measures latency, throughput, and records baseline environments. Triggered by phrases like "benchmark", "performance test", "measure latency".
-complexity: medium
-expected_duration: 30 minutes
 ---
 
 # Benchmark

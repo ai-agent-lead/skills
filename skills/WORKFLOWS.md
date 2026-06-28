@@ -1,6 +1,6 @@
 # Workflows
 
-How the 20 skills compose into the common paths users actually walk.
+How the skill set composes into the common paths users actually walk.
 
 The skills aren't a flat menu — they form a workflow with branching. This file maps the canonical paths so you can see where to enter, what to expect, and what produces what.
 
@@ -32,7 +32,7 @@ Got a task? Pick by what you have in front of you:
 │ Surface-changing work (auth, public │ /security-review (gate, runs     │
 │   API, sensitive data, new entry pt)│  alongside Workflow 1/2/6)       │
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Audit terminology or ADR compliance │ /sync-check (gate)               │
+│ Audit terminology or ADR compliance │ doc-drift audit (DOC-DRIFT-AUDIT)│
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Lost in unfamiliar area, mid-task   │ /zoom-out  (utility, anytime)    │
 └─────────────────────────────────────┴──────────────────────────────────┘
@@ -73,9 +73,7 @@ For a single-package feature with a manageable acceptance-criteria count.
             │
             ▼
        prod-ready  ──── 7-section checklist
-            │
-            ▼
-       sync-check  ──── terminology and ADR audit
+            │             (§7 = doc-drift audit: terminology + ADR + doc-map)
             │
             ▼
        (optional) pr-review  ── self-check against the diff before opening
@@ -334,7 +332,7 @@ A few things that happen across all workflows:
 
 3. **`design` doesn't have a workflow of its own** — it's a sub-step inside Workflow 1, 2, and 4. Always paired with `tdd` (or implicitly with `tdd-rounds`). Optional sibling artifact `docs/features/<name>.design.md` when the module shape is non-trivial.
 
-4. **`code-hygiene` is a lens, not a phase.** Apply it during the simplify sweep that follows TDD green, during `pr-review`, or whenever you re-read code and pause to understand it. Especially relevant in Workflows 1, 2, 4, and 5.
+4. **`code-hygiene` is a lens, not a phase** — and now a shared reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)), not a routable skill. Apply it during the simplify sweep that follows TDD green, during `pr-review` §3f, or whenever you re-read code and pause to understand it. Especially relevant in Workflows 1, 2, 4, and 5.
 
 5. **`caveman` is an efficiency lens.** Apply it whenever token optimization is needed, particularly in Builder reports or long sessions. It doesn't change the workflow but compresses the communication.
 
@@ -352,9 +350,9 @@ A few things that happen across all workflows:
 
 12. **Vocabulary is shared.** All architecture-talking skills (`design`, `system-design`, `improve-codebase-architecture`, `pr-review`, `grill-plan`) read from [`skills/LANGUAGE.md`](./LANGUAGE.md). Format references (ADRs, CONTEXT.md) live in [`skills/formats/`](./formats/). Domain vocabulary (Customer, Order, etc.) lives in `docs/CONTEXT.md`. Keep them distinct.
 
-13. **Bootstrap mode for greenfield repos** is documented in one place — [`grill-plan/BOOTSTRAP.md`](./grill-plan/BOOTSTRAP.md). `feature-doc` and `system-design` defer there rather than re-explaining the rules.
+13. **Bootstrap mode for greenfield repos** is documented in one place — [`bootstrap/BOOTSTRAP.md`](./bootstrap/BOOTSTRAP.md). `feature-doc`, `system-design`, and `improve-codebase-architecture` defer there rather than re-explaining the rules.
 
-14. **`simplify` is the end-of-slice / end-of-round sweep.** Runs after every `tdd` slice goes green; in `tdd-rounds`, lands as its own commit per [`tdd-rounds/COMMITS.md` rule 4](./tdd-rounds/COMMITS.md). Applies the `code-hygiene` lens to the changed files, plus a test-relevance check. Distinct from `code-hygiene` (the lens) and from `improve-codebase-architecture` (the structural escalation when simplify finds bigger issues).
+14. **`simplify` is the end-of-slice / end-of-round sweep.** Runs after every `tdd` slice goes green; in `tdd-rounds`, lands as its own commit per [`tdd-rounds/COMMITS.md` rule 4](./tdd-rounds/COMMITS.md). Applies the [`code-hygiene`](./formats/CODE-HYGIENE.md) lens to the changed files, plus a test-relevance and telemetry check. Distinct from the `code-hygiene` lens reference itself and from `improve-codebase-architecture` (the structural escalation when simplify finds bigger issues).
 
 15. **Artifacts accumulate in `docs/`:**
 

@@ -1,8 +1,6 @@
 ---
 name: debug
 description: Disciplined reproduction, isolation, and hypothesis-testing for non-trivial bugs — runs BEFORE `tdd` when the failing assertion isn't yet known. Use when the user reports a bug whose root cause is not obvious from the symptom — triggered by phrases like "it's broken", "this is failing", "intermittent", "flaky", "regression", "not sure why", "production issue", "doesn't work in <env>". Skip for typos, clear stack traces with one-step fixes, or bugs whose fix is obvious from reading the message. Pairs with `tdd` (downstream — the failing test crystallises once the bug is reproduced) and `zoom-out` (upstream, when the area is unfamiliar).
-complexity: high
-expected_duration: 45 minutes
 ---
 
 # Debug

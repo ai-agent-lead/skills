@@ -1,8 +1,6 @@
 ---
 name: design
 description: Module and interface design principles — deep modules and testable interfaces. Use when designing a NEW module, class, or public API; deciding what to expose vs hide; reviewing an interface before implementation; or when the user asks "how should I structure this", mentions "deep modules", "testability", or "API design". Use for NEW code shape; for finding deepening opportunities in EXISTING code, use `improve-codebase-architecture`. Skip for trivial glue, getters/setters, or single-call wrappers. Pairs with the tdd skill — good design is what makes TDD pleasant.
-complexity: medium
-expected_duration: 20 minutes
 ---
 
 # Module and Interface Design

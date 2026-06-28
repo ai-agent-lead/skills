@@ -2,6 +2,8 @@
 
 Canonical scaffold for every skill in this set. Copy the body below into a new `<skill-name>/SKILL.md`, fill it in, then prune sections that genuinely don't apply (rather than leaving placeholders).
 
+**Before you create one:** apply the test in [ADR-0003](../docs/adr/0003-lenses-as-shared-references.md). A discipline applied only *inside* other skills — a lens or diagnostic never invoked on its own — belongs in [`formats/`](formats/) as a shared reference, not a `SKILL.md`. A `SKILL.md` is earned by a routable phase a user or another skill invokes directly.
+
 The order is load-bearing. Claude scans top-to-bottom — `When to use` / `When to skip` should hit early so routing is decided before the reader gets to the body.
 
 ## Naming and placement
@@ -27,6 +29,8 @@ The `description` is the routing signal. It should:
 - Name 1–3 adjacent skills (upstream / downstream / lateral) so Claude can de-conflict.
 
 A `description` that names only the happy path will route falsely. Always name what to skip.
+
+**Optional frontmatter.** Add `disable-model-invocation: true` for a user-only utility that should never auto-fire (e.g. `zoom-out`); the skill then runs only on explicit invocation. No other keys are read by the harness — `name` and `description` are the whole routing contract. Don't add decorative metadata (`complexity`, `expected_duration`, etc.); it isn't consumed and only drifts.
 
 ## Canonical body shape
 
@@ -98,7 +102,7 @@ A `description` that names only the happy path will route falsely. Always name w
 
 ## Voice and length
 
-- **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility / lens skills run short (tdd-rounds, simplify, code-hygiene). Don't pad an orchestration skill to match a teaching skill — it adds noise.
+- **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility skills run short (tdd-rounds, simplify, caveman). Don't pad an orchestration skill to match a teaching skill — it adds noise.
 - **No hedging.** "Sometimes consider maybe doing X" is dead text. Pick a recommendation.
 - **No corporate voice.** Direct sentences. The reader is a fast-reading senior engineer or an LLM, not an executive.
 - **Cite paths**: `path:line` or `[link](relative/path.md)`. Don't say "see the auth module"; say `src/auth/session.go:42`.

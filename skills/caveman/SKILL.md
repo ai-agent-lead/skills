@@ -1,8 +1,6 @@
 ---
 name: caveman
 description: Ultra-concise communication utility for token optimization. Use when the user mentions "caveman mode", "be concise", "save tokens", or "ooga booga". Strips articles, pleasantries, and filler words to maximize efficiency. Skip when the user explicitly requests professional or detailed explanations.
-complexity: low
-expected_duration: 5 minutes
 ---
 
 # Caveman Mode (Token Optimizer)

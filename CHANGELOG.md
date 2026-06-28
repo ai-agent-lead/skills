@@ -11,6 +11,61 @@ to the new version and a fresh `[Unreleased]` block is opened.
 
 ## [Unreleased]
 
+> **Heads-up:** `code-hygiene` and `sync-check` are no longer routable skills
+> (see Removed) — point anything that invoked them by name at the new
+> `formats/` references.
+
+### Added
+- `skills/formats/CODE-HYGIENE.md` — the line-level lens (boring code, naming,
+  YAGNI, rule of 3, locality, comments, constants placement) as a shared
+  reference. Consumed by `simplify`, `pr-review` §3f, and
+  `improve-codebase-architecture`.
+- `skills/formats/DOC-DRIFT-AUDIT.md` — the terminology / ADR / doc-map audit
+  as a single shared source. Run from `prod-ready` §7 (author lens),
+  `pr-review` §3e (reviewer lens), or standalone (the former `sync-check`).
+- `CODE-HYGIENE.md` Principle 7 — **"Constants live where they're used"**:
+  narrowest honest scope, no `constants.ts` dumping ground, env-varying values
+  from config not source literals. Closes a gap (the set had zero guidance on
+  constant placement).
+- [ADR-0003](docs/adr/0003-lenses-as-shared-references.md) records the rule
+  behind this release's consolidation: a discipline applied only inside other
+  skills is a `formats/` reference, not a routable skill. Referenced from
+  `SKILL-TEMPLATE.md` at the point of action.
+
+### Changed
+- **`code-hygiene` demoted from a skill to a shared reference.** It was a lens
+  "applied during other skills, not invoked alone" — that's a reference's job.
+  Its principles now live once in `formats/CODE-HYGIENE.md`; `simplify`
+  §2 and `pr-review` §3f link it instead of restating the comment rules.
+- **`sync-check` folded into `formats/DOC-DRIFT-AUDIT.md`.** The doc-drift
+  checks were triplicated across `sync-check`, `prod-ready` §7, and
+  `pr-review` §3e; they are now single-sourced. `prod-ready` §7 and
+  `pr-review` §3e reference the audit (author vs reviewer lens); `grill-plan`
+  points at it for escalation.
+- Dropped the unused `complexity:` / `expected_duration:` frontmatter from all
+  skills — no tooling read them and they drifted. `disable-model-invocation:`
+  (functional, on `zoom-out`) is kept. `SKILL-TEMPLATE.md` now documents the
+  real frontmatter schema: `name` + `description`, optional
+  `disable-model-invocation`, nothing else.
+- `design/ILLEGAL-STATES.md` gains a "type safety is simplicity, bounded by
+  boring-beats-clever" guardrail, cross-linking `CODE-HYGIENE` Principle 1.
+  Phantom-type / conditional-type examples relabeled **advanced** — reach for
+  them only when the invariant is load-bearing; prefer sum types + validate-at-
+  boundary otherwise.
+
+### Removed
+- `code-hygiene` and `sync-check` standalone skills (content preserved in the
+  two new `formats/` references above). Skill set: 20 → 18.
+
+### Fixed
+- `simplify` heading "The four lenses" corrected to "five" (Telemetry was a
+  fifth lens); `simplify` pairing note "5 principles" corrected to six.
+- Broken `grill-plan/BOOTSTRAP.md` links fixed to `bootstrap/BOOTSTRAP.md`
+  (the file's real location) in `WORKFLOWS.md`, `feature-doc`, and
+  `system-design`.
+- Hardcoded "20 skills" counts in `README.md` and `WORKFLOWS.md` replaced with
+  non-numeric phrasing so they stop drifting on every add/remove.
+
 ## [1.3.0] — 2026-06-27
 
 ### Added

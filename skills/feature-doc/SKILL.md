@@ -1,8 +1,6 @@
 ---
 name: feature-doc
 description: One-page contract for a non-trivial feature or bug fix — Problem, User Story, Acceptance Criteria, Non-Goals. The ACs become the test list for `tdd`. Use before any non-trivial feature or bug fix; when the user mentions "spec this out", "write a feature doc", "before any non-trivial feature", or describes a feature without listing ACs. Skip for typo fixes, dependency bumps, or pure refactors. Pairs with `tdd` / `tdd-rounds` (downstream — ACs feed the test list), `investigate` (upstream — when direction itself is unclear), and `grill-plan` (when the chosen plan needs stress-testing against existing model).
-complexity: low
-expected_duration: 10 minutes
 ---
 
 # Feature Doc
@@ -101,7 +99,7 @@ Once the doc is reviewed and ACs are stable:
 - **Larger delivery** (≥10 ACs or multi-package) → run [`tdd-rounds`](../tdd-rounds/SKILL.md). The AC list maps to round splits.
 - **Direction still feels uncertain after writing the doc**:
   - Project has `CONTEXT.md` and/or ADRs → run [`grill-plan`](../grill-plan/SKILL.md) to stress-test against the existing model.
-  - No `CONTEXT.md` or ADRs yet → run [`investigate`](../investigate/SKILL.md) to map options first; or, if the plan is chosen but vocabulary is fuzzy, run `grill-plan` in [bootstrap mode](../grill-plan/BOOTSTRAP.md).
+  - No `CONTEXT.md` or ADRs yet → run [`investigate`](../investigate/SKILL.md) to map options first; or, if the plan is chosen but vocabulary is fuzzy, run `grill-plan` in [bootstrap mode](../bootstrap/BOOTSTRAP.md).
 - **Hard-to-reverse / surface-changing** (new auth flow, public API, sensitive data flow) → run [`security-review`](../security-review/SKILL.md) alongside `tdd` / `tdd-rounds`.
 
 ## Done when

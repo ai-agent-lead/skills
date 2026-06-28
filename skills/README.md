@@ -25,8 +25,9 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 | `system-design` | Greenfield system architecture — modules, dependency direction, seams | `docs/architecture.md` (system map) | [system-design/](./system-design/) |
 | `design` | Designing a module or public API before implementation | Guidance only — optional `docs/features/<feature>.design.md` for non-trivial shapes | [design/](./design/) |
 | `improve-codebase-architecture` | Finding deepening opportunities — turning shallow modules into deep ones | Numbered candidate list, optional ADR / CONTEXT.md updates | [improve-codebase-architecture/](./improve-codebase-architecture/) |
-| `code-hygiene` | Line/function-level coding discipline (boring, naming, YAGNI, rule of 3, locality) | Guidance only — applied as a lens during `simplify` and `pr-review` | [code-hygiene/](./code-hygiene/) |
 | `zoom-out` | User-invoked: ask for higher-level context when unfamiliar with an area | Map of relevant modules and callers in `CONTEXT.md` vocabulary | [zoom-out/](./zoom-out/) |
+
+The `code-hygiene` line-level lens is no longer a routable skill — it lives at [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) and is applied during `simplify` and `pr-review` §3f.
 
 ### Implementation
 
@@ -41,7 +42,6 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
-| `sync-check` | Before pr-review or after refactor | Terminology/ADR drift report | [sync-check/](./sync-check/) |
 | `prod-ready` | After tdd green, before merge | Verified pre-merge checklist (incl. doc drift) | [prod-ready/](./prod-ready/) |
 | `security-review` | Surface-changing work — new entry points, identity flows, authz, sensitive data, external deps | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
@@ -55,14 +55,14 @@ Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; 
 | --- | --- | --- |
 | **Doc-producing** (writes a durable artifact under `docs/`) | `feature-doc`, `investigate`, `system-design`, `grill-plan`, `debug` (optional), `security-review` (optional), `verify-real-deps`, `bench`, `bootstrap` | Output survives the conversation. The discipline of writing it is the value. |
 | **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify` | Diff-producing. Always behind a contract (feature doc + ACs). |
-| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps`, `sync-check` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
-| **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out`, `sync-check` | Run *before* a build skill when the input isn't yet clear. |
+| **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
+| **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out` | Run *before* a build skill when the input isn't yet clear. |
 | **Shape** (decides module / topology) | `design`, `system-design`, `improve-codebase-architecture` | Greenfield-module / greenfield-system / brownfield. Same vocabulary ([`LANGUAGE.md`](./LANGUAGE.md)). |
-| **Lens** (applied during other skills, not invoked alone) | `code-hygiene`, `caveman` | Principles you carry into any turn to maintain quality or efficiency. |
+| **Lens** (applied during other skills, not invoked alone) | `caveman` skill; `code-hygiene` reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)) | Principles you carry into any turn to maintain quality or efficiency. The line-level lens is a shared reference, not a routable skill. |
 
 ## Skill relationship map
 
-The 20 skills + their dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow.
+The skill set + its dependencies. Lateral edges are vocabulary / lens; vertical edges are workflow flow.
 
 ```
                      ┌─────────────────────────────────────────────┐
@@ -81,7 +81,7 @@ The 20 skills + their dependencies. Lateral edges are vocabulary / lens; vertica
    │       │              ▲                │          │     prod-ready│
    │       │              │                │          │          │   │
    │       └──────────────┘                │          │          ▼   │
-   │                                       │          │      sync-check │
+   │                                       │          │          │   │
    │   system-design ──► design (per mod) ─┘          │          │   │
    │       │                                          │          ▼   │
    │       ▼                                          │      pr-review │
@@ -97,24 +97,23 @@ The 20 skills + their dependencies. Lateral edges are vocabulary / lens; vertica
    │       │   (when bug)  (when surface)                             │
    │                                                                  │
    │   ┌────────────── LENSES & UTILITIES ──────────────┐             │
-   │   │  code-hygiene ──► applied during simplify,    │             │
-   │   │  caveman     ──► pr-review, any code reading  │             │
+   │   │  code-hygiene (formats/) -> line-level lens    │             │
+   │   │  caveman -> token lens, any code reading       │             │
    │   │                                                │             │
-   │   │  zoom-out ──► interrupts any workflow,        │             │
+   │   │  zoom-out -> interrupts any workflow,          │             │
    │   │              maps unfamiliar areas             │             │
    │   └────────────────────────────────────────────────┘             │
    └──────────────────────────────────────────────────────────────────┘
 ```
 
-**Seven things the map shows:**
+**Six things the map shows:**
 
-1. `code-hygiene`, `caveman`, and `zoom-out` are not nodes in any flow — they're lenses / utilities applied across.
+1. `caveman` and `zoom-out` are not nodes in any flow — they're a lens / utility applied across. The `code-hygiene` line-level lens is the same idea, now a shared reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)) rather than a routable skill.
 2. `grill-plan` is the only skill invoked from three upstreams (`investigate`, `feature-doc`, `improve-codebase-architecture`) — it's the shared pressure-test step.
 3. `tdd-rounds` is the only multi-callee orchestrator — dispatches `design`, `tdd`, `simplify`, `prod-ready`, `verify-real-deps` to Builders.
-4. `pr-review` is the reviewer-side mirror of `prod-ready` — Section 7 doc-drift covered in both.
-5. `sync-check` sits before `pr-review` as a final terminology and ADR audit.
-6. `system-design` and `improve-codebase-architecture` are duals — same [LANGUAGE.md](./LANGUAGE.md), greenfield vs brownfield.
-7. The shared substrate ([LANGUAGE.md](./LANGUAGE.md), [formats/](./formats/), [TRIGGERS.md](./TRIGGERS.md)) is referenced everywhere — never copy-paste the content into a skill.
+4. `pr-review` is the reviewer-side mirror of `prod-ready` — the Section 7 / §3e doc-drift audit is single-sourced in [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) (the former `sync-check` skill) and run from both sides.
+5. `system-design` and `improve-codebase-architecture` are duals — same [LANGUAGE.md](./LANGUAGE.md), greenfield vs brownfield.
+6. The shared substrate ([LANGUAGE.md](./LANGUAGE.md), [formats/](./formats/), [TRIGGERS.md](./TRIGGERS.md)) is referenced everywhere — never copy-paste the content into a skill.
 
 
 ## Workflows
@@ -135,8 +134,11 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 
 - [`formats/ADR-FORMAT.md`](./formats/ADR-FORMAT.md) — ADR template, numbering, when-to-write criteria.
 - [`formats/CONTEXT-FORMAT.md`](./formats/CONTEXT-FORMAT.md) — `CONTEXT.md` structure, single-vs-multi-context layout, minimal example.
+- [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement). Applied during `simplify` and `pr-review` §3f.
+- [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) — the terminology / ADR / doc-map audit. Run from `prod-ready` §7 (author), `pr-review` §3e (reviewer), or standalone (the former `sync-check`).
+- [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the comment bar.
 
-Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investigate`, and (lazily) `feature-doc`.
+Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investigate`, `simplify`, `prod-ready`, `pr-review`, and (lazily) `feature-doc`.
 
 ## Conventions
 

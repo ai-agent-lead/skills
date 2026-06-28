@@ -1,8 +1,6 @@
 ---
 name: system-design
 description: System-level architecture for greenfield work — name the modules, define responsibilities, set dependency direction, identify seams. Use when starting a new multi-module system or service from scratch, when defining topology before code lands, or when the user mentions "system architecture", "module boundaries", "service boundaries", "how should I structure this system", "draw the architecture", "topology". Skip for single-module work — use `design` instead. Skip for reorganizing an existing codebase — use `improve-codebase-architecture`. Pairs with `investigate` (comes before, surveying options) and `design` (comes after, shaping each module's interface).
-complexity: high
-expected_duration: 30 minutes
 ---
 
 # System Design
@@ -38,7 +36,7 @@ Before drawing anything, read what already exists:
 - `docs/adr/` — decisions already taken.
 - The feature set — what the system has to do.
 
-If `CONTEXT.md` doesn't exist yet, **resolve the core domain terms first** — defer to [`grill-plan` bootstrap mode](../grill-plan/BOOTSTRAP.md) (single source of truth for the lazy-creation rules). Module names without domain terms are placeholders.
+If `CONTEXT.md` doesn't exist yet, **resolve the core domain terms first** — defer to [`grill-plan` bootstrap mode](../bootstrap/BOOTSTRAP.md) (single source of truth for the lazy-creation rules). Module names without domain terms are placeholders.
 
 ### 2. List the modules
 
