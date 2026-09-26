@@ -31,7 +31,7 @@ Canonical definitions in [skills/LANGUAGE.md](../LANGUAGE.md). The terms this sk
 
 Before drawing anything, read what already exists:
 
-- `docs/CONTEXT.md` — the domain language. Module names should come from here.
+- `docs/CONTEXT.md` — the domain language (with several domains: `docs/CONTEXT-MAP.md` and each `docs/<domain>/CONTEXT.md`). Module names should come from here.
 - `docs/research/<topic>.md` — any prior `investigate` runs that constrain the design.
 - `docs/adr/` — decisions already taken.
 - The feature set — what the system has to do.
@@ -119,6 +119,7 @@ Failures here are not "warnings" — they're "stop and rework". The system map i
 ## Done when
 
 - `docs/architecture.md` exists with: module table, dependency direction, seam list, Mermaid map.
+- When the modules are separate domains: `docs/CONTEXT-MAP.md` lists them, and each domain's code folder has a short `CLAUDE.md` / `AGENTS.md` pointing at `docs/<domain>/` ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §6).
 - Each module name comes from `CONTEXT.md` vocabulary (not framework conventions).
 - The dependency graph is acyclic and explicitly reviewed.
 - Every cross-module boundary has a named seam + adapter location.

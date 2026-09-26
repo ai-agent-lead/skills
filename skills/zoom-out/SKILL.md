@@ -30,7 +30,7 @@ Ask the user (or infer from context) what they're trying to do. The map is scope
 
 ### 2. Read the project's vocabulary first
 
-- [`docs/CONTEXT.md`](../../docs/CONTEXT.md) — the domain glossary. Module names should come from here.
+- [`docs/CONTEXT.md`](../../docs/CONTEXT.md) — the domain glossary; with several domains, `docs/CONTEXT-MAP.md` and the area's `docs/<domain>/CONTEXT.md`. Module names should come from here.
 - [`docs/architecture.md`](../../docs/architecture.md) — the system map, if it exists.
 - Any ADRs in [`docs/adr/`](../../docs/adr/) that constrain the area.
 
