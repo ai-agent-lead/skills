@@ -119,6 +119,12 @@ to the new version and a fresh `[Unreleased]` block is opened.
 - `zoom-out` no longer lists "what depends on what here"; what one change
   affects routes to `impact`. Four more routing cases (50/50 by static trace).
 - `check-comments.mjs` skips vendored files (`vendor/`, `node_modules/`, minified JS).
+- AgentLead.Dev homepage (`site/`): entry rows and flows for schema changes
+  (`migrate`), upgrades (`upgrade`), and releases (`release`); `impact` in the
+  bug-fix and review flows and as a cross-cutting card; the large-feature flow
+  ends in `release`; `security-review` described as asked-for or escalated; a
+  new "Always-on rules" section (writing, comments, docs layout, docs hooks);
+  install examples for `--style` and `--hooks`.
 
 - Rewrote all 18 skill descriptions in one shape (template in
   `SKILL-TEMPLATE.md`). "Pairs with…" moved out of descriptions into bodies;
