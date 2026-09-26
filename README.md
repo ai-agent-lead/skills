@@ -36,7 +36,7 @@ By default, the installer runs in an interactive console wizard allowing you to 
 - `--opencode`          Install skills only for OpenCode
 - `--all`               Install skills for all supported assistants (default)
 - `--force`, `-f`         Overwrite files without confirmation
-- `--style`             Also add the always-on rules — writing (answer first, plain words, diagram first), code comments (contract headers, tagged comments, history in git), and docs upkeep (start at `docs/index.md`, status owners, run the checker) — to each assistant's instructions file — `CLAUDE.md`, `AGENTS.md`, or `GEMINI.md`. Re-running replaces the block instead of duplicating it.
+- `--style`             Also add the always-on rules — writing (answer first, plain words, diagram first), code comments (contract headers, tagged comments, history in git), code hygiene (boring code, naming, YAGNI, rule of 3, locality, constants), and docs upkeep (start at `docs/index.md`, status owners, run the checker) — to each assistant's instructions file — `CLAUDE.md`, `AGENTS.md`, or `GEMINI.md`. Re-running replaces the block instead of duplicating it.
 - `--hooks`             Also add Claude Code hooks to `settings.json` that keep `docs/` accurate: at session start, list the docs in flight; after each edit, name the docs covering that file; block stopping while changed docs have problems. Silent in projects without `docs/`. Other hooks and settings are kept; re-running doesn't duplicate.
 - `--help`, `-h`          Show the help menu with all options
 

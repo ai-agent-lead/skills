@@ -123,6 +123,9 @@ to the new version and a fresh `[Unreleased]` block is opened.
   in the green step, all seven principles in the refactor step — not only in
   the later `simplify` sweep. The `tdd-rounds` Builder brief requires it each
   round, and the parent checks each round's diff against *The bar*.
+- `snippets/code-hygiene.md` — the always-on hygiene rules (boring code, naming,
+  YAGNI, rule of 3, locality, constants), added by `--style`. `npm test` fails
+  when it stops naming a principle of `CODE-HYGIENE.md`.
 - AgentLead.Dev homepage (`site/`): entry rows and flows for schema changes
   (`migrate`), upgrades (`upgrade`), and releases (`release`); `impact` in the
   bug-fix and review flows and as a cross-cutting card; the large-feature flow

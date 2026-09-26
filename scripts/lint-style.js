@@ -83,6 +83,18 @@ function checkTagsInSync() {
   }
 }
 
+// The always-on hygiene snippet must name every principle of formats/CODE-HYGIENE.md except
+// comments, which have their own snippet.
+function checkHygieneInSync() {
+  const snippet = read('snippets/code-hygiene.md');
+  const principles = [...read('skills/formats/CODE-HYGIENE.md').matchAll(/^\d+\. \*\*([^*]+)\*\*/gm)].map((m) => m[1]);
+  const key = { 'Boring code beats clever code': 'Boring', 'Naming is the primary refactor': 'Naming', 'Comments earn their keep': null, 'Locality of behavior': 'Locality', 'Constants live where they\'re used': 'Constants', 'Rule of 3 before extracting': 'Rule of 3', YAGNI: 'YAGNI' };
+  for (const p of principles) {
+    if (!(p in key)) fail('snippets/code-hygiene.md', `CODE-HYGIENE.md has a new principle "${p}" — add it to the snippet and to checkHygieneInSync`);
+    else if (key[p] && !snippet.includes(`**${key[p]}`)) fail('snippets/code-hygiene.md', `does not name the principle "${p}"`);
+  }
+}
+
 function checkSingleSource(files) {
   for (const file of files) {
     const where = rel(file);
@@ -116,6 +128,7 @@ for (const file of files) {
 }
 for (const file of [...markdownFiles(path.join(root, 'skills')), path.join(root, 'README.md')]) checkDocPaths(file);
 checkTagsInSync();
+checkHygieneInSync();
 checkSingleSource([...files, path.join(root, SNIPPET)]);
 
 if (errors.length) {

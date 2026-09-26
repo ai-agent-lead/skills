@@ -28,7 +28,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SOURCE_SKILLS_DIR = path.resolve(__dirname, '../skills');
 const SNIPPETS_DIR = path.resolve(__dirname, '../snippets');
-const SNIPPETS = ['writing-style.md', 'comment-style.md', 'docs-upkeep.md'];
+const SNIPPETS = ['writing-style.md', 'comment-style.md', 'code-hygiene.md', 'docs-upkeep.md'];
 const HOOK_SCRIPT = 'check-docs.mjs';
 const STYLE_START = '<!-- ai-agent-lead/skills:style:start -->';
 const STYLE_END = '<!-- ai-agent-lead/skills:style:end -->';
@@ -59,7 +59,7 @@ function printHelp() {
   console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
-  console.log(`  ${CYAN}--style${RESET}             Also add the writing, comment, and docs rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
+  console.log(`  ${CYAN}--style${RESET}             Also add the writing, comment, code hygiene, and docs rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
   console.log(`  ${CYAN}--hooks${RESET}             Also add Claude Code hooks that keep docs/ accurate (settings.json): list docs in flight at session start, name the docs covering each edited file, block stopping while changed docs have problems`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
   console.log(``);
@@ -230,7 +230,8 @@ async function run() {
 
     console.log(`${BOLD}3. Style rules:${RESET}`);
     console.log(`   Add the writing style (answer first, plain words, diagrams), comment style`);
-    console.log(`   (contract headers, tagged comments, history in git), and docs upkeep rules`);
+    console.log(`   (contract headers, tagged comments, history in git), code hygiene (boring code,`);
+    console.log(`   naming, YAGNI, rule of 3), and docs upkeep rules`);
     console.log(`   to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md).`);
     const styleAns = await askQuestion(`${BOLD}${CYAN}? Add style rules [y/N]: ${RESET}`);
     flags.style = /^y(es)?$/i.test(styleAns);

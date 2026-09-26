@@ -69,7 +69,7 @@ test('existing files are kept unless --force', () => {
   assert.equal(read(file), read(path.join(ROOT, 'skills/tdd/SKILL.md')));
 });
 
-test('--style writes all three rule blocks once, and keeps the user\'s own text', () => {
+test('--style writes all four rule blocks once, and keeps the user\'s own text', () => {
   const { home, run, read } = sandbox();
   const file = path.join(home, '.claude/CLAUDE.md');
   fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -79,7 +79,7 @@ test('--style writes all three rule blocks once, and keeps the user\'s own text'
   const text = read(file);
   assert.match(text, /^# My rules\n\nAlways use tabs\./);
   assert.equal(count(text, START), 1, 're-running replaces the block');
-  for (const heading of ['## Writing style', '## Code comments', '## Docs']) assert.ok(text.includes(heading), heading);
+  for (const heading of ['## Writing style', '## Code comments', '## Code hygiene', '## Docs']) assert.ok(text.includes(heading), heading);
 });
 
 test('--local --style writes each assistant\'s project file', () => {
