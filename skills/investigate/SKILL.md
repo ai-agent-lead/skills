@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Use when the user asks for investigation, research, a proposal, or "options" before any code lands; or proactively for non-trivial structural decisions (new dependency, framework choice, API contract change, cross-cutting refactor). Triggered by phrases like "investigate X", "research Y", "give me a proposal", "what are our options", "how would we approach", "let's explore", "should we...". Produces a durable research note in `docs/research/<topic>.md`. Skip for tasks where one obvious approach exists (typo fixes, config tweaks, mechanical refactors). Pairs with `feature-doc` (captures *what* we're building once a direction is chosen) and `grill-plan` (stress-tests a chosen plan).
+description: Researches a non-trivial decision with more than one credible approach and writes a durable research note at `docs/research/<topic>.md`. Use when the user asks to investigate or research options before code lands, or proactively for hard-to-reverse structural decisions (new dependency, framework choice, API contract change, cross-cutting refactor). Triggered by "investigate", "research", "what are our options for", "compare approaches for". Not for questions answerable in chat (explaining a plan, a quick "should we rename this?"); not for work with one obvious approach; not for pressure-testing a chosen plan → `grill-plan`.
 ---
 
 # Investigation Workflow
@@ -9,7 +9,7 @@ Investigation is a separate phase from implementation. It produces a durable art
 
 ## When to use
 
-- The user explicitly asks for investigation, research, a proposal, options, or "how would we approach X".
+- The user explicitly asks to investigate or research the options for a decision before code lands.
 - A non-trivial structural decision is on the table: new dependency, new architectural pattern, framework choice, contract change, cross-cutting refactor.
 - The decision passes the same bar as an ADR: hard to reverse, surprising-without-context, or the result of a real trade-off.
 
@@ -18,6 +18,7 @@ Investigation is a separate phase from implementation. It produces a durable art
 - One obvious approach (typo fixes, config tweaks, mechanical refactors).
 - Pure execution of an already-decided plan.
 - Bug fixes that don't change architecture.
+- Questions answerable in chat — explaining a plan, weighing a quick naming choice. A research note is for decisions worth keeping.
 
 ## Phases
 

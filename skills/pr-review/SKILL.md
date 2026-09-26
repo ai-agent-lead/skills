@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: Discipline for reviewing someone else's pull request — the inverse of `prod-ready` (which is the author's pre-merge gate). Use when the user asks to "review this PR", "look over the diff", "check this change", "give feedback on", or invokes a code-review slash command. Reviews against the linked feature doc / ADRs / domain vocabulary, classifies findings by severity (blocker / suggestion / nit), and returns a structured report. Skip for trivial PRs (typo, dep bump, lint-only) — approve directly. Pairs with `prod-ready` (the author's checklist; the reviewer verifies it landed honestly), `security-review` (escalation when the diff is surface-changing), and the `code-hygiene` lens (`formats/CODE-HYGIENE.md`, applied line-level during the read).
+description: Reviews a pull request against its feature doc, ADRs, and domain vocabulary — including terminology drift — and returns findings classed blocker / suggestion / nit / question. Use when asked to review someone else's PR, a Builder's round in `tdd-rounds`, or your own branch as a last self-check after `prod-ready`. Triggered by "review this PR", "review their diff", "audit terminology in this PR". Not for the author's pre-merge checklist → `prod-ready`; not for the `/code-review` command, which runs its own flow; not for typo, lint-only, or dependency-bump PRs — approve directly. Escalates to `security-review` when the diff changes a trust boundary.
 ---
 
 # PR Review
@@ -19,13 +19,16 @@ This skill produces a **prioritised** review where blockers are unambiguous, sug
 
 ## When to use
 
-- The user asks for a PR review (any phrasing).
+- The user asks for a PR review of someone else's change.
+- A terminology / ADR audit of a diff — [`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md), run from §3e.
 - Reviewing a Builder's round in `tdd-rounds` (the parent's verification ritual borrows from this skill).
 - Reviewing your own work before opening the PR — last self-check after `prod-ready`.
 
 ## When to skip
 
 - Typo / lint-only / formatter-only diffs. Approve.
+- The user invoked the `/code-review` command — that command runs its own flow.
+- The author's own pre-merge checklist — that is [`prod-ready`](../prod-ready/SKILL.md).
 - Dependency bumps with no API change (still: scan changelog for security advisories before approving).
 - Trivial config tweaks with no behavioural change.
 - PRs that are explicitly draft / WIP — give early feedback, but skip the formal severity classification until the author flags ready.

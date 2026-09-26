@@ -1,6 +1,6 @@
 ---
 name: bootstrap
-description: Initializes a greenfield repository. Creates the docs/ directory, the initial CONTEXT.md, and the first ADR. Triggered by phrases like "new project", "initialize", "bootstrap".
+description: Sets up the docs scaffolding for a project that has none — creates `docs/`, the initial `docs/CONTEXT.md`, and the first ADR. Use when starting a new repository or service, or adopting this skill set in a repo without `docs/CONTEXT.md`. Triggered by "new project", "start a new repo", "bootstrap the docs". Not for repos that already have `docs/CONTEXT.md`; not for initializing code (DB pools, clients, config) — no skill needed; not for deciding module topology → `system-design`.
 ---
 
 # Bootstrap
@@ -19,6 +19,7 @@ Starting from a blank slate often leads to inconsistent documentation structure.
 ## When to skip
 
 - The repository already has `docs/CONTEXT.md` and an established `docs/` structure.
+- Initializing code (a DB pool, a client, config) — that is ordinary implementation; no skill needed.
 
 ## Process
 
@@ -43,3 +44,9 @@ If any major architectural decisions are made during initialization, record them
 - `docs/` directory exists with the required subdirectories.
 - `docs/CONTEXT.md` is seeded with core domain terms.
 - (Optional) `docs/adr/0000-architectural-overview.md` exists.
+
+## Pairing with other skills
+
+- **`system-design`** — runs next for a new multi-module system; it builds the topology on the vocabulary seeded here.
+- **`investigate`** / **`feature-doc`** — run next for a single-service project; both assume `docs/CONTEXT.md` exists.
+- **`grill-plan`** — needs the `CONTEXT.md` and ADR directory this skill creates.

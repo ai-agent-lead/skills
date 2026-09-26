@@ -6,6 +6,9 @@
   "bin": {
     "install-skills": "bin/install.js"
   },
+  "scripts": {
+    "test": "node scripts/lint-triggers.js"
+  },
   "type": "module",
   "files": [
     "bin/",

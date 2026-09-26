@@ -1,6 +1,6 @@
 ---
 name: grill-plan
-description: Grilling session that stress-tests a chosen plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use AFTER a direction has been picked (post-`investigate` or post-`feature-doc`), when the user wants to pressure-test the plan — triggered by phrases like "grill me on this", "stress-test this plan", "walk me through this", "is this consistent with our model". Skip if the direction is still being explored — use `investigate` instead.
+description: Interrogates an already-chosen plan against the project's domain model — sharpening terms and recording decisions in `docs/CONTEXT.md` and `docs/adr/` as they crystallise. Use when a direction is picked (after `investigate` or `feature-doc`) and the user wants it pressure-tested. Triggered by "grill me on this", "stress-test this plan", "poke holes in this plan", "is this consistent with our model". Not for choosing a direction → `investigate`; not for explaining existing code — just answer.
 ---
 
 ## When to use

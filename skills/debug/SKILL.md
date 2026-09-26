@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Disciplined reproduction, isolation, and hypothesis-testing for non-trivial bugs — runs BEFORE `tdd` when the failing assertion isn't yet known. Use when the user reports a bug whose root cause is not obvious from the symptom — triggered by phrases like "it's broken", "this is failing", "intermittent", "flaky", "regression", "not sure why", "production issue", "doesn't work in <env>". Skip for typos, clear stack traces with one-step fixes, or bugs whose fix is obvious from reading the message. Pairs with `tdd` (downstream — the failing test crystallises once the bug is reproduced) and `zoom-out` (upstream, when the area is unfamiliar).
+description: Reproduce, isolate, and hypothesis-test a bug whose root cause is not yet known, until the cause is named and the failing test is obvious. Use when the symptom does not point at the fix — intermittent or flaky failures, regressions with no obvious culprit, environment-specific breakage, "not sure why". Triggered by "flaky", "intermittent", "regression", "I don't know why it's failing", "works locally but not in <env>", "production issue". Not for bugs whose cause is clear from the message or stack trace → `tdd` directly; not for missing or unclear requirements → `feature-doc`.
 ---
 
 # Debug

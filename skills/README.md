@@ -43,7 +43,7 @@ The `code-hygiene` line-level lens is no longer a routable skill — it lives at
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
 | `prod-ready` | After tdd green, before merge | Verified pre-merge checklist (incl. doc drift) | [prod-ready/](./prod-ready/) |
-| `security-review` | Surface-changing work — new entry points, identity flows, authz, sensitive data, external deps | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
+| `security-review` | Explicit request, or escalated by `feature-doc` / `prod-ready` / `pr-review` when a change is surface-changing (entry points, identity flows, authz, sensitive data, external deps) | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
 | `verify-real-deps` | Pre-tag smoke test against real third-party APIs | `docs/known-issues.md` bug ledger; fix-rounds until clean | [verify-real-deps/](./verify-real-deps/) |
 
@@ -122,7 +122,7 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 
 ## Trigger lookup
 
-[TRIGGERS.md](./TRIGGERS.md) is the flat phrase → skill index. Useful for routing-collision debugging and onboarding.
+[TRIGGERS.md](./TRIGGERS.md) is the flat phrase → skill index. Useful for routing-collision debugging and onboarding — but Claude never reads it. The routing signal is each skill's `description:`; `npm test` fails if TRIGGERS.md drifts from them, if two skills claim the same phrase, or if a retired phrase comes back. [`tests/routing-cases.md`](../tests/routing-cases.md) holds prompt → expected-skill cases to re-score whenever a description changes.
 
 ## Shared vocabulary
 
@@ -152,9 +152,9 @@ Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investi
 ## Adding a skill
 
 1. Copy [`SKILL-TEMPLATE.md`](./SKILL-TEMPLATE.md) to `<name>/SKILL.md` and fill in.
-2. Make the `description` sharp enough that Claude will pick the skill on the right triggers and skip it on the wrong ones — name trigger phrases AND skip conditions AND adjacent skills.
+2. Write the `description` in the What / Use when / Triggered by / Not for shape from [`SKILL-TEMPLATE.md`](./SKILL-TEMPLATE.md#frontmatter-rules) — it is the only thing Claude reads when routing.
 3. Reference [`LANGUAGE.md`](./LANGUAGE.md) and [`formats/`](./formats/) rather than redefining shared terms or formats.
 4. Link any templates from `SKILL.md` so Claude can find them.
 5. Add the skill to **both** index tables above (by trigger phase AND by role).
-6. Add an entry to [TRIGGERS.md](./TRIGGERS.md) for routing.
+6. Add a row to [TRIGGERS.md](./TRIGGERS.md) mirroring the description's *Triggered by* list, add cases to [`tests/routing-cases.md`](../tests/routing-cases.md), and run `npm test`.
 7. Update [WORKFLOWS.md](./WORKFLOWS.md) if the skill participates in a canonical workflow or as a cross-workflow pattern.

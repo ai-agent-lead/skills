@@ -1,6 +1,6 @@
 ---
 name: system-design
-description: System-level architecture for greenfield work — name the modules, define responsibilities, set dependency direction, identify seams. Use when starting a new multi-module system or service from scratch, when defining topology before code lands, or when the user mentions "system architecture", "module boundaries", "service boundaries", "how should I structure this system", "draw the architecture", "topology". Skip for single-module work — use `design` instead. Skip for reorganizing an existing codebase — use `improve-codebase-architecture`. Pairs with `investigate` (comes before, surveying options) and `design` (comes after, shaping each module's interface).
+description: Lays out the module topology of a NEW multi-module system — which modules exist, their responsibilities, dependency direction, and seams — in `docs/architecture.md`. Use when starting a new system, service, or major subsystem from scratch, before any per-module design. Triggered by "system architecture", "how should I structure this system", "service boundaries", "draw the architecture". Pick by age and scope — new code in one module → `design`; a new multi-module system → `system-design`; existing code across modules → `improve-codebase-architecture`; existing code in one module → refactor inline, then `simplify`. Not for feature work inside an established topology → `feature-doc`.
 ---
 
 # System Design

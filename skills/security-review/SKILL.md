@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: Threat-model + control-review pass for surface-changing work — runs alongside `tdd` and as a heavier gate than `prod-ready` Section 3 when the change introduces or alters trust boundaries, authentication, authorization, sensitive data flows, or external surfaces. Use when the user mentions "security review", "threat model", "STRIDE", "auth flow", "permissions", "secrets", "PII", "public API", "external surface", "abuse", "hardening", or whenever a feature doc / PR adds a new entry point, identity flow, or sensitive-data path. Skip for pure-internal refactors with no surface change, dependency bumps that don't change runtime behavior, or doc-only changes. Pairs with `feature-doc` (informs the threat model) and `prod-ready` (which has the lighter operational-security checklist for every change).
+description: Threat model (STRIDE) and control review for a change that alters a trust boundary — new entry points, identity or session flows, authorization logic, sensitive-data paths, or secret handling. Use when the user explicitly asks for a security review or threat model, or when `feature-doc`, `prod-ready`, or `pr-review` escalates a surface-changing change. Triggered by "security review", "threat model", "STRIDE". Not for passing mentions of auth, APIs, or permissions — let those gates escalate; not for internal refactors, doc-only changes, or dependency bumps without runtime change.
 ---
 
 # Security Review
@@ -15,7 +15,7 @@ This skill exists to make the threat-modeling step explicit when the surface cha
 
 ## When to use
 
-A change is **surface-changing** (and this skill should fire) when *any* of these hold:
+A change is **surface-changing** when *any* of these hold. Detecting it is the job of the gates — `feature-doc`, `prod-ready`, and `pr-review` escalate here when they see one. A passing mention of "auth" or "API" is not by itself a trigger.
 
 - New external entry point (HTTP route, gRPC method, queue consumer, file/upload handler, public CLI flag).
 - New or changed **identity / session / token** flow (sign-in, OAuth, API key issuance, password reset, MFA).

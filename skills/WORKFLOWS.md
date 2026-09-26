@@ -29,10 +29,10 @@ Got a task? Pick by what you have in front of you:
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Reviewing someone else's PR         │ /pr-review  (utility)            │
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Surface-changing work (auth, public │ /security-review (gate, runs     │
-│   API, sensitive data, new entry pt)│  alongside Workflow 1/2/6)       │
+│ Surface-changing work (auth, public │ /security-review (escalated by   │
+│   API, sensitive data, new entry pt)│ feature-doc/prod-ready/pr-review)│
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Audit terminology or ADR compliance │ doc-drift audit (DOC-DRIFT-AUDIT)│
+│ Audit terminology or ADR compliance │ /pr-review §3e (DOC-DRIFT-AUDIT) │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Lost in unfamiliar area, mid-task   │ /zoom-out  (utility, anytime)    │
 └─────────────────────────────────────┴──────────────────────────────────┘
@@ -338,7 +338,7 @@ A few things that happen across all workflows:
 
 6. **`debug` runs *before* `tdd` for non-trivial bugs.** Workflow 5b makes this explicit. The reproduction from `debug` becomes the failing test for `tdd`. Skip for bugs whose root cause is obvious from the trace (Workflow 5a).
 
-7. **`security-review` is a gate, not a workflow.** Fires when a change is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
+7. **`security-review` is a gate, not a workflow.** Fires on an explicit request ("security review", "threat model"), or when `feature-doc`, `prod-ready`, or `pr-review` escalates a change that is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
 
 8. **`pr-review` is a utility workflow.** Runs when reviewing someone else's PR. Also runs (lighter form) as a self-check before opening the PR. The `tdd-rounds` parent's per-round verification borrows from it.
 

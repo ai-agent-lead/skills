@@ -1,6 +1,6 @@
 ---
 name: tdd-rounds
-description: Multi-round TDD orchestration. Use when delivering a feature larger than one TDD slice — typically 5-15 acceptance criteria across multiple packages — by dispatching Builder sub-agents per round, with the parent maintaining state and verifying. Triggered when the user mentions "drive the sub-agent team", "multi-round TDD", "orchestrate rounds", "Builder agents", or when a plan from `feature-doc` lists more ACs than one agent should reasonably tackle in a single invocation. Pairs with `tdd` (Builders invoke that skill per round) and `prod-ready` (final round before tag).
+description: Orchestrates a large feature as serial TDD rounds, dispatching a Builder sub-agent per round while the parent keeps state and verifies. Use when a feature doc has 10 or more ACs or spans multiple packages. Triggered by "multi-round TDD", "drive the Builder agents", "orchestrate rounds". Not for fewer than 10 ACs in one package → `tdd`; not for pure refactors → `improve-codebase-architecture`.
 ---
 
 # Multi-Round TDD Orchestration
@@ -9,13 +9,13 @@ Distills the pattern of a parent agent driving Builder sub-agents through a feat
 
 ## When to use
 
-- A feature doc has more ACs (say, ≥10) than one agent invocation can hold cleanly.
+- A feature doc has 10 or more ACs — more than one agent invocation can hold cleanly.
 - Multiple packages are involved; serial rounds let each one land cleanly before the next builds on top.
 - Cross-round invariants matter (test green every round, not just at the end).
 
 ## When to skip
 
-- Single-AC bug fix or single-package feature — invoke `tdd` directly, no round overhead.
+- Fewer than 10 ACs in a single package — invoke `tdd` directly, no round overhead.
 - Pure refactor with no AC changes — use the `improve-codebase-architecture` flow instead.
 
 ## The parent's contract

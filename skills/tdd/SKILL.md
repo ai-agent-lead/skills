@@ -1,20 +1,22 @@
 ---
 name: tdd
-description: Test-driven development with the red-green-refactor loop. Use when implementing a feature, fixing a bug, changing core logic, or when the user mentions "TDD", "test-first", "red-green-refactor", or "integration tests". Skip for trivial UI glue, config changes, or pure docs edits.
+description: Test-first implementation via red-green-refactor. Use when implementing a feature with known acceptance criteria, fixing a bug whose cause is already known, or changing core logic. Triggered by "TDD", "test-first", "red-green-refactor", "implement this feature". Not for bugs whose root cause is unknown → `debug` first; not for 10+ ACs or multi-package delivery → `tdd-rounds`; not for adding tests to existing code, UI glue, config, or docs.
 ---
 
 # Test-Driven Development
 
 ## When to use
 
-- Implementing a feature, fixing a bug, or changing core logic.
+- Implementing a feature, fixing a bug whose root cause is known, or changing core logic.
 - Any `tdd-rounds` Builder invocation (mandatory every round).
-- The user mentions "TDD", "test-first", "red-green-refactor", "integration tests".
+- The user mentions "TDD", "test-first", "red-green-refactor".
 
 ## When to skip
 
 - Trivial UI glue, framework wiring, config changes, pure docs edits.
 - Trivial getters / setters with no behavior.
+- Adding tests to existing, working code — there is no red phase to drive the design; just write the tests.
+- 10+ ACs or multi-package delivery — use [`tdd-rounds`](../tdd-rounds/SKILL.md).
 - Bug whose root cause isn't yet known — run [`debug`](../debug/SKILL.md) first; the reproduction crystallises into the failing test.
 
 ## Pre-conditions

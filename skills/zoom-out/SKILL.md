@@ -1,6 +1,6 @@
 ---
 name: zoom-out
-description: User-invoked utility — pulls the agent up an abstraction layer when the user is lost in unfamiliar code. Produces a map of relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary. Use when the user says "I'm lost", "zoom out", "give me higher-level context", "I don't know this area", "what depends on what here", or invokes the slash command. Does not change which workflow the user is in — interrupts to orient, then hands back. Skip when the user already has the map and just needs to read code.
+description: Maps an unfamiliar area one abstraction level up — relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary — then hands back to the current workflow. User-invoked only (`/zoom-out`). Use when the user is lost in unfamiliar code. Triggered by "I'm lost", "zoom out", "what depends on what here". Not when the user already has the map and just needs to read code.
 disable-model-invocation: true
 ---
 

@@ -11,6 +11,46 @@ to the new version and a fresh `[Unreleased]` block is opened.
 
 ## [Unreleased]
 
+> **Heads-up:** `security-review` no longer fires on keyword mentions of auth,
+> public APIs, or permissions — it runs on an explicit request or when
+> `feature-doc`, `prod-ready`, or `pr-review` escalates a surface-changing change.
+
+### Added
+
+- `npm test` (`scripts/lint-triggers.js`) — lints every skill `description:`:
+  required What / Use when / Triggered by / Not for shape, YAML-safe characters,
+  length, trigger phrases unique across skills, no retired phrases, and
+  `skills/TRIGGERS.md` mirroring each description's trigger list.
+- `tests/routing-cases.md` — 37 prompt → expected-skill cases, including
+  near-misses and Claude Code built-ins. 1.4.0 descriptions scored 17/37;
+  the rewritten ones trace to 37/37.
+- `TRIGGERS.md` "Retired phrases" list and an age × scope table for the Shape skills.
+- `bench`: *When to skip* and *Pairing* sections; `bootstrap`: *Pairing* section.
+
+### Changed
+
+- Rewrote all 18 skill descriptions in one shape (template in
+  `SKILL-TEMPLATE.md`). "Pairs with…" moved out of descriptions into bodies;
+  every description now names its nearest neighbour in a *Not for* clause.
+- Shape skills (`design`, `system-design`, `improve-codebase-architecture`)
+  share one splitting rule — pick by age (new / existing) and scope (one / many modules).
+- `tdd` claims only bugs whose cause is known; unknown cause → `debug`.
+  Adding tests to existing code no longer routes to `tdd`.
+- `tdd-rounds` threshold unified at 10+ ACs or multi-package (was "5-15" in its description).
+- `pr-review` owns the terminology audit trigger and yields to the built-in
+  `/code-review` command; `simplify` owns the over-engineered / YAGNI triggers
+  formerly routed to `code-hygiene`.
+- `verify-real-deps` vs `prod-ready`: merge → `prod-ready`; tag with vendor APIs → both, in order.
+
+### Removed
+
+- Over-broad trigger phrases that fired on ordinary conversation or collided
+  with other skills: "should we", "give me a proposal", "how would we approach",
+  "let's explore", "walk me through this", "check this change", "look over the
+  diff", "give feedback on", "be concise", "initialize", "shipping", "fixing a
+  bug", "integration tests", "permissions", "public API", "auth flow", "testability".
+- `TRIGGERS.md` rows routing to `formats/` references, which no skill could reach.
+
 ## [1.4.0] — 2026-06-28
 
 > **Heads-up:** `code-hygiene` and `sync-check` are no longer routable skills

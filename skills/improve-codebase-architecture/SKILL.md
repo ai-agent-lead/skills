@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Find deepening opportunities in EXISTING code, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable. Use for EXISTING code; for designing the shape of a new module from scratch, use `design`. Skip for single-module local refactors with no cross-module impact — use `design` or just refactor inline.
+description: Finds deepening opportunities in EXISTING code across modules — shallow modules to merge, tangled seams to split — guided by `docs/CONTEXT.md` and `docs/adr/`. Use when restructuring existing code whose problems span module boundaries, or making an existing codebase more testable or AI-navigable. Triggered by "improve the architecture", "find refactoring opportunities", "these modules are too coupled", "make this codebase more testable". Pick by age and scope — new code in one module → `design`; a new multi-module system → `system-design`; existing code across modules → `improve-codebase-architecture`; existing code in one module → refactor inline, then `simplify`. Not for line-level cleanup of the current diff → `simplify`.
 ---
 
 # Improve Codebase Architecture

@@ -1,6 +1,6 @@
 ---
 name: simplify
-description: Single end-of-round sweep that tightens what `tdd` just left green — review every changed file for reuse, quality, efficiency, and test relevance. Use after `tdd` reaches green and before opening a PR (or before a Builder closes a round in `tdd-rounds`). Triggered by phrases like "simplify pass", "tighten this", "clean up before commit", "end-of-round sweep", or appearing as a step in a Builder brief. Skip for trivial diffs (typo, dep bump, doc-only). Pairs with `tdd` (runs immediately after green), the `code-hygiene` lens (`formats/CODE-HYGIENE.md`, applied during the sweep), and `pr-review` (a self-check after this).
+description: One sweep over a green diff to tighten it — reuse, line-level quality (naming, YAGNI, boring code per `formats/CODE-HYGIENE.md`), efficiency, and test relevance — committed separately. Use after tests go green and before opening a PR, at the end of each `tdd-rounds` round, or when the user says changed code is over-engineered or badly named. Triggered by "simplify pass", "tighten this", "clean up before commit", "over-engineered", "YAGNI". Not for restructuring across modules → `improve-codebase-architecture`; not while tests are red; not for typo, dependency-bump, or doc-only diffs.
 ---
 
 # Simplify
@@ -25,6 +25,7 @@ The simplify pass catches these once, deliberately, before the diff lands. Witho
 - After `tdd` reaches green, before opening a PR.
 - At the end of every round in `tdd-rounds` (Builder responsibility — a separate commit per [`tdd-rounds/COMMITS.md`](../tdd-rounds/COMMITS.md) rule 4).
 - After a focused refactor when you want a final sweep before merging.
+- The user says the changed code is over-engineered, badly named, or too clever — apply the [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) lens to the current diff.
 
 ## When to skip
 

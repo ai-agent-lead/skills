@@ -1,6 +1,6 @@
 ---
 name: feature-doc
-description: One-page contract for a non-trivial feature or bug fix — Problem, User Story, Acceptance Criteria, Non-Goals. The ACs become the test list for `tdd`. Use before any non-trivial feature or bug fix; when the user mentions "spec this out", "write a feature doc", "before any non-trivial feature", or describes a feature without listing ACs. Skip for typo fixes, dependency bumps, or pure refactors. Pairs with `tdd` / `tdd-rounds` (downstream — ACs feed the test list), `investigate` (upstream — when direction itself is unclear), and `grill-plan` (when the chosen plan needs stress-testing against existing model).
+description: Writes the one-page contract for a non-trivial feature or bug fix — Problem, User Story, Acceptance Criteria, Non-Goals — at `docs/features/<name>.md`; the ACs become the `tdd` test list. Use when a feature or fix is about to be built and its ACs are not written down yet. Triggered by "spec this out", "write a feature doc", "what are the acceptance criteria". Not for choosing between approaches → `investigate`; not for typo fixes, dependency bumps, or pure refactors. Escalates to `security-review` when the feature adds an entry point, identity flow, authorization rule, or sensitive-data path.
 ---
 
 # Feature Doc

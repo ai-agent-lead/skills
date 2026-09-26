@@ -1,6 +1,6 @@
 ---
 name: prod-ready
-description: Pre-merge production-readiness checklist — operational, infrastructure, and consistency checks that tests alone don't surface. Use after `tdd` reaches green; before opening a PR or merging to main; after significant infra changes (new DB, new deployment target, new auth flow); or when the user mentions "shipping", "ready to merge", "before deploy", "production readiness", or "prod-ready". Pairs with the `tdd` skill — tdd proves the feature works; this catches what tests can't see (server timeouts, DB pragmas, error-response consistency, secrets at rest).
+description: The author's pre-merge gate for their own change — operational, infrastructure, consistency, and doc-drift checks tests do not catch (timeouts, DB pragmas, error-shape consistency, secrets at rest). Use after tests are green, before opening a PR or merging to main, or after infra changes (new DB, deploy target, auth flow). Triggered by "ready to merge", "prod-ready", "production readiness", "before deploy". Not for reviewing someone else's PR → `pr-review`; for a tagged release that calls third-party APIs, run this and then `verify-real-deps`. Escalates to `security-review` when the change alters a trust boundary.
 ---
 
 # Prod-Readiness Checklist
