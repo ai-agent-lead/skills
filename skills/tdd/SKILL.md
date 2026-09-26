@@ -23,6 +23,7 @@ description: Test-first implementation via red-green-refactor. Use when implemen
 
 - **Current branch is not `main` / `master`.** If it is, stop and run `git checkout -b feat/<short-name>` (or `fix/...`) before writing the first test. Code lands on a feature branch; `main` receives merges, not commits.
 - A feature doc (`docs/features/<short-name>.md`) exists with testable ACs — or a `debug` reproduction names the root cause.
+- **Changing existing code that looks wrong or unclear, with no `WHY:`?** Read its history first (`git log -L :<Func>:<file>`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 ## Philosophy
 
@@ -70,6 +71,7 @@ One test → minimum code to pass → next test. Each cycle informs the next.
 - Remove duplication, improve names, extract functions.
 - Run tests after every change.
 - Do not add new behavior during refactor.
+- **Comments, while you're here:** follow [`STYLE-comments.md`](../formats/STYLE-comments.md) — headers state the contract, comments inside functions are tagged, and every comment in a function you changed is re-read. The reason for a change goes in the commit body, not a comment.
 - **Never refactor while red.** Get to green first.
 
 ### 4. Simplify pass — end-of-round, after green

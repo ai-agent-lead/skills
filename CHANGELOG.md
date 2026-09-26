@@ -38,6 +38,17 @@ to the new version and a fresh `[Unreleased]` block is opened.
   research note *At a glance* table and per-option *Picture*, ADR optional
   *Diagram*, `security-review` data-flow diagram with trust zones, `zoom-out`
   map *Picture*, `debug` expected-vs-actual.
+- `skills/scripts/check-comments.mjs` — checks the comments in a diff (Go, JS/TS,
+  other `//` and `#` languages): flags untagged comments, edit narration,
+  reviewer talk, process tags, owner-less TODOs, and commented-out code; lists
+  existing comments — headers included — in changed functions for re-check;
+  reports `comment lines: +N -M`. Run by `simplify` and `pr-review`.
+- `snippets/comment-style.md` — always-on comment rules; `--style` now writes
+  both snippets as one block.
+- `scripts/lint-style.js` in `npm test` — skill examples obey the comment
+  rules, the tag list matches across source / snippet / checker, and no other
+  file restates the rules. Checker tests in `tests/check-comments.test.mjs`.
+- ADR-0004 — comment style has one source.
 
 ### Changed
 
@@ -55,6 +66,18 @@ to the new version and a fresh `[Unreleased]` block is opened.
 - `verify-real-deps` vs `prod-ready`: merge → `prod-ready`; tag with vendor APIs → both, in order.
 - `system-design` writes the `docs/architecture.md` map in Mermaid (was ASCII);
   ASCII stays for chat.
+- `STYLE-comments.md` rewritten as the single source, with Go and JS examples.
+  Headers state the caller's contract only; comments inside functions carry a
+  tag (`WHY:`, `WORKAROUND:`, `SAFETY:`, `TODO(owner):`); editing a function
+  means re-reading every comment in it; history lives in git (commit body +
+  `Refs:`), read only on named triggers; folder-wide rules go in a folder
+  `AGENTS.md` / `CLAUDE.md`.
+- `CODE-HYGIENE.md`, `simplify`, `pr-review`, `tdd`, `debug`,
+  `improve-codebase-architecture`, `tdd-rounds` (COMMITS, builder brief), and
+  `CONVENTIONS.md` link the source instead of restating it; `tdd` applies it
+  while writing.
+- 19 label comments in `design/` and `tdd/TESTS.md` examples moved out of the
+  code blocks into the text, so agents stop copying "a comment above every function".
 
 ### Removed
 
@@ -64,6 +87,9 @@ to the new version and a fresh `[Unreleased]` block is opened.
   diff", "give feedback on", "be concise", "initialize", "shipping", "fixing a
   bug", "integration tests", "permissions", "public API", "auth flow", "testability".
 - `TRIGGERS.md` rows routing to `formats/` references, which no skill could reach.
+- `STYLE-comments.md` provenance grammar (`R6 AC-3`, `v0.3 R1b2` in code) —
+  round and AC ids now belong in commit messages only. Test-file preambles
+  shrink from 5–20 lines to 1–3, and only when a fake would surprise.
 
 ## [1.4.0] — 2026-06-28
 

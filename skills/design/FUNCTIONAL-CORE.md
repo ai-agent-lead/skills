@@ -35,7 +35,7 @@ The core never touches the world directly.
 
 ## Refactoring example
 
-WEAK — mixed
+**Weak** — mixed:
 ```ts
 async function processOrder(orderId: string) {
   const order = await db.orders.get(orderId);
@@ -57,9 +57,11 @@ async function processOrder(orderId: string) {
 
 To test this you must mock `db`, `api`, `emailer`, AND the date. The test mostly verifies the mocks.
 
-STRONG — split
+**Strong** — split:
+
+**Functional core** — pure:
+
 ```ts
-// Functional core — pure
 type OrderDecision =
   | { kind: "confirm";     newStatus: "confirmed";   confirmedAt: Date }
   | { kind: "backorder";   newStatus: "backordered" };
@@ -74,8 +76,11 @@ function decideOrderStatus(
   }
   return { kind: "backorder", newStatus: "backordered" };
 }
+```
 
-// Imperative shell — thin
+**Imperative shell** — thin:
+
+```ts
 async function processOrder(orderId: string) {
   const order = await db.orders.get(orderId);
   const stock = await api.checkStock(order.items);

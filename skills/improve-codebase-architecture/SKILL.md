@@ -45,7 +45,7 @@ This skill is _informed_ by the project's domain model. The domain language give
 
 ### 1. Explore
 
-Read the project's domain glossary ([`docs/CONTEXT.md`](../../docs/CONTEXT.md)) and any ADRs in [`docs/adr/`](../../docs/adr/) for the area you're touching first.
+Read the project's domain glossary ([`docs/CONTEXT.md`](../../docs/CONTEXT.md)) and any ADRs in [`docs/adr/`](../../docs/adr/) for the area you're touching first. Before proposing to remove code that looks odd, check for a `WHY:` or `WORKAROUND:`, then its history (`git log -L`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
 

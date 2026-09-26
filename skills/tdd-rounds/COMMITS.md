@@ -66,6 +66,9 @@ The first line is the subject (~50–72 chars). The body explains:
 - **What** the commit does (one or two sentences).
 - **Why** the change was needed (the AC, the bug, the constraint).
 - **Tradeoff being accepted** if the change picked one path over another.
+- **`Refs:`** trailer linking the feature doc, ADR, or known-issues entry the change serves.
+
+This body is where the change's story lives. Round and AC ids (`R6`, `AC-3`) go in the commit, **never in code comments** — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 Keep it short. Three short paragraphs > one long one. Bullets are fine.
 

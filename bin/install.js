@@ -27,11 +27,11 @@ const INFO_COLOR = `${CYAN}`;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SOURCE_SKILLS_DIR = path.resolve(__dirname, '../skills');
-const STYLE_SNIPPET_PATH = path.resolve(__dirname, '../snippets/writing-style.md');
-const STYLE_START = '<!-- ai-agent-lead/skills:writing-style:start -->';
-const STYLE_END = '<!-- ai-agent-lead/skills:writing-style:end -->';
+const SNIPPETS_DIR = path.resolve(__dirname, '../snippets');
+const SNIPPETS = ['writing-style.md', 'comment-style.md'];
+const STYLE_START = '<!-- ai-agent-lead/skills:style:start -->';
+const STYLE_END = '<!-- ai-agent-lead/skills:style:end -->';
 
-// --- Helper Functions ---
 function printBanner() {
   console.log(`
 ${BRAND_COLOR}   _    ___     _     ___  ___  _  _  _____   _     ___   _    ___
@@ -58,7 +58,7 @@ function printHelp() {
   console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
-  console.log(`  ${CYAN}--style${RESET}             Also add the writing-style rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
+  console.log(`  ${CYAN}--style${RESET}             Also add the writing and comment style rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
   console.log(``);
   console.log(`${BOLD}Examples:${RESET}`);
@@ -118,7 +118,6 @@ function upsertStyleBlock(file, snippet) {
   return existing ? 'updated' : 'created';
 }
 
-// --- Main Execution ---
 async function run() {
   const args = process.argv.slice(2);
   
@@ -153,13 +152,11 @@ async function run() {
     return;
   }
 
-  // Check if source skills folder exists in the package
   if (!fs.existsSync(SOURCE_SKILLS_DIR)) {
     console.error(`${RED}✗ Error: Source skills folder not found at: ${SOURCE_SKILLS_DIR}${RESET}`);
     process.exit(1);
   }
 
-  // Interactive Mode
   if (args.length === 0 && process.stdout.isTTY) {
     printBanner();
     console.log(`${INFO_COLOR}No options provided. Running interactive setup...${RESET}\n`);
@@ -204,17 +201,17 @@ async function run() {
     }
     console.log(``);
 
-    console.log(`${BOLD}3. Writing style:${RESET}`);
-    console.log(`   Add answer-first, plain-language, diagram-first rules to each assistant's`);
-    console.log(`   instructions file (CLAUDE.md / AGENTS.md / GEMINI.md) so every answer follows them.`);
-    const styleAns = await askQuestion(`${BOLD}${CYAN}? Add writing-style rules [y/N]: ${RESET}`);
+    console.log(`${BOLD}3. Style rules:${RESET}`);
+    console.log(`   Add the writing style (answer first, plain words, diagrams) and comment style`);
+    console.log(`   (contract headers, tagged comments, history in git) to each assistant's`);
+    console.log(`   instructions file (CLAUDE.md / AGENTS.md / GEMINI.md) so every turn follows them.`);
+    const styleAns = await askQuestion(`${BOLD}${CYAN}? Add style rules [y/N]: ${RESET}`);
     flags.style = /^y(es)?$/i.test(styleAns);
     console.log(``);
   } else {
-    // If not interactive and no flags specified, apply defaults
     const hasScopeFlag = flags.global || flags.local;
     if (!hasScopeFlag) {
-      flags.global = true; // Default to global
+      flags.global = true;
     }
 
     const hasAssistantFlag = flags.claude || flags.codex || flags.antigravity || flags.opencode;
@@ -226,7 +223,6 @@ async function run() {
     }
   }
 
-  // Setup Paths
   const home = os.homedir();
   const cwd = process.cwd();
 
@@ -298,11 +294,9 @@ async function run() {
   for (const dest of destinations) {
     console.log(`${INFO_COLOR}➜ Installing to ${BOLD}${dest.name}${RESET}${GRAY}...${RESET}`);
     try {
-      // Resolve absolute paths nicely for output display
       const displayPath = dest.path.replace(home, '~');
       console.log(`  ${GRAY}Path: ${displayPath}${RESET}`);
       
-      // Perform directory copy
       const result = copyFolderSync(SOURCE_SKILLS_DIR, dest.path, { force: flags.force });
 
       const summary = result.skipped > 0
@@ -317,8 +311,10 @@ async function run() {
   }
 
   if (flags.style) {
-    const snippet = fs.readFileSync(STYLE_SNIPPET_PATH, 'utf8');
-    console.log(`${BOLD}Adding writing-style rules...${RESET}`);
+    const snippet = SNIPPETS
+      .map((name) => fs.readFileSync(path.join(SNIPPETS_DIR, name), 'utf8').trim())
+      .join('\n\n');
+    console.log(`${BOLD}Adding style rules...${RESET}`);
     for (const target of instructionFiles) {
       try {
         const result = upsertStyleBlock(target.path, snippet);

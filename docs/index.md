@@ -12,6 +12,7 @@ OKF bundle listing for this repo's produced documentation. The format contract i
 * [adr/0001-distributed-state.md](./adr/0001-distributed-state.md) — feature-scoped state for `tdd-rounds`
 * [adr/0002-adopt-okf-for-produced-docs.md](./adr/0002-adopt-okf-for-produced-docs.md) — produced docs carry OKF frontmatter
 * [adr/0003-lenses-as-shared-references.md](./adr/0003-lenses-as-shared-references.md) — lenses/diagnostics are `formats/` references, not skills
+* [adr/0004-comment-style-single-source.md](./adr/0004-comment-style-single-source.md) — comment rules live in one file; a lint keeps them there
 
 ## Features
 

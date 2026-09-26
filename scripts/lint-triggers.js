@@ -55,7 +55,7 @@ function checkShape(skills) {
     if (description.length > MAX_DESCRIPTION) {
       fail(where, `description is ${description.length} chars (max ${MAX_DESCRIPTION})`);
     }
-    // Both break a YAML plain scalar.
+    // WHY: both break a YAML plain scalar.
     if (description.includes(': ')) fail(where, 'description contains ": " (breaks YAML)');
     if (description.includes(' #')) fail(where, 'description contains " #" (starts a YAML comment)');
     if (!/\bUse (only )?(when|after)\b/.test(description)) fail(where, 'description has no "Use when" clause');

@@ -70,4 +70,5 @@ You are a Builder sub-agent in a multi-round TDD project. Read the orchestration
 - **No `time.Sleep` in tests.**
 - **Don't `git push`.**
 - **Don't break existing tests.**
+- **Comments follow [`STYLE-comments.md`](../../formats/STYLE-comments.md).** No round/AC ids or edit narration in code; the why goes in the commit body. `check-comments.mjs` must show no problems before the simplify commit.
 - **Don't silently descope an AC.** If blocked, surface as a blocking open question and stop.

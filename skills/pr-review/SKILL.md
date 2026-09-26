@@ -94,7 +94,7 @@ Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIF
 
 Apply the [`code-hygiene`](../formats/CODE-HYGIENE.md) lens here, not as a primary phase:
 
-- **Comment noise**: new WHAT-comments, docstrings on exports whose contract is obvious from the signature, in-function section headers (`// validate`, `// build response`), stale "used by X" references, citation grammar that doesn't match the repo's comment style doc ([`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md)). Flag as **nits by default**; promote to a suggestion only when cumulative comment noise obscures the diff (signal the author skipped `simplify`).
+- **Comments** against [`STYLE-comments.md`](../formats/STYLE-comments.md) — run `node <skills-dir>/scripts/check-comments.mjs <base>` on the PR branch. Added-comment *problems* are **nits**, promoted to a **suggestion** when they pile up (the author skipped `simplify`). A *re-check* item that is now false — a header or `WHY:` the diff made untrue — is a **suggestion**: a stale comment misleads the next agent.
 - Names that mislead (boolean returning non-bool, `getX` that mutates, `Manager`/`Helper` suffixes hiding what the thing is).
 - Cleverness that earns its cost? Or could be boring?
 - YAGNI — "in case we need it" parameters / interfaces / classes? Strip.

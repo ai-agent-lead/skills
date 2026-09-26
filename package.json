@@ -7,7 +7,7 @@
     "install-skills": "bin/install.js"
   },
   "scripts": {
-    "test": "node scripts/lint-triggers.js"
+    "test": "node scripts/lint-triggers.js && node scripts/lint-style.js && node --test tests/*.test.mjs"
   },
   "type": "module",
   "files": [

@@ -36,6 +36,6 @@ By default, the installer runs in an interactive console wizard allowing you to 
 - `--opencode`          Install skills only for OpenCode
 - `--all`               Install skills for all supported assistants (default)
 - `--force`, `-f`         Overwrite files without confirmation
-- `--style`             Also add the writing-style rules (answer first, plain words, diagram first) to each assistant's instructions file — `CLAUDE.md`, `AGENTS.md`, or `GEMINI.md`. Re-running replaces the block instead of duplicating it.
+- `--style`             Also add the style rules — writing (answer first, plain words, diagram first) and code comments (contract headers, tagged comments, history in git) — to each assistant's instructions file — `CLAUDE.md`, `AGENTS.md`, or `GEMINI.md`. Re-running replaces the block instead of duplicating it.
 - `--help`, `-h`          Show the help menu with all options
 

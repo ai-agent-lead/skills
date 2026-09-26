@@ -34,11 +34,12 @@ Rules for how documentation and skills are structured in this repository.
 
 - Conventional Commits style: `feat(scope): …`, `docs(scope): …`, `fix(scope): …`.
 - In `tdd-rounds`, additionally prefix with `R<N>:` per [`skills/tdd-rounds/COMMITS.md`](../skills/tdd-rounds/COMMITS.md).
+- The body says **why**, and a `Refs:` trailer links the feature doc / ADR / known-issues entry. This is where a change's story lives — not in code comments.
 - Co-author trailers are encouraged when the agent and a human collaborated on the change.
 
 ## Code Style
 
-- Comment discipline is anchored in [`skills/formats/STYLE-comments.md`](../skills/formats/STYLE-comments.md). Default: write **no** comment. Keep only why / invariant / trade-off / provenance comments — and only when the next reader would otherwise reattempt the rejected alternative.
+- Comments follow [`skills/formats/STYLE-comments.md`](../skills/formats/STYLE-comments.md) — the single source; see [ADR-0004](adr/0004-comment-style-single-source.md).
 
 ## Terminology
 

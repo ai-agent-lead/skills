@@ -48,7 +48,7 @@ Walk every changed file. Apply each lens in order. Fix what you find inline.
 - Names that read clearly out of context — would a stranger guess what `result`, `data`, `value` referred to? If not, rename.
 - Error messages that name the failing input — `"could not parse: <value>"` beats `"parse error"`.
 - Abstractions that haven't earned their keep — a base class with one subclass, an interface with one implementation. Inline.
-- Comments — **default during the sweep is DELETE.** Apply [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) Principle 6 and the bar in [`STYLE-comments.md`](../formats/STYLE-comments.md): delete WHAT-comments, obvious-from-signature docstrings, "used by X" caller references, commented-out code, banners, and in-function section headers (`// validate`, `// build response`); keep only why-comments the next reader would otherwise reattempt. Normalize any kept citation (`ADR-007 §7`, `R6 AC-3`, `v0.3 R1b2`) to [`STYLE-comments.md`](../formats/STYLE-comments.md) §3.
+- Comments — run `node <skills-dir>/scripts/check-comments.mjs` and apply [`STYLE-comments.md`](../formats/STYLE-comments.md). Fix every *problem*; re-read every *re-check* item (headers included) in the functions you changed — still true, update, or delete. Report the `comments: +N −M` line in the round summary.
 
 ### 3. Efficiency — dead code, redundant work, premature defensive checks
 

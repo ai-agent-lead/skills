@@ -52,7 +52,7 @@ If you cannot reproduce, **stop and say so.** "Can't reproduce" is a valid debug
 
 Don't read the whole codebase. Bisect.
 
-- **`git bisect`** for regressions. Find the commit that introduced the change.
+- **`git bisect`** for regressions. Find the commit that introduced the change. For one function, `git log -L :<Func>:<file>` shows every change and its why — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 - **Logs / tracing** — add structured logs at suspect boundaries; don't read code that hasn't been confirmed to execute.
 - **Diff your assumptions against the code.** If you believe path A executes, prove it. Print, log, breakpoint.
 - **Walk the data, not the code.** Trace one specific input through the system; see where the actual value diverges from the expected. The divergence point is the bug's region.
