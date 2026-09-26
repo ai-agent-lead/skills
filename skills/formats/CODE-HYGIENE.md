@@ -2,7 +2,11 @@
 
 The line-level and function-level lens this skill set carries into any turn that writes or reads code. Smaller in scope than [`design`](../design/SKILL.md) (which shapes module interfaces) — these are the day-to-day habits that keep a codebase readable, navigable, and easy to change.
 
-This is a **shared reference**, not a standalone skill. It is the lens applied *while writing*, during the [`simplify`](../simplify/SKILL.md) sweep after `tdd` reaches green, and during [`pr-review`](../pr-review/SKILL.md) (§3f). Read it once; apply it many times.
+This is a **shared reference**, not a standalone skill. Read it once; apply it many times:
+
+- **While writing:** the [`tdd`](../tdd/SKILL.md) green step (YAGNI, boring code) and refactor step (all seven); every [`tdd-rounds`](../tdd-rounds/SKILL.md) Builder round.
+- **After green:** the [`simplify`](../simplify/SKILL.md) sweep over the whole diff.
+- **At review:** the `tdd-rounds` parent's check of each round, and [`pr-review`](../pr-review/SKILL.md) §3f.
 
 Seven principles.
 

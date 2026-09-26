@@ -25,7 +25,7 @@ Distills the pattern of a parent agent driving Builder sub-agents through a feat
 - **Brief per round.** A self-contained brief — the Builder shouldn't need conversation history. 
   - **Briefing Sub-agent**: For complex rounds, invoke a sub-agent to autonomously generate the brief by analyzing `docs/STATE.md`, the `feature-doc`, and the results of the previous round. See `templates/builder-brief.md` for the schema.
 - **Set `status: building`** on the feature doc before dispatching Round 1 ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2). The parent owns the feature doc; Builders don't change its status.
-- **Verify after each round.** Run the test command independently (don't trust the Builder's pasted output), read the diff, tick AC checkboxes in the feature doc with the test name, append a round summary to `docs/STATE.md`.
+- **Verify after each round.** Run the test command independently (don't trust the Builder's pasted output), read the diff against [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) *The bar* (send misses back as the next round's first task), tick AC checkboxes in the feature doc with the test name, append a round summary to `docs/STATE.md`.
 - **Never write code yourself.** If you find yourself doing it directly under time pressure, that's a signal the round was misscoped — split it.
 
 ## The Builder's contract

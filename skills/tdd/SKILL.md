@@ -65,11 +65,11 @@ One test → minimum code to pass → next test. Each cycle informs the next.
 
 - Smallest amount of code that makes the test pass.
 - Hardcoding a return value is acceptable on the first test — the next test forces generalization.
-- Resist adding features the test does not require.
+- Resist adding features the test does not require — YAGNI, and boring code over clever code ([`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) 1, 3).
 
 ### 3. Refactor — Clean up with the test as a safety net
 
-- Remove duplication, improve names, extract functions.
+- Shape the code to [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) — its seven principles, checked against *The bar*. In a refactor step that means: rename until the names say what the code does, extract only on the third copy, keep related code together, and put constants at their narrowest scope.
 - Run tests after every change.
 - Do not add new behavior during refactor.
 - **Comments, while you're here:** follow [`STYLE-comments.md`](../formats/STYLE-comments.md) — headers state the contract, comments inside functions are tagged, and every comment in a function you changed is re-read. The reason for a change goes in the commit body, not a comment — commits follow [`COMMIT-FORMAT.md`](../formats/COMMIT-FORMAT.md).
@@ -120,7 +120,7 @@ The `tdd-rounds` skill captures the full orchestration pattern (Builder brief sc
 - All ACs from the feature doc are green and the tests are committed.
 - The feature doc's `status` is `building`, and its `code:` lists the paths this work touched.
 - Tests assert behavior through public interfaces, not internals.
-- The simplify pass has run.
+- The changed code meets *The bar* in [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md), and the simplify pass has run.
 - For single-feature flow: `prod-ready` is queued. For `tdd-rounds`: the structured Builder report is emitted.
 
 ## Handoff

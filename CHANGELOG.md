@@ -119,6 +119,10 @@ to the new version and a fresh `[Unreleased]` block is opened.
 - `zoom-out` no longer lists "what depends on what here"; what one change
   affects routes to `impact`. Four more routing cases (50/50 by static trace).
 - `check-comments.mjs` skips vendored files (`vendor/`, `node_modules/`, minified JS).
+- `tdd` applies `formats/CODE-HYGIENE.md` while writing — YAGNI and boring code
+  in the green step, all seven principles in the refactor step — not only in
+  the later `simplify` sweep. The `tdd-rounds` Builder brief requires it each
+  round, and the parent checks each round's diff against *The bar*.
 - AgentLead.Dev homepage (`site/`): entry rows and flows for schema changes
   (`migrate`), upgrades (`upgrade`), and releases (`release`); `impact` in the
   bug-fix and review flows and as a cross-cutting card; the large-feature flow
