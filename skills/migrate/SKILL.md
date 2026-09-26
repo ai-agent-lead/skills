@@ -68,7 +68,7 @@ List every schema operation in the change. For each touched table, get the row c
 
 ### 2. Write the plan
 
-Add a `## Migration plan` section to the feature doc (or a short `docs/research/<name>-migration.md` for a big change). One row per deploy:
+Add a `## Migration plan` section to the feature doc (or a short `docs/features/<name>/migration.md` for a big change). One row per deploy:
 
 | Step | Migration | App change | Roll back by | Done when |
 | --- | --- | --- | --- | --- |

@@ -14,6 +14,12 @@ to the new version and a fresh `[Unreleased]` block is opened.
 > **Heads-up:** `security-review` no longer fires on keyword mentions of auth,
 > public APIs, or permissions — it runs on an explicit request or when
 > `feature-doc`, `prod-ready`, or `pr-review` escalates a surface-changing change.
+>
+> **Heads-up:** new docs use the ADR-0005 layout. A feature's docs live in
+> `docs/features/<name>/` (`feature.md`, `design.md`, `security.md`, `bench.md`,
+> `migration.md`), not `docs/features/<name>.md`, `docs/security/`, or
+> `docs/benchmarks/`. Status values are lowercase and live only in frontmatter.
+> Existing docs keep working; `check-docs.mjs` lists what to update.
 
 ### Added
 
@@ -63,8 +69,38 @@ to the new version and a fresh `[Unreleased]` block is opened.
   skills; `tdd-rounds/COMMITS.md` keeps only the round-specific rules.
 - Workflow 7 (upgrade) and Workflow 8 (release); 9 more routing cases
   (baseline 20/46, now 46/46 by static trace).
+- `formats/DOCS-LAYOUT.md` and ADR-0005 — one docs layout: scope decides the
+  folder (`docs/<domain>/` once a second domain appears), one folder per
+  feature, `docs/releases/<version>.md` checklists plus a `docs/roadmap.md`,
+  global ADR numbers. Status lives in frontmatter, and each status change has
+  one owner skill: `feature-doc` draft/approved, `tdd` building, `prod-ready`
+  done, `release` shipped.
+- `skills/scripts/check-docs.mjs` — checks status values, broken links,
+  `code:` paths, release and roadmap boxes against statuses, and a stale
+  `docs/index.md`; lists code changed under a feature whose doc didn't change.
+  `--write` generates the `docs/index.md` list from frontmatter. `npm test`
+  runs it on this repo and fails when a skill names a `docs/` path outside the layout.
+- Installer `--hooks` (and a y/N wizard step): Claude Code hooks that list the docs
+  in flight at session start, name the docs covering each edited file, and
+  block stopping while changed docs have problems.
+- `snippets/docs-upkeep.md` — the always-on docs rules, added by `--style`.
+- Feature docs list their code in a `code:` frontmatter field.
 
 ### Changed
+
+- `feature-doc`, `tdd`, `tdd-rounds`, `prod-ready`, `release`, `investigate`
+  each make their status change as a "Done when" step; `release` ticks the
+  release file and roadmap. `DOC-DRIFT-AUDIT` gains a seventh check (status
+  and links, via `check-docs.mjs`).
+- `grill-plan`, `CONTEXT-FORMAT`, `CONTEXT-MAP-FORMAT`,
+  `improve-codebase-architecture`: domain docs live in `docs/<domain>/`, not
+  next to the code; `docs/CONTEXT-MAP.md` lists the domains; code folders get
+  a `CLAUDE.md` / `AGENTS.md` pointing at their docs.
+- `bootstrap` creates a generated `docs/index.md` and a root pointer to it.
+- `OKF.md` §2 lists every doc type with its status values and points to
+  `DOCS-LAYOUT.md` for paths; the WORKFLOWS artifacts table does the same.
+- Templates (feature, research note, ADR) drop the `**Status:**` body line.
+- `docs/features/distributed-state.md` moved to `docs/features/distributed-state/feature.md`.
 
 - Rewrote all 18 skill descriptions in one shape (template in
   `SKILL-TEMPLATE.md`). "Pairs with…" moved out of descriptions into bodies;

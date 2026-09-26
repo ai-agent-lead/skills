@@ -13,17 +13,17 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
 | `bootstrap` | Starting a new project or service | `docs/` structure + `docs/CONTEXT.md` | [bootstrap/](./bootstrap/) |
-| `feature-doc` | Before any non-trivial feature or bug fix | `docs/features/<short-name>.md` | [feature-doc/](./feature-doc/) |
+| `feature-doc` | Before any non-trivial feature or bug fix | `docs/features/<short-name>/feature.md` | [feature-doc/](./feature-doc/) |
 | `investigate` | Open-ended research, proposals, or "options before code" | `docs/research/<topic>.md` | [investigate/](./investigate/) |
 | `grill-plan` | Stress-test a **chosen** plan against existing terminology and decisions | Updates to `docs/CONTEXT.md` and `docs/adr/` | [grill-plan/](./grill-plan/) |
-| `bench` | Verifying performance ACs or profiling hot paths | `docs/benchmarks/<feature>.md` | [bench/](./bench/) |
+| `bench` | Verifying performance ACs or profiling hot paths | `docs/features/<feature>/bench.md` | [bench/](./bench/) |
 
 ### Design & architecture
 
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
 | `system-design` | Greenfield system architecture — modules, dependency direction, seams | `docs/architecture.md` (system map) | [system-design/](./system-design/) |
-| `design` | Designing a module or public API before implementation | Guidance only — optional `docs/features/<feature>.design.md` for non-trivial shapes | [design/](./design/) |
+| `design` | Designing a module or public API before implementation | Guidance only — optional `docs/features/<feature>/design.md` for non-trivial shapes | [design/](./design/) |
 | `improve-codebase-architecture` | Finding deepening opportunities — turning shallow modules into deep ones | Numbered candidate list, optional ADR / CONTEXT.md updates | [improve-codebase-architecture/](./improve-codebase-architecture/) |
 | `zoom-out` | User-invoked: ask for higher-level context when unfamiliar with an area | Map of relevant modules and callers in `CONTEXT.md` vocabulary | [zoom-out/](./zoom-out/) |
 
@@ -44,7 +44,7 @@ The `code-hygiene` line-level lens is no longer a routable skill — it lives at
 | Skill | Trigger | Produces | Location |
 | --- | --- | --- | --- |
 | `prod-ready` | After tdd green, before merge | Verified pre-merge checklist (incl. doc drift) | [prod-ready/](./prod-ready/) |
-| `security-review` | Explicit request, or escalated by `feature-doc` / `prod-ready` / `pr-review` when a change is surface-changing (entry points, identity flows, authz, sensitive data, external deps) | Threat model + verified controls; appended to feature doc, or `docs/security/<feature>.md` for high-stakes | [security-review/](./security-review/) |
+| `security-review` | Explicit request, or escalated by `feature-doc` / `prod-ready` / `pr-review` when a change is surface-changing (entry points, identity flows, authz, sensitive data, external deps) | Threat model + verified controls; appended to feature doc, or `docs/features/<feature>/security.md` for high-stakes | [security-review/](./security-review/) |
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
 | `verify-real-deps` | Pre-tag smoke test against real third-party APIs | `docs/known-issues.md` bug ledger; fix-rounds until clean | [verify-real-deps/](./verify-real-deps/) |
 
@@ -153,7 +153,7 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 - [`formats/CONTEXT-FORMAT.md`](./formats/CONTEXT-FORMAT.md) — `CONTEXT.md` structure, single-vs-multi-context layout, minimal example.
 - [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement). Applied during `simplify` and `pr-review` §3f.
 - [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) — the terminology / ADR / doc-map audit. Run from `prod-ready` §7 (author), `pr-review` §3e (reviewer), or standalone (the former `sync-check`).
-- [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the single source for code comments (headers as contracts, tagged comments, history in git), checked by [`scripts/check-comments.mjs`](./scripts/check-comments.mjs).
+- [`formats/DOCS-LAYOUT.md`](./formats/DOCS-LAYOUT.md) — the single source for where docs live (by domain, feature folders, `releases/`), who changes each status, and how docs stay true — checked by [`scripts/check-docs.mjs`](./scripts/check-docs.mjs). [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the single source for code comments (headers as contracts, tagged comments, history in git), checked by [`scripts/check-comments.mjs`](./scripts/check-comments.mjs).
 - [`formats/COMMIT-FORMAT.md`](./formats/COMMIT-FORMAT.md) — the one format for commit messages and PR descriptions: why in the body, `Refs:` into `docs/`, `BREAKING CHANGE:` for `release`.
 - [`formats/WRITING-STYLE.md`](./formats/WRITING-STYLE.md) — how docs and chat explanations read: answer first, plain words, diagram first (Mermaid in `docs/`, ASCII in chat). Used by every doc-producing skill; [`snippets/writing-style.md`](../snippets/writing-style.md) is the always-on version for `CLAUDE.md` / `AGENTS.md`.
 

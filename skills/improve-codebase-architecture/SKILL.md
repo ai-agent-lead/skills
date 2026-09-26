@@ -88,8 +88,9 @@ Side effects happen inline as decisions crystallize:
 When a single `CONTEXT.md` becomes a bottleneck (>100 terms), the codebase is likely ready for context splitting.
 
 - **Identify Seams**: Find logical boundaries where domain terms are largely independent.
-- **Extract Sub-Contexts**: Move terms into `<module>/CONTEXT.md` files.
-- **Update CONTEXT-MAP.md**: Create or update the root [`docs/CONTEXT-MAP.md`](../formats/CONTEXT-MAP-FORMAT.md) to point to the new sub-contexts.
+- **Extract Sub-Contexts**: Move terms into `docs/<domain>/CONTEXT.md` files, one folder per domain, named like its code folder ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1). Existing docs stay where they are; new docs for a domain go in its folder.
+- **Update CONTEXT-MAP.md**: Create or update [`docs/CONTEXT-MAP.md`](../formats/CONTEXT-MAP-FORMAT.md) to list the domains.
+- **Point code at docs**: Add a short `CLAUDE.md` / `AGENTS.md` in each domain's code folder naming its `CONTEXT.md`.
 - **AI-Navigability**: This reduces context pollution, allowing agents to focus only on the relevant vocabulary for a given module.
 
 ## Pairing with other skills

@@ -9,7 +9,7 @@ The one format for commit messages and PR descriptions. Code comments hold what 
  What it does, if the subject can't say it.
  The trade-off accepted, if one path was picked.>
 
-Refs: docs/features/<name>.md, docs/adr/NNNN-<slug>.md    ← footers
+Refs: docs/features/<name>/feature.md, docs/adr/NNNN-<slug>.md    ← footers
 BREAKING CHANGE: <what callers must change>               (only when true)
 Co-Authored-By: <agent line, when an agent helped>
 ```

@@ -22,7 +22,7 @@ description: Test-first implementation via red-green-refactor. Use when implemen
 ## Pre-conditions
 
 - **Current branch is not `main` / `master`.** If it is, stop and run `git checkout -b feat/<short-name>` (or `fix/...`) before writing the first test. Code lands on a feature branch; `main` receives merges, not commits.
-- A feature doc (`docs/features/<short-name>.md`) exists with testable ACs — or a `debug` reproduction names the root cause.
+- A feature doc (`docs/features/<short-name>/feature.md`) exists with testable ACs — or a `debug` reproduction names the root cause. With the first failing test, set its `status: building` ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2).
 - **Changing existing code that looks wrong or unclear, with no `WHY:`?** Read its history first (`git log -L :<Func>:<file>`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 ## Philosophy
@@ -117,6 +117,7 @@ The `tdd-rounds` skill captures the full orchestration pattern (Builder brief sc
 ## Done when
 
 - All ACs from the feature doc are green and the tests are committed.
+- The feature doc's `status` is `building`, and its `code:` lists the paths this work touched.
 - Tests assert behavior through public interfaces, not internals.
 - The simplify pass has run.
 - For single-feature flow: `prod-ready` is queued. For `tdd-rounds`: the structured Builder report is emitted.

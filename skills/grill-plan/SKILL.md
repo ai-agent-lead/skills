@@ -29,33 +29,31 @@ During codebase exploration, also look for existing documentation:
 
 ### File structure
 
-Most repos have a single context:
+Paths follow [`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md). Most repos have a single context:
 
 ```
-/
+docs/
 ├── CONTEXT.md
-├── docs/
-│   └── adr/
-│       ├── 0001-event-sourced-orders.md
-│       └── 0002-postgres-for-write-model.md
-└── src/
+└── adr/
+    ├── 0001-event-sourced-orders.md
+    └── 0002-postgres-for-write-model.md
 ```
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+If `docs/CONTEXT-MAP.md` exists, the repo has several domains (bounded contexts). Each domain's docs sit in its own folder under `docs/`, named like its code folder:
 
 ```
-/
-├── CONTEXT-MAP.md
-├── docs/
-│   └── adr/                          ← system-wide decisions
-├── src/
-│   ├── ordering/
-│   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
-│   └── billing/
-│       ├── CONTEXT.md
-│       └── docs/adr/
+docs/
+├── CONTEXT-MAP.md          ← lists the domains and how they talk
+├── adr/                    ← cross-domain decisions
+├── ordering/
+│   ├── CONTEXT.md
+│   └── adr/                ← ordering-only decisions
+└── billing/
+    ├── CONTEXT.md
+    └── adr/
 ```
+
+ADR numbers are one sequence across all `adr/` folders.
 
 Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
 

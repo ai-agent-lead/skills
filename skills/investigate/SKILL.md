@@ -69,7 +69,7 @@ For high-stakes artifacts — specs, ADRs, anything load-bearing for cross-team 
 
 ## The artifact
 
-Save the research note to `docs/research/<short-topic>.md`. Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton, written per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) — answer first, diagrams for flow, a table to compare options. Create `docs/research/` lazily on first use.
+Save the research note to `docs/research/<short-topic>.md` — or `docs/<domain>/research/` when the answer changes one domain ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1). Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton, written per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) — answer first, diagrams for flow, a table to compare options. Create `docs/research/` lazily on first use.
 
 The note must include:
 - **Context** with citations.
@@ -90,7 +90,7 @@ The note must include:
 
 Once the user picks an option:
 
-- Mark the research note **Decided** and bold the chosen option in the Recommendation section.
+- Set `status: decided` in the research note's frontmatter and bold the chosen option in the Recommendation section.
 - If the decision is hard-to-reverse / surprising-without-context / the result of a real tradeoff → write an ADR (use `grill-plan`, or write directly into `docs/adr/`). Link the ADR back from the research note.
 - If a concrete feature is now being built → run `feature-doc` next; link it from the research note.
 - If the chosen option requires later validation → leave the research note Open and add a "Follow-ups" section.

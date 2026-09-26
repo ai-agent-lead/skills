@@ -51,7 +51,7 @@ Before reviewing controls, draw what's actually exposed. Most security holes hid
 - **Data flows**: for each entry point, trace the data — what's stored, what's logged, what's forwarded to a third party, what's reflected back to the caller.
 - **Trust boundaries**: where data crosses from a less-trusted zone to a more-trusted one. Every boundary is a place input must be validated, sanitised, or authorised.
 
-Draw it: a small data-flow diagram with trust zones as boxes and each boundary crossing marked (Mermaid `flowchart` with a `subgraph` per trust zone in docs; ASCII in chat — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md)). Output is a short artifact (the diagram plus 3–10 lines is fine for most changes) — usually appended to the feature doc as a `## Security surface` section, or, for high-stakes changes, a dedicated `docs/security/<feature>.md`.
+Draw it: a small data-flow diagram with trust zones as boxes and each boundary crossing marked (Mermaid `flowchart` with a `subgraph` per trust zone in docs; ASCII in chat — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md)). Output is a short artifact (the diagram plus 3–10 lines is fine for most changes) — usually appended to the feature doc as a `## Security surface` section, or, for high-stakes changes, a dedicated `docs/features/<feature>/security.md`.
 
 ### 2. Enumerate threats
 
@@ -118,7 +118,7 @@ Most reviews produce a **`## Security review` section appended to the feature do
 - <risk> — accepted because <reason>; tracked at <link or follow-up>
 ```
 
-For high-stakes changes (new auth flow, new external surface, regulated data), promote to `docs/security/<feature>.md` with a fuller threat-model section. Same shape, just longer.
+For high-stakes changes (new auth flow, new external surface, regulated data), promote to `docs/features/<feature>/security.md` with a fuller threat-model section (`docs/research/security-<topic>.md` when the review isn't for one feature). Same shape, just longer.
 
 ## Anti-patterns
 
@@ -141,5 +141,5 @@ For high-stakes changes (new auth flow, new external surface, regulated data), p
 - The security surface (entry points + trust zones + data flows) is named, not assumed.
 - Each plausible threat has a verified control or an explicit deferral with rationale.
 - High-impact threats have two independent layers of control where feasible.
-- The artifact (feature-doc section or `docs/security/<feature>.md`) is in the repo.
+- The artifact (feature-doc section or `docs/features/<feature>/security.md`) is in the repo.
 - The PR description references the review so the reviewer can audit it.

@@ -54,7 +54,7 @@ For a single-package feature with a manageable acceptance-criteria count.
    [user has a clear idea]
             │
             ▼
-       feature-doc  ──── produces: docs/features/<name>.md
+       feature-doc  ──── produces: docs/features/<name>/feature.md
             │             (Problem, User Story, ACs, Non-Goals)
             │
             ▼
@@ -64,11 +64,11 @@ For a single-package feature with a manageable acceptance-criteria count.
             │     authz, sensitive data, external dep)
             │       └─► security-review  ──── runs alongside design/tdd;
             │             produces: feature-doc Security section
-            │             or docs/security/<feature>.md
+            │             or docs/features/<feature>/security.md
             │
             ▼
        (optional) design ──── new module shape; optional sibling
-            │                 docs/features/<name>.design.md if non-trivial
+            │                 docs/features/<name>/design.md if non-trivial
             │
             ▼
           tdd  ──── red → green → refactor, per AC
@@ -378,7 +378,7 @@ A few things that happen across all workflows:
 
 2. **`grill-plan` is reusable as a sub-step.** Workflow 3 calls it explicitly; Workflow 4's grilling loop borrows the same discipline. It's also valid as a standalone skill if the user has a plan they want to stress-test. Has a **bootstrap mode** for greenfield repos with no `CONTEXT.md` / ADRs yet — the session creates them lazily.
 
-3. **`design` doesn't have a workflow of its own** — it's a sub-step inside Workflow 1, 2, and 4. Always paired with `tdd` (or implicitly with `tdd-rounds`). Optional sibling artifact `docs/features/<name>.design.md` when the module shape is non-trivial.
+3. **`design` doesn't have a workflow of its own** — it's a sub-step inside Workflow 1, 2, and 4. Always paired with `tdd` (or implicitly with `tdd-rounds`). Optional sibling artifact `docs/features/<name>/design.md` when the module shape is non-trivial.
 
 4. **`code-hygiene` is a lens, not a phase** — and now a shared reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)), not a routable skill. Apply it during the simplify sweep that follows TDD green, during `pr-review` §3f, or whenever you re-read code and pause to understand it. Especially relevant in Workflows 1, 2, 4, and 5.
 
@@ -404,22 +404,15 @@ A few things that happen across all workflows:
 
 15. **`migrate` is a sub-step, not a workflow.** When a feature in Workflow 1 or 2 changes a schema, `migrate` plans the deploy steps (expand → backfill → switch → contract) as a section of the feature doc, and `tdd` builds the app change for each step. Each step ships as its own PR.
 
-16. **Artifacts accumulate in `docs/`:**
+16. **Artifacts accumulate in `docs/`**, at the paths in [`formats/DOCS-LAYOUT.md`](formats/DOCS-LAYOUT.md) — the single source for where each doc lives, which skill writes it, and which skill changes its status. In short:
 
-    | Location | Produced by | Type |
-    |---|---|---|
-    | `docs/features/<name>.md` | `feature-doc` | One per feature |
-    | `docs/features/<name>.design.md` | `design` (optional) | One per feature with non-trivial module shape |
-    | `docs/research/<topic>.md` | `investigate`, `debug` (optional) | One per investigation or non-trivial bug |
-    | `docs/adr/<n>-<topic>.md` | `grill-plan`, `improve-codebase-architecture` | One per architectural decision |
-    | `docs/CONTEXT.md` | `grill-plan`, `improve-codebase-architecture` (inline updates) | One per repo / context |
-    | `docs/architecture.md` | `system-design` | One per system (the system map) |
-    | `docs/features/<name>/state/snapshot.md` | `tdd-rounds` parent | Living snapshot per feature (target end-state per ADR-0001; not yet wired through `tdd-rounds` skill text) |
-    | `docs/features/<name>/state/rounds/*.md` | `tdd-rounds` Builder | Immutable round logs (target end-state per ADR-0001) |
-    | `docs/STATE.md` | `tdd-rounds` parent | Currently the single running summary; ADR-0001 demotes it to a global manifest after migration. |
-    | `docs/security/<feature>.md` | `security-review` (high-stakes only) | One per surface-changing feature where a feature-doc section isn't enough |
-    | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
-    | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record); also holds follow-up tracking for accepted-but-unimplemented ADRs. |
-    | `CHANGELOG.md` | `prod-ready` Section 7, `release` | One per repo; `[Unreleased]` accumulates between releases, and `release` dates it. |
+    ```
+    feature-doc ─► features/<name>/feature.md   draft → approved
+    design, migrate, security-review, bench ─► features/<name>/*.md
+    tdd ─► status: building     prod-ready ─► done
+    release ─► shipped, ticks releases/<version>.md, dates CHANGELOG.md
+    ```
+
+    `CHANGELOG.md` sits at the repo root: `prod-ready` adds to `[Unreleased]`; `release` dates it.
     All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.
 

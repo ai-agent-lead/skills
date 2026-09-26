@@ -28,7 +28,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SOURCE_SKILLS_DIR = path.resolve(__dirname, '../skills');
 const SNIPPETS_DIR = path.resolve(__dirname, '../snippets');
-const SNIPPETS = ['writing-style.md', 'comment-style.md'];
+const SNIPPETS = ['writing-style.md', 'comment-style.md', 'docs-upkeep.md'];
+const HOOK_SCRIPT = 'check-docs.mjs';
 const STYLE_START = '<!-- ai-agent-lead/skills:style:start -->';
 const STYLE_END = '<!-- ai-agent-lead/skills:style:end -->';
 
@@ -58,7 +59,8 @@ function printHelp() {
   console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
-  console.log(`  ${CYAN}--style${RESET}             Also add the writing and comment style rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
+  console.log(`  ${CYAN}--style${RESET}             Also add the writing, comment, and docs rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
+  console.log(`  ${CYAN}--hooks${RESET}             Also add Claude Code hooks that keep docs/ accurate (settings.json): list docs in flight at session start, name the docs covering each edited file, block stopping while changed docs have problems`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
   console.log(``);
   console.log(`${BOLD}Examples:${RESET}`);
@@ -118,6 +120,29 @@ function upsertStyleBlock(file, snippet) {
   return existing ? 'updated' : 'created';
 }
 
+// Replaces our hook entries in settings.json and keeps every other setting and hook.
+function upsertHooks(file, command) {
+  const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  const settings = existing.trim() ? JSON.parse(existing) : {};
+  const ours = {
+    SessionStart: { hooks: [{ type: 'command', command: `${command} --hook session` }] },
+    PostToolUse: { matcher: 'Edit|Write|MultiEdit', hooks: [{ type: 'command', command: `${command} --hook edit` }] },
+    Stop: { hooks: [{ type: 'command', command: `${command} --hook stop` }] },
+  };
+  settings.hooks = settings.hooks || {};
+  for (const [event, group] of Object.entries(ours)) {
+    const others = (settings.hooks[event] || [])
+      .map((g) => ({ ...g, hooks: (g.hooks || []).filter((h) => !String(h.command || '').includes(HOOK_SCRIPT)) }))
+      .filter((g) => g.hooks.length);
+    settings.hooks[event] = [...others, group];
+  }
+  const next = `${JSON.stringify(settings, null, 2)}\n`;
+  if (next === existing) return 'unchanged';
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, next);
+  return existing ? 'updated' : 'created';
+}
+
 async function run() {
   const args = process.argv.slice(2);
   
@@ -131,6 +156,7 @@ async function run() {
     all: false,
     force: false,
     style: false,
+    hooks: false,
     help: false
   };
 
@@ -144,6 +170,7 @@ async function run() {
     else if (arg === '--all') flags.all = true;
     else if (arg === '--force' || arg === '-f') flags.force = true;
     else if (arg === '--style') flags.style = true;
+    else if (arg === '--hooks') flags.hooks = true;
     else if (arg === '--help' || arg === '-h') flags.help = true;
   }
 
@@ -202,12 +229,22 @@ async function run() {
     console.log(``);
 
     console.log(`${BOLD}3. Style rules:${RESET}`);
-    console.log(`   Add the writing style (answer first, plain words, diagrams) and comment style`);
-    console.log(`   (contract headers, tagged comments, history in git) to each assistant's`);
-    console.log(`   instructions file (CLAUDE.md / AGENTS.md / GEMINI.md) so every turn follows them.`);
+    console.log(`   Add the writing style (answer first, plain words, diagrams), comment style`);
+    console.log(`   (contract headers, tagged comments, history in git), and docs upkeep rules`);
+    console.log(`   to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md).`);
     const styleAns = await askQuestion(`${BOLD}${CYAN}? Add style rules [y/N]: ${RESET}`);
     flags.style = /^y(es)?$/i.test(styleAns);
     console.log(``);
+
+    if (flags.claude) {
+      console.log(`${BOLD}4. Docs hooks (Claude Code):${RESET}`);
+      console.log(`   At session start, list the docs in flight. After each edit, name the docs`);
+      console.log(`   that cover the file. Block stopping while changed docs have problems.`);
+      console.log(`   Silent in projects without docs/.`);
+      const hooksAns = await askQuestion(`${BOLD}${CYAN}? Add docs hooks [y/N]: ${RESET}`);
+      flags.hooks = /^y(es)?$/i.test(hooksAns);
+      console.log(``);
+    }
   } else {
     const hasScopeFlag = flags.global || flags.local;
     if (!hasScopeFlag) {
@@ -321,6 +358,27 @@ async function run() {
         console.log(`  ${SUCCESS_COLOR}✔${RESET} ${target.name}: ${target.path.replace(home, '~')} ${GRAY}(${result})${RESET}`);
       } catch (err) {
         console.error(`  ${RED}✗ ${target.name}: ${err.message}${RESET}`);
+      }
+    }
+    console.log(``);
+  }
+
+  if (flags.hooks) {
+    const hookTargets = [];
+    if (flags.claude && flags.global) {
+      hookTargets.push({ name: 'Claude Code (Global)', file: path.join(home, '.claude', 'settings.json'), command: `node "${path.join(home, '.claude', 'skills', 'scripts', HOOK_SCRIPT)}"` });
+    }
+    if (flags.claude && flags.local) {
+      hookTargets.push({ name: 'Claude Code (Local)', file: path.join(cwd, '.claude', 'settings.json'), command: `node "$CLAUDE_PROJECT_DIR/.claude/skills/scripts/${HOOK_SCRIPT}"` });
+    }
+    console.log(`${BOLD}Adding docs hooks...${RESET}`);
+    if (!hookTargets.length) console.log(`  ${YELLOW}⚠ Hooks are Claude Code only; select Claude to add them.${RESET}`);
+    for (const target of hookTargets) {
+      try {
+        const result = upsertHooks(target.file, target.command);
+        console.log(`  ${SUCCESS_COLOR}✔${RESET} ${target.name}: ${target.file.replace(home, '~')} ${GRAY}(${result})${RESET}`);
+      } catch (err) {
+        console.error(`  ${RED}✗ ${target.name}: ${err.message} — settings.json left unchanged${RESET}`);
       }
     }
     console.log(``);

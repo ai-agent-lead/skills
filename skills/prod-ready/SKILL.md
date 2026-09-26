@@ -52,7 +52,7 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 
 ### 7. Documentation (the doc-map)
 
-Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — **author lens**: tick each `✓`, `✗ + remediation`, or `n/a + reason`, and fix the drift inline before the PR (don't kick it to a follow-up). Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
+Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". Walk the seven checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — **author lens**: tick each `✓`, `✗ + remediation`, or `n/a + reason`, and fix the drift inline before the PR (don't kick it to a follow-up). Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
 
 - [ ] ADR for any new decision with viable alternatives (and no active ADR is contradicted).
 - [ ] `CONTEXT.md` updated for any new/changed domain term, with `_Avoid_:` aliases where confusion is likely.
@@ -60,6 +60,7 @@ Implementation lands → docs drift. The natural moment to catch drift is now, n
 - [ ] Feature doc reflects what was actually built (no silently-dropped or silently-added behavior).
 - [ ] `CHANGELOG.md` `[Unreleased]` entry for any user-visible change.
 - [ ] Every new/changed `docs/` file opens with OKF `type` frontmatter.
+- [ ] Feature doc `status` set to `done` — or `shipped` when the repo has no `docs/releases/` (merge is the release). `check-docs.mjs --write` shows no problems ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2, §7).
 
 Per-check definitions, skip lists, and severity live in [`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — this is the same audit `pr-review` §3e runs from the reviewer side.
 

@@ -21,7 +21,7 @@ const STARTS_NEW = new RegExp(`^(${['WHY:', 'WORKAROUND:', 'SAFETY:', 'TODO', 'F
 export const DECLARATION = /^\s*(export\s+)?(default\s+)?(async\s+)?(package|func|function|class|interface|type|const|let|var|enum|struct|def|public|private|protected|static)\b|^\s*[A-Za-z_$][\w$]*\s*\([^)]*\)\s*\{/;
 
 export const CHECKS = [
-  { rule: 'narrates the edit — state the current fact (WHY:) or move it to the commit message', re: /\b(now|no longer|was|were|changed|updated?|fixed|previously|used to|replaced|renamed|moved|increased|decreased|refactored)\b/i },
+  { rule: 'narrates the edit — state the current fact (WHY:) or move it to the commit message', re: /(?<!-)\b(now|no longer|was|were|changed|updated?|fixed|previously|used to|replaced|renamed|moved|increased|decreased|refactored)\b/i },
   { rule: 'talks to the reviewer — put it in the PR or chat', re: /\b(as (you )?(mentioned|asked|requested|discussed)|per (your|the) (request|review|discussion)|see discussion)\b/i },
   { rule: 'process tag — round/AC ids belong in commit messages', re: /\bR\d+\b|\bAC-[A-Z0-9]+\b/ },
   { rule: 'TODO without owner — use TODO(owner): or TODO(#123):', re: /\b(TODO(?!\()|FIXME|XXX|HACK)\b/ },

@@ -4,12 +4,13 @@ title: Distributed State for TDD Rounds
 description: Feature-scoped state replaces the global STATE.md to cut merge conflicts and context waste.
 tags: [tdd-rounds, state]
 timestamp: 2026-05-25
-status: Approved
+status: approved
+code: [skills/tdd-rounds/]
 ---
 
 # Feature: Distributed State for TDD Rounds
 
-**Status:** ADR-0001 accepted (2026-05-25); implementation pending. See [`docs/known-issues.md`](../known-issues.md).
+ADR-0001 was accepted on 2026-05-25; implementation is pending. See [`docs/known-issues.md`](../../known-issues.md).
 
 **Problem:** Single global `STATE.md` causes merge conflicts and context waste during parallel feature development.
 

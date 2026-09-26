@@ -40,7 +40,7 @@ This skill produces a **prioritised** review where blockers are unambiguous, sug
 Before opening the diff, read what the PR claims to do:
 
 - **PR description / title** — what's the change? Why?
-- **Linked feature doc** (`docs/features/<name>.md`) — what's the contract? Which ACs?
+- **Linked feature doc** (`docs/features/<name>/feature.md`) — what's the contract? Which ACs?
 - **Linked ADRs** — what decisions does this change rely on or supersede?
 - **Linked research note / known-issues entry** — for fix-rounds, the bug ledger entry doubles as the brief.
 
@@ -88,7 +88,7 @@ For non-surface-changing diffs: walk `prod-ready` Section 3 (defense-in-depth) b
 
 #### 3e. Doc-drift audit
 
-Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) against the diff — **reviewer lens**. This is the second line of defense for `prod-ready` Section 7: the author may have missed it; you catch what's left. Any check that resolves to "no" without `n/a + reason` is a finding, at the severity that reference defines — **Blocker** for load-bearing drift (a missing ADR for a hard-to-reverse decision, a `CONTEXT.md` entry for a term other PRs will use, AC drift hiding behavior, a direct ADR contradiction), **Suggestion** when the diff is self-explanatory in isolation.
+Walk the seven checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) against the diff — **reviewer lens**. This is the second line of defense for `prod-ready` Section 7: the author may have missed it; you catch what's left. Any check that resolves to "no" without `n/a + reason` is a finding, at the severity that reference defines — **Blocker** for load-bearing drift (a missing ADR for a hard-to-reverse decision, a `CONTEXT.md` entry for a term other PRs will use, AC drift hiding behavior, a direct ADR contradiction), **Suggestion** when the diff is self-explanatory in isolation.
 
 #### 3f. Hygiene (line level)
 

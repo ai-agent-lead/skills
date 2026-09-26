@@ -39,6 +39,7 @@ Agents guess the version, dump commit subjects as notes, and tag before checking
 - On `main` (or the project's release branch), clean, and up to date with the remote.
 - CI is green on the exact commit you'll tag.
 - Changes in this release passed `prod-ready`; if they touch third-party APIs, `verify-real-deps` is clean.
+- **If `docs/releases/<version>.md` exists**, every feature on its checklist is `done`. A feature that isn't: ask the user — wait for it, or move its line to the next release file under `## Features` (and note it under `## Moved out`). See [`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §3.
 
 ### 2. Collect what changed
 
@@ -82,6 +83,8 @@ The CHANGELOG's `[Unreleased]` section (kept by `prod-ready`) is the primary sou
   ```
 
   Breaking changes first, each with the exact change callers make.
+
+- **Release file and roadmap** (when the repo has `docs/releases/`): set each listed feature's `status: shipped` and tick its box; paste the notes under `## Release notes`; set the release's `status: shipped`; tick its line in `docs/roadmap.md`. Then run `check-docs.mjs --write` — it fails if a box and a status disagree.
 
 ### 5. Commit and tag
 
@@ -139,3 +142,4 @@ npx your-cli@X.Y.Z --version
 - The tag points at the release commit, and CI was green on it.
 - Release notes list breaking changes first, each with the change callers make.
 - The published version installs and builds in a scratch directory.
+- With `docs/releases/`: the release file and every feature on it are `shipped`, the roadmap line is ticked, and `check-docs.mjs` shows no problems.

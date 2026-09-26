@@ -46,7 +46,7 @@ You are a Builder sub-agent in a multi-round TDD project. Read the orchestration
 ## Pre-flight reading (in order)
 
 1. `docs/STATE.md` — what previous rounds delivered.
-2. `docs/features/<feature>.md` — the AC contract.
+2. `docs/features/<feature>/feature.md` — the AC contract.
 3. The ADRs cited above.
 4. <specific files the Builder needs to read before starting>
 
@@ -60,7 +60,7 @@ You are a Builder sub-agent in a multi-round TDD project. Read the orchestration
 - `make lint` clean.
 - New tests cover: <specific behaviors>.
 - Per-AC commits prefixed `R<N>:`.
-- AC-XX1, AC-XX2, ... ticked in `docs/features/<feature>.md` with the test names.
+- AC-XX1, AC-XX2, ... ticked in `docs/features/<feature>/feature.md` with the test names.
 
 ## Output (REQUIRED — paste verbatim shape from `templates/builder-report.md`)
 

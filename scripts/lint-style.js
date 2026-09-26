@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 // Keeps the comment style single-sourced (ADR-0004): skill examples obey
 // skills/formats/STYLE-comments.md, and its tag list matches the snippet and the checker.
+// Keeps docs paths single-sourced (ADR-0005): every docs/ path a skill names is in DOCS-LAYOUT.
 
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { TAGS, CHECKS, DECLARATION } from '../skills/scripts/check-comments.mjs';
+import { LAYOUT_PATTERNS } from '../skills/scripts/check-docs.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (file) => path.relative(root, file);
@@ -92,10 +94,27 @@ function checkSingleSource(files) {
   }
 }
 
+// A directory is valid when some file the layout allows could live in it.
+const DIR_PROBES = ['x.md', '0001-x.md', 'x/feature.md', 'CONTEXT.md', 'x/state/x.md'];
+const inLayout = (p) => LAYOUT_PATTERNS.some((re) => re.test(p));
+
+function checkDocPaths(file) {
+  const where = rel(file);
+  fs.readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
+    for (const m of line.matchAll(/(?<![\w./-])docs\/[A-Za-z0-9_<>./*-]*/g)) {
+      const p = m[0].replace(/\.+$/, '');
+      if (p.includes('*') || p === 'docs/') continue;
+      const ok = p.endsWith('.md') ? inLayout(p) : DIR_PROBES.some((probe) => inLayout(`${p.replace(/\/?$/, '/')}${probe}`));
+      if (!ok) fail(`${where}:${i + 1}`, `docs path "${p}" is not in the DOCS-LAYOUT table (skills/formats/DOCS-LAYOUT.md §1)`);
+    }
+  });
+}
+
 const files = [...markdownFiles(path.join(root, 'skills')), ...markdownFiles(path.join(root, 'docs')), path.join(root, 'README.md')];
 for (const file of files) {
   if (!SHOWS_BAD_EXAMPLES.has(rel(file))) checkExamples(file);
 }
+for (const file of [...markdownFiles(path.join(root, 'skills')), path.join(root, 'README.md')]) checkDocPaths(file);
 checkTagsInSync();
 checkSingleSource([...files, path.join(root, SNIPPET)]);
 

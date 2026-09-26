@@ -25,11 +25,10 @@ Starting from a blank slate often leads to inconsistent documentation structure.
 
 ### 1. Initialize docs/
 
-Create the standard directory structure:
-- `docs/`
-- `docs/adr/`
-- `docs/features/`
-- `docs/research/`
+Create the flat layout from [`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1 — domain folders come later, when a second domain appears:
+- `docs/adr/`, `docs/features/`, `docs/research/`
+- `docs/index.md` — a one-line intro, then the generated list: run `node <skills-dir>/scripts/check-docs.mjs --write`.
+- One line in the root `AGENTS.md` / `CLAUDE.md` (create it if missing): "Start at `docs/index.md`."
 
 ### 2. Seed CONTEXT.md
 
@@ -41,7 +40,9 @@ If any major architectural decisions are made during initialization, record them
 
 ## Done when
 
-- `docs/` directory exists with the required subdirectories.
+- `docs/` directory exists with the required subdirectories and a generated `docs/index.md`.
+- The root `AGENTS.md` / `CLAUDE.md` points at `docs/index.md`.
+- `check-docs.mjs` shows no problems.
 - `docs/CONTEXT.md` is seeded with core domain terms.
 - (Optional) `docs/adr/0000-architectural-overview.md` exists.
 

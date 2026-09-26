@@ -4,25 +4,17 @@ title: <Feature Name>
 description: <one sentence — the user pain this feature solves>
 tags: [<area>]
 timestamp: YYYY-MM-DD
-status: Draft
+status: draft
 owner: <name>
+code: [<path/to/package/>]
 ---
 
-<!-- Frontmatter is OKF per skills/formats/OKF.md. `timestamp` is the canonical date;
-     `status`/`owner` mirror the human-facing lines below (OKF models neither). -->
+<!-- Frontmatter is OKF per skills/formats/OKF.md; status lives only there.
+status: draft → approved (feature-doc) → building (tdd) → done (prod-ready) → shipped (release); or dropped.
+code: the paths this feature covers — hooks map an edited file back to this doc.
+See skills/formats/DOCS-LAYOUT.md §2. -->
 
 # <Feature Name>
-
-**Status:** Draft | Approved | In Progress | Shipped
-**Owner:** <name — primary author and point of contact for follow-up>
-
-<!--
-Status values:
-- Draft       — being written; not yet reviewed
-- Approved    — reviewed; ready to start implementation
-- In Progress — implementation underway
-- Shipped     — all acceptance criteria checked AND merged to main
--->
 
 ## Problem
 
@@ -62,9 +54,10 @@ This is about *capabilities deliberately not built*. (A research note's "Out of 
 
 Cross-links to other artifacts. Omit any subsection that doesn't apply.
 
-- **ADRs:** [`ADR-NNNN <title>`](../adr/NNNN-slug.md) — why this one matters here
-- **Research notes:** [`<topic>`](../research/<topic>.md)
-- **Design note:** [`<short-name>.design.md`](./<short-name>.design.md) — when module shape was decided before code
+- **ADRs:** [`ADR-NNNN <title>`](../../adr/NNNN-slug.md) — why this one matters here
+- **Research notes:** [`<topic>`](../../research/<topic>.md)
+- **Design note:** [`design.md`](./design.md) — when module shape was decided before code
+- **Migration plan:** [`migration.md`](./migration.md) — when the feature changes a schema
 
 ## Notes
 

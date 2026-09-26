@@ -82,7 +82,7 @@ Read commands precheck /v1/healthz; daemon-down surfaces the
 documented "Run gemini-proxy start first" remediation instead of a
 raw connection-refused stack.
 
-Refs: docs/features/cli.md
+Refs: docs/features/cli/feature.md
 ```
 
 Counter-example that fails the rules: `R8: stuff` — no scope, no why, no shape.

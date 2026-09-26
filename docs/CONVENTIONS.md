@@ -12,6 +12,7 @@ Rules for how documentation and skills are structured in this repository.
 
 ## Documentation Artifacts
 
+- **Layout and upkeep**: Paths, status values, status owners, and the checker are in [`skills/formats/DOCS-LAYOUT.md`](../skills/formats/DOCS-LAYOUT.md) — the single source; see [ADR-0005](adr/0005-docs-layout-and-upkeep.md). `npm test` runs `check-docs.mjs` on this repo's `docs/`.
 - **Lazy Creation**: Directories like `docs/adr/` or `docs/features/` are created only when the first file is needed.
 - **Naming**: Use `kebab-case.md` for feature docs, research notes, and ADRs.
 - **Writing style**: Docs and explanations follow [`skills/formats/WRITING-STYLE.md`](../skills/formats/WRITING-STYLE.md) — answer first, plain words, and a diagram for anything with steps, order, states, or dependencies. Mermaid in `docs/`, ASCII in chat and code.
@@ -28,7 +29,7 @@ Rules for how documentation and skills are structured in this repository.
 
 - Code lands on a feature branch (`feat/<short-name>`) or fix branch (`fix/<short-name>`); `main` receives merges, not commits.
 - `feature-doc`, `tdd`, and `tdd-rounds` refuse to start if `HEAD` is `main` / `master` — create the branch first.
-- The branch name should match the feature-doc filename (`docs/features/<short-name>.md` ↔ `feat/<short-name>`) so the contract and the diff are co-locatable.
+- The branch name should match the feature-doc filename (`docs/features/<short-name>/feature.md` ↔ `feat/<short-name>`) so the contract and the diff are co-locatable.
 
 ## Commits
 

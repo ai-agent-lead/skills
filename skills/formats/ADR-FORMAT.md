@@ -1,6 +1,6 @@
 # ADR Format
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADRs live in `docs/adr/` — or `docs/<domain>/adr/` for a decision inside one domain ([`DOCS-LAYOUT.md`](DOCS-LAYOUT.md) §1). They use one sequential numbering across all `adr/` folders: `0001-slug.md`, `0002-slug.md`, etc.
 
 Create the `docs/adr/` directory lazily — only when the first ADR is needed.
 
@@ -20,18 +20,16 @@ status: accepted
 
 # {Short title of the decision}
 
-**Status:** accepted
-
 {1-3 sentences, decision first: what we decided, why, and the context that forced it.}
 ```
 
-That's it. An ADR can be a single paragraph plus the frontmatter and the `Status` line. The value is in recording *that* a decision was made and *why* — not in filling out sections. The date lives in `timestamp`; don't also keep a `**Date:**` line.
+That's it. An ADR can be a single paragraph plus the frontmatter. Status lives only in the frontmatter. The value is in recording *that* a decision was made and *why* — not in filling out sections. The date lives in `timestamp`; don't also keep a `**Date:**` line.
 
 ## Optional sections
 
 Only include these when they add genuine value. Most ADRs won't need them. **Optional sections amplify a decision; they do not replace it.** Keep them terse — if a section grows past a short bullet list, ask whether the content belongs in a feature doc or design note instead. An ADR is not a feature spec.
 
-- **Status** values: `proposed | accepted | deprecated | superseded by ADR-NNNN`. Default to `accepted` on creation; flip to `deprecated` or `superseded` when revisited.
+- **Status** values (frontmatter): `proposed | accepted | deprecated | superseded`. Default to `accepted` on creation. When a newer ADR replaces this one, the skill writing the newer ADR sets `superseded` here and adds one line: "Superseded by [ADR-NNNN](…)."
 - **Considered Options** — only when the rejected alternatives are worth remembering. One line per option, plus the reason for rejection.
 - **Diagram** — only when the decision changes shape: before → after, or where the new piece sits. One small Mermaid diagram per [`WRITING-STYLE.md`](WRITING-STYLE.md).
 - **Consequences** — only when non-obvious downstream effects need to be called out. Things the *code* will not make obvious.
@@ -39,7 +37,7 @@ Only include these when they add genuine value. Most ADRs won't need them. **Opt
 
 ## Numbering
 
-Scan `docs/adr/` for the highest existing number and increment by one. Numbers are monotonic — never reuse a retired number, even if the ADR is deleted, deprecated, or superseded. Gaps are acceptable; reuse causes confusion.
+Scan every `adr/` folder under `docs/` for the highest existing number and increment by one. Numbers are monotonic — never reuse a retired number, even if the ADR is deleted, deprecated, or superseded. Gaps are acceptable; reuse causes confusion.
 
 ## When to offer an ADR
 
