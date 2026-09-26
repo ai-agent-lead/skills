@@ -84,6 +84,11 @@ to the new version and a fresh `[Unreleased]` block is opened.
   in flight at session start, name the docs covering each edited file, and
   block stopping while changed docs have problems.
 - `snippets/docs-upkeep.md` — the always-on docs rules, added by `--style`.
+- `tests/install.test.mjs` — runs the installer against a temporary home and
+  project: which skills land where, `--force`, `--style` (all three blocks,
+  once, keeping the user's text), `--hooks` (three hooks, once, keeping other
+  settings; an unreadable `settings.json` is left alone), and that the
+  installed session hook runs.
 - Feature docs list their code in a `code:` frontmatter field.
 - `impact` skill and `scripts/code-graph/` — a code graph for Go, JavaScript,
   TypeScript/TSX, and Python built on demand with tree-sitter compiled to
