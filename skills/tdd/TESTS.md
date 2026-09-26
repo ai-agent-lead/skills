@@ -28,8 +28,9 @@ Properties:
 
 ### 1. Asserting on internal calls
 
+**Bad** — couples the test to the implementation:
+
 ```ts
-// BAD — couples the test to the implementation
 test("checkout calls paymentService.process", async () => {
   const mockPayment = jest.mock(paymentService);
   await checkout(cart, payment);
@@ -41,8 +42,9 @@ If you rename `process` or split it into two calls, the test breaks even though 
 
 ### 2. Bypassing the interface to verify
 
+**Bad** — peeks into the database directly:
+
 ```ts
-// BAD — peeks into the database directly
 test("createUser saves to database", async () => {
   await createUser({ name: "Alice" });
   const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
@@ -50,8 +52,9 @@ test("createUser saves to database", async () => {
 });
 ```
 
+**Good** — verifies through the public interface:
+
 ```ts
-// GOOD — verifies through the public interface
 test("createUser makes user retrievable", async () => {
   const user = await createUser({ name: "Alice" });
   const retrieved = await getUser(user.id);
@@ -63,8 +66,9 @@ If the storage layer changes (different table, new ORM, in-memory cache), the go
 
 ### 3. Testing the shape, not the behavior
 
+**Bad** — asserts structure, not meaning:
+
 ```ts
-// BAD — asserts structure, not meaning
 test("getUser returns object with id and name fields", async () => {
   const user = await getUser("123");
   expect(user).toHaveProperty("id");
@@ -72,8 +76,9 @@ test("getUser returns object with id and name fields", async () => {
 });
 ```
 
+**Good** — asserts the behavior the caller depends on:
+
 ```ts
-// GOOD — asserts the behavior the caller depends on
 test("getUser returns the user matching the requested id", async () => {
   const created = await createUser({ name: "Alice" });
   const fetched = await getUser(created.id);

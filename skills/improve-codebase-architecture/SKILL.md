@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: Find deepening opportunities in EXISTING code, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable. Use for EXISTING code; for designing the shape of a new module from scratch, use `design`. Skip for single-module local refactors with no cross-module impact — use `design` or just refactor inline.
+description: Finds deepening opportunities in EXISTING code across modules — shallow modules to merge, tangled seams to split — guided by `docs/CONTEXT.md` and `docs/adr/`. Use when restructuring existing code whose problems span module boundaries, or making an existing codebase more testable or AI-navigable. Triggered by "improve the architecture", "find refactoring opportunities", "these modules are too coupled", "make this codebase more testable". Pick by age and scope — new code in one module → `design`; a new multi-module system → `system-design`; existing code across modules → `improve-codebase-architecture`; existing code in one module → refactor inline, then `simplify`. Not for line-level cleanup of the current diff → `simplify`.
 ---
 
 # Improve Codebase Architecture
@@ -45,7 +45,7 @@ This skill is _informed_ by the project's domain model. The domain language give
 
 ### 1. Explore
 
-Read the project's domain glossary ([`docs/CONTEXT.md`](../../docs/CONTEXT.md)) and any ADRs in [`docs/adr/`](../../docs/adr/) for the area you're touching first.
+Read the project's domain glossary ([`docs/CONTEXT.md`](../../docs/CONTEXT.md), or the area's `docs/<domain>/CONTEXT.md` when `docs/CONTEXT-MAP.md` exists) and any ADRs in [`docs/adr/`](../../docs/adr/) for the area you're touching first. Before proposing to remove code that looks odd, check for a `WHY:` or `WORKAROUND:`, then its history (`git log -L`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
 
@@ -88,8 +88,9 @@ Side effects happen inline as decisions crystallize:
 When a single `CONTEXT.md` becomes a bottleneck (>100 terms), the codebase is likely ready for context splitting.
 
 - **Identify Seams**: Find logical boundaries where domain terms are largely independent.
-- **Extract Sub-Contexts**: Move terms into `<module>/CONTEXT.md` files.
-- **Update CONTEXT-MAP.md**: Create or update the root [`docs/CONTEXT-MAP.md`](../formats/CONTEXT-MAP-FORMAT.md) to point to the new sub-contexts.
+- **Extract Sub-Contexts**: Move terms into `docs/<domain>/CONTEXT.md` files, one folder per domain, named like its code folder ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1). Existing docs stay where they are; new docs for a domain go in its folder.
+- **Update CONTEXT-MAP.md**: Create or update [`docs/CONTEXT-MAP.md`](../formats/CONTEXT-MAP-FORMAT.md) to list the domains.
+- **Point code at docs**: Add a short `CLAUDE.md` / `AGENTS.md` in each domain's code folder naming its `CONTEXT.md`.
 - **AI-Navigability**: This reduces context pollution, allowing agents to focus only on the relevant vocabulary for a given module.
 
 ## Pairing with other skills

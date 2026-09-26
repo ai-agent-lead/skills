@@ -28,8 +28,9 @@ The shallow version makes the *caller* manage file lifecycles. The deep version 
 
 ## Concrete example
 
+**Shallow** — caller does most of the work:
+
 ```ts
-// SHALLOW — caller does most of the work
 class HttpClient {
   buildUrl(base: string, path: string, params: object): string;
   buildHeaders(auth: string, contentType: string): object;
@@ -37,8 +38,11 @@ class HttpClient {
   parse(response: string): any;
   send(method: string, url: string, headers: object, body: string): Promise<string>;
 }
+```
 
-// caller code:
+The caller:
+
+```ts
 const url = client.buildUrl(BASE, "/users", { id: 123 });
 const headers = client.buildHeaders(token, "application/json");
 const body = client.serialize({ name: "Alice" });
@@ -46,13 +50,17 @@ const raw = await client.send("POST", url, headers, body);
 const result = client.parse(raw);
 ```
 
+**Deep** — interface hides the orchestration:
+
 ```ts
-// DEEP — interface hides the orchestration
 class HttpClient {
   request<T>(method: string, path: string, options?: RequestOptions): Promise<T>;
 }
+```
 
-// caller code:
+The caller:
+
+```ts
 const result = await client.request("POST", "/users", {
   query: { id: 123 },
   body: { name: "Alice" },

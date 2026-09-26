@@ -1,26 +1,30 @@
 ---
 name: tdd
-description: Test-driven development with the red-green-refactor loop. Use when implementing a feature, fixing a bug, changing core logic, or when the user mentions "TDD", "test-first", "red-green-refactor", or "integration tests". Skip for trivial UI glue, config changes, or pure docs edits.
+description: Test-first implementation via red-green-refactor. Use when implementing a feature with known acceptance criteria, fixing a bug whose cause is already known, or changing core logic. Triggered by "TDD", "test-first", "red-green-refactor", "implement this feature". Not for bugs whose root cause is unknown → `debug` first; not for 10+ ACs or multi-package delivery → `tdd-rounds`; not for adding tests to existing code, UI glue, config, or docs.
 ---
 
 # Test-Driven Development
 
 ## When to use
 
-- Implementing a feature, fixing a bug, or changing core logic.
+- Implementing a feature, fixing a bug whose root cause is known, or changing core logic.
 - Any `tdd-rounds` Builder invocation (mandatory every round).
-- The user mentions "TDD", "test-first", "red-green-refactor", "integration tests".
+- The user mentions "TDD", "test-first", "red-green-refactor".
 
 ## When to skip
 
 - Trivial UI glue, framework wiring, config changes, pure docs edits.
 - Trivial getters / setters with no behavior.
+- Adding tests to existing, working code — there is no red phase to drive the design; just write the tests.
+- 10+ ACs or multi-package delivery — use [`tdd-rounds`](../tdd-rounds/SKILL.md).
 - Bug whose root cause isn't yet known — run [`debug`](../debug/SKILL.md) first; the reproduction crystallises into the failing test.
 
 ## Pre-conditions
 
 - **Current branch is not `main` / `master`.** If it is, stop and run `git checkout -b feat/<short-name>` (or `fix/...`) before writing the first test. Code lands on a feature branch; `main` receives merges, not commits.
-- A feature doc (`docs/features/<short-name>.md`) exists with testable ACs — or a `debug` reproduction names the root cause.
+- A feature doc (`docs/features/<short-name>/feature.md`) exists with testable ACs — or a `debug` reproduction names the root cause. With the first failing test, set its `status: building` ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2).
+- **Changing an existing exported or shared function?** Run [`impact`](../impact/SKILL.md) first: its entry points and tests say where the test goes and what else to re-run.
+- **Changing existing code that looks wrong or unclear, with no `WHY:`?** Read its history first (`git log -L :<Func>:<file>`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 ## Philosophy
 
@@ -61,13 +65,14 @@ One test → minimum code to pass → next test. Each cycle informs the next.
 
 - Smallest amount of code that makes the test pass.
 - Hardcoding a return value is acceptable on the first test — the next test forces generalization.
-- Resist adding features the test does not require.
+- Resist adding features the test does not require — YAGNI, and boring code over clever code ([`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) 1, 3).
 
 ### 3. Refactor — Clean up with the test as a safety net
 
-- Remove duplication, improve names, extract functions.
+- Shape the code to [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md) — its seven principles, checked against *The bar*. In a refactor step that means: rename until the names say what the code does, extract only on the third copy, keep related code together, and put constants at their narrowest scope.
 - Run tests after every change.
 - Do not add new behavior during refactor.
+- **Comments, while you're here:** follow [`STYLE-comments.md`](../formats/STYLE-comments.md) — headers state the contract, comments inside functions are tagged, and every comment in a function you changed is re-read. The reason for a change goes in the commit body, not a comment — commits follow [`COMMIT-FORMAT.md`](../formats/COMMIT-FORMAT.md).
 - **Never refactor while red.** Get to green first.
 
 ### 4. Simplify pass — end-of-round, after green
@@ -113,8 +118,9 @@ The `tdd-rounds` skill captures the full orchestration pattern (Builder brief sc
 ## Done when
 
 - All ACs from the feature doc are green and the tests are committed.
+- The feature doc's `status` is `building`, and its `code:` lists the paths this work touched.
 - Tests assert behavior through public interfaces, not internals.
-- The simplify pass has run.
+- The changed code meets *The bar* in [`CODE-HYGIENE.md`](../formats/CODE-HYGIENE.md), and the simplify pass has run.
 - For single-feature flow: `prod-ready` is queued. For `tdd-rounds`: the structured Builder report is emitted.
 
 ## Handoff

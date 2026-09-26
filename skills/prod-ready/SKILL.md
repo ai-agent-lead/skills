@@ -1,6 +1,6 @@
 ---
 name: prod-ready
-description: Pre-merge production-readiness checklist — operational, infrastructure, and consistency checks that tests alone don't surface. Use after `tdd` reaches green; before opening a PR or merging to main; after significant infra changes (new DB, new deployment target, new auth flow); or when the user mentions "shipping", "ready to merge", "before deploy", "production readiness", or "prod-ready". Pairs with the `tdd` skill — tdd proves the feature works; this catches what tests can't see (server timeouts, DB pragmas, error-response consistency, secrets at rest).
+description: The author's pre-merge gate for their own change — operational, infrastructure, consistency, and doc-drift checks tests do not catch (timeouts, DB pragmas, error-shape consistency, secrets at rest). Use after tests are green, before opening a PR or merging to main, or after infra changes (new DB, deploy target, auth flow). Triggered by "ready to merge", "prod-ready", "production readiness", "before deploy". Not for reviewing someone else's PR → `pr-review`; for a tagged release, run this, then `verify-real-deps` if vendor APIs are involved, then `release`. Escalates to `security-review` when the change alters a trust boundary.
 ---
 
 # Prod-Readiness Checklist
@@ -29,7 +29,7 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 - [ ] Referential integrity enforced — FK constraints on, or an equivalent invariant maintained explicitly with a comment naming where it lives.
 - [ ] Concurrency / isolation mode set deliberately, not left on the engine's default. Default isolation often allows write-write races your tests didn't see.
 - [ ] Indexes match the actual filter + sort shape of hot queries — read the slow-query log or `EXPLAIN` the top endpoints; don't guess.
-- [ ] Migrations are forward-only and idempotent — safe to re-run after a partial deploy.
+- [ ] Schema changes followed [`migrate`](../migrate/SKILL.md): each deploy step runs against the previous app version, and migrations are idempotent — safe to re-run after a partial deploy.
 
 ### 3. Auth / security defense-in-depth
 - [ ] Tokens (sign-in, session, API keys) are hashed at rest — a DB leak shouldn't grant live sessions.
@@ -48,11 +48,12 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 
 ### 6. Deferred-by-design
 - [ ] Items in the feature doc's "Non-Goals" / "Known production gaps" still appear there — no silent regressions.
+- [ ] Changed exported or shared functions ran through [`impact`](../impact/SKILL.md); every entry point reached has a test on its path, or the gap is named in the PR.
 - [ ] New deferrals introduced this feature are linked to a tracking issue or follow-up doc.
 
 ### 7. Documentation (the doc-map)
 
-Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — **author lens**: tick each `✓`, `✗ + remediation`, or `n/a + reason`, and fix the drift inline before the PR (don't kick it to a follow-up). Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
+Implementation lands → docs drift. The natural moment to catch drift is now, not "next sprint". Walk the seven checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — **author lens**: tick each `✓`, `✗ + remediation`, or `n/a + reason`, and fix the drift inline before the PR (don't kick it to a follow-up). Files don't need to pre-exist — create `docs/adr/`, `CONTEXT.md`, design notes lazily when the first relevant change appears.
 
 - [ ] ADR for any new decision with viable alternatives (and no active ADR is contradicted).
 - [ ] `CONTEXT.md` updated for any new/changed domain term, with `_Avoid_:` aliases where confusion is likely.
@@ -60,6 +61,7 @@ Implementation lands → docs drift. The natural moment to catch drift is now, n
 - [ ] Feature doc reflects what was actually built (no silently-dropped or silently-added behavior).
 - [ ] `CHANGELOG.md` `[Unreleased]` entry for any user-visible change.
 - [ ] Every new/changed `docs/` file opens with OKF `type` frontmatter.
+- [ ] Feature doc `status` set to `done` — or `shipped` when the repo has no `docs/releases/` (merge is the release). `check-docs.mjs --write` shows no problems ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2, §7).
 
 Per-check definitions, skip lists, and severity live in [`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) — this is the same audit `pr-review` §3e runs from the reviewer side.
 

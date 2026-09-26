@@ -4,30 +4,21 @@ title: "Research: <topic>"
 description: <one sentence — the question this note investigates>
 tags: [<area>]
 timestamp: YYYY-MM-DD
-status: Open
+status: open
 owner: <user>
 ---
 
-<!-- Frontmatter is OKF per skills/formats/OKF.md. `timestamp` is the canonical date;
-     `status`/`owner` mirror the human-facing lines below (OKF models neither). -->
+<!-- Frontmatter is OKF per skills/formats/OKF.md; status lives only there.
+status: open → decided (investigate, when the user picks); or superseded (link the replacement).
+See skills/formats/DOCS-LAYOUT.md §2. -->
 
 # Research: <topic>
-
-**Status:** Open | Decided | Superseded
-**Owner:** <user>
-
-<!--
-Status values:
-- Open       — investigation in progress, or written and awaiting decision
-- Decided    — user has chosen an option; record it on the Decision line below
-- Superseded — replaced by a later research note or ADR; link the replacement
--->
 
 **Decision:** _<pin the chosen option here once decided, e.g., "Option B — decided 2026-05-07">_
 
 ## Context
 
-What's true today. Each claim should be cite-able (file:line, ADR number, doc heading). Include:
+What's true today, answer first. Each claim should be cite-able (file:line, ADR number, doc heading). When the question is about flow or structure, open with a diagram of how it works today (Mermaid — see `skills/formats/WRITING-STYLE.md`). Include:
 - The problem or question that triggered the investigation.
 - Relevant code paths and what they do today.
 - Prior ADRs / feature docs / `CONTEXT.md` entries that constrain the space.
@@ -35,9 +26,17 @@ What's true today. Each claim should be cite-able (file:line, ADR number, doc he
 
 ## Options
 
+### At a glance
+
+| Option | Approach (one line) | Main cost | Fit with project |
+| --- | --- | --- | --- |
+| A — <name> | | | |
+| B — <name> | | | |
+
 ### Option A — <short name>
 
 - **Approach:** one or two sentences, concrete.
+- **Picture:** optional — a small diagram when the options differ in shape (where the new piece sits, how data moves).
 - **Pros:** what makes this attractive.
 - **Cons:** what hurts. Don't soft-pedal.
 - **Fit with project:** alignment with existing ADRs / conventions / team ceremony level.
@@ -90,7 +89,7 @@ Decisions deliberately deferred from this investigation.
 ## Handoff
 
 Once a direction is picked:
-- Update **Status** to `Decided` and fill in the **Decision** line at the top.
+- Set `status: decided` in the frontmatter and fill in the **Decision** line at the top.
 - Bold the chosen option in the Recommendation section.
 - If the decision is hard-to-reverse, surprising-without-context, and the result of a real tradeoff → write an ADR and link it here.
 - If a feature follows → invoke `feature-doc` and link the resulting feature doc here.

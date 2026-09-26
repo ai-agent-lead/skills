@@ -1,6 +1,6 @@
 ---
 name: verify-real-deps
-description: Pre-tag smoke test against real third-party APIs. Use after `prod-ready` is clean, before tagging vN.0 — the gate that catches wire-shape mismatches that fakes accept but real upstreams reject. Triggered when the user mentions "smoke test", "real API", "live verify", "before tag", or "end-to-end against actual <vendor>". Pairs with `prod-ready` (which catches ops/infra issues tests miss) and `tdd-rounds` (the orchestration that feeds into this gate).
+description: Pre-tag smoke test of a release against the real third-party APIs, catching wire-shape mismatches that fakes accept; logs issues in `docs/known-issues.md`. Use after `prod-ready` is clean and before tagging a release that calls external vendors. Triggered by "smoke test against the real API", "live verify", "before we tag", "end-to-end against the real vendor". Not for merging a branch → `prod-ready`; not for cutting the version itself → `release`, which runs next; not for systems with no third-party APIs or whose upstreams you fully own.
 ---
 
 # Verify Against Real Dependencies
@@ -54,7 +54,7 @@ Capture the **raw upstream response** for each — headers and body. Don't parap
 
 ### 3. Capture every surfaced surprise
 
-Anything that worked-in-tests but doesn't-work-now is a bug. For each, write an entry in `docs/known-issues.md` (create the file lazily on first use — copy the format from [`templates/known-issues.md`](templates/known-issues.md)). The fields:
+Anything that worked-in-tests but doesn't-work-now is a bug. For each, write an entry in `docs/known-issues.md` (create the file lazily on first use — copy the format from [`templates/known-issues.md`](templates/known-issues.md)). Describe each as what's wrong → why → fix, per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) §4. The fields:
 
 - **Severity** (high / medium / low — based on user impact, not difficulty).
 - **Status** (Open / Closed in R<N> with commit hash).

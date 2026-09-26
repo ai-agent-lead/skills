@@ -1,11 +1,11 @@
 ---
 name: feature-doc
-description: One-page contract for a non-trivial feature or bug fix — Problem, User Story, Acceptance Criteria, Non-Goals. The ACs become the test list for `tdd`. Use before any non-trivial feature or bug fix; when the user mentions "spec this out", "write a feature doc", "before any non-trivial feature", or describes a feature without listing ACs. Skip for typo fixes, dependency bumps, or pure refactors. Pairs with `tdd` / `tdd-rounds` (downstream — ACs feed the test list), `investigate` (upstream — when direction itself is unclear), and `grill-plan` (when the chosen plan needs stress-testing against existing model).
+description: Writes the one-page contract for a non-trivial feature or bug fix — Problem, User Story, Acceptance Criteria, Non-Goals — at `docs/features/<name>/feature.md`; the ACs become the `tdd` test list. Use when a feature or fix is about to be built and its ACs are not written down yet. Triggered by "spec this out", "write a feature doc", "what are the acceptance criteria". Not for choosing between approaches → `investigate`; not for typo fixes, dependency bumps, or pure refactors. Escalates to `security-review` when the feature adds an entry point, identity flow, authorization rule, or sensitive-data path.
 ---
 
 # Feature Doc
 
-Every non-trivial change starts with a one-page doc in `docs/features/<short-name>.md`. The doc is the **contract**: ACs become tests, Non-Goals prevent scope creep, and reviewers check the PR against this — not against memory.
+Every non-trivial change starts with a one-page doc in `docs/features/<short-name>/feature.md`. The doc is the **contract**: ACs become tests, Non-Goals prevent scope creep, and reviewers check the PR against this — not against memory.
 
 ## Why this skill exists
 
@@ -32,10 +32,11 @@ The doc is short by design — one page. If it grows, the feature is too big.
 
 ## Steps
 
-1. Copy [`templates/feature-template.md`](templates/feature-template.md) to `docs/features/<short-name>.md`.
-2. Fill in **Problem**, **User Story**, **Acceptance Criteria**, **Non-Goals**.
-3. Get one round of review on the doc **before** writing code.
-4. Update the doc if behavior changes during implementation — stale docs are worse than none.
+1. Copy [`templates/feature-template.md`](templates/feature-template.md) to `docs/features/<short-name>/feature.md` — or `docs/<domain>/features/…` once the repo has domains ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1). Write it in plain words with a flow diagram per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
+2. Fill in **Problem**, **User Story**, **Acceptance Criteria**, **Non-Goals**, and the `code:` paths the feature will touch. Status starts as `draft`.
+3. Get one round of review on the doc **before** writing code. When the user approves, set `status: approved`.
+4. If the user names a target release, add `- [ ] [<title>](<path to feature.md>)` under `## Features` in `docs/releases/<version>.md` (create it with `status: planned` if missing, and add it to `docs/roadmap.md`).
+5. Update the doc if behavior changes during implementation — stale docs are worse than none.
 
 ## Rules
 
@@ -105,9 +106,10 @@ Once the doc is reviewed and ACs are stable:
 ## Done when
 
 - A feature branch (e.g. `feat/<short-name>` or `fix/<short-name>`) is checked out and the contract doc is committed on it, **not on `main`**.
-- `docs/features/<short-name>.md` exists with all four required sections.
+- `docs/features/<short-name>/feature.md` exists with all four required sections.
 - The doc opens with OKF frontmatter (`type: feature`) per [`skills/formats/OKF.md`](../formats/OKF.md).
 - ACs are testable Given / When / Then statements.
 - Non-Goals is non-empty (or explicitly "none — see scope in Problem").
 - One reviewer has signed off.
-- Status is `Approved` and the next skill (`tdd` / `tdd-rounds` / `grill-plan` / `security-review`) is named.
+- Frontmatter has `status: approved` and `code:` paths, and the next skill (`tdd` / `tdd-rounds` / `grill-plan` / `security-review`) is named.
+- `check-docs.mjs --write` ran and shows no problems ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §7).

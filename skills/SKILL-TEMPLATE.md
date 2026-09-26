@@ -18,17 +18,21 @@ The order is load-bearing. Claude scans top-to-bottom — `When to use` / `When 
 ```yaml
 ---
 name: <kebab-case>
-description: <one paragraph: trigger phrases AND skip conditions AND adjacent skills>
+description: <What it does, one clause>. Use when <situation>. Triggered by "<phrase>", "<phrase>". Not for <nearest neighbour's case> → `<other-skill>`.
 ---
 ```
 
-The `description` is the routing signal. It should:
-- Name what the skill does in one clause.
-- List trigger phrases ("Use when…", "Triggered by phrases like…").
-- List skip conditions ("Skip for…", "Use … instead when…").
-- Name 1–3 adjacent skills (upstream / downstream / lateral) so Claude can de-conflict.
+The `description` is the **only** routing signal — Claude never reads [`TRIGGERS.md`](TRIGGERS.md) or the README when deciding which skill to fire. Disambiguation that lives anywhere else does not route. Write it in this order:
 
-A `description` that names only the happy path will route falsely. Always name what to skip.
+1. **What** — one clause naming the skill's output or discipline.
+2. **Use when** — the *situation*, not keywords. Claude matches on meaning more than on exact phrases.
+3. **Triggered by** — 2–6 quoted phrases, each specific to this skill. No phrase may appear in another skill's list. Avoid phrases that occur in ordinary conversation ("should we…", "walk me through this", "check this change", "be concise") — they fire the skill on chat questions.
+4. **Not for** — the nearest neighbour's case, with `→` and the skill name pointing at the right skill. This clause is what settles collisions. When several skills split one space, state the splitting rule in every one of them (the Shape skills all carry the same "pick by age and scope" sentence).
+5. **Escalates to** (optional) — when this skill hands a detected condition to another (the gates escalate to `security-review`).
+
+Keep "Pairs with…" workflow relationships out of the description — they spend routing budget without helping routing. They belong in the body's *Pairing with other skills* / *Handoff* section.
+
+YAML constraints (the description is a plain scalar): no `": "` (colon-space) and no `" #"` (space-hash) anywhere in it; stay under 1024 characters. `npm test` ([`scripts/lint-triggers.js`](../scripts/lint-triggers.js)) enforces the shape, the constraints, phrase uniqueness, and that [`TRIGGERS.md`](TRIGGERS.md) mirrors the descriptions. [`tests/routing-cases.md`](../tests/routing-cases.md) is the routing check — re-score it when a description changes.
 
 **Optional frontmatter.** Add `disable-model-invocation: true` for a user-only utility that should never auto-fire (e.g. `zoom-out`); the skill then runs only on explicit invocation. No other keys are read by the harness — `name` and `description` are the whole routing contract. Don't add decorative metadata (`complexity`, `expected_duration`, etc.); it isn't consumed and only drifts.
 
@@ -89,7 +93,7 @@ A `description` that names only the happy path will route falsely. Always name w
 
 | Section | Required | Notes |
 | --- | --- | --- |
-| Frontmatter (`name`, `description`) | yes | `description` must name skip conditions, not only trigger phrases. |
+| Frontmatter (`name`, `description`) | yes | `description` follows the What / Use when / Triggered by / Not for shape above. |
 | Title (`# <Title>`) | yes | |
 | Why this skill exists | optional | Include for *teaching* skills (discipline being taught). Skip for *orchestration* and *utility* skills. |
 | When to use | yes | Body section, not just frontmatter. Frontmatter alone is too easy to skim past. |
@@ -105,6 +109,8 @@ A `description` that names only the happy path will route falsely. Always name w
 - **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility skills run short (tdd-rounds, simplify, caveman). Don't pad an orchestration skill to match a teaching skill — it adds noise.
 - **No hedging.** "Sometimes consider maybe doing X" is dead text. Pick a recommendation.
 - **No corporate voice.** Direct sentences. The reader is a fast-reading senior engineer or an LLM, not an executive.
+- **Code examples obey [`formats/STYLE-comments.md`](formats/STYLE-comments.md).** Agents copy examples. Put labels like *Bad* / *Good* in the text above a code block, never as a comment above the function inside it. `npm test` checks this.
+- **Produced docs follow [`formats/WRITING-STYLE.md`](formats/WRITING-STYLE.md).** A skill that writes a `docs/` artifact links it at the step where the doc is written.
 - **Cite paths**: `path:line` or `[link](relative/path.md)`. Don't say "see the auth module"; say `src/auth/session.go:42`.
 
 ## Vocabulary
@@ -119,6 +125,7 @@ Once `SKILL.md` is written:
 
 1. Add a row to README.md's "by trigger phase" index (under the right role group).
 2. Add a row to README.md's "by role" table.
-3. Add an entry to [`TRIGGERS.md`](TRIGGERS.md) — list the trigger phrases that should route to it.
-4. If the skill participates in a canonical workflow, update [`WORKFLOWS.md`](WORKFLOWS.md).
-5. If the skill produces a `docs/` artifact, add a row to the "Artifacts accumulate in `docs/`" table at the bottom of WORKFLOWS.md.
+3. Add a row to [`TRIGGERS.md`](TRIGGERS.md) whose quoted phrases exactly match the description's *Triggered by* list (`npm test` checks this).
+4. Add rows to [`tests/routing-cases.md`](../tests/routing-cases.md) — at least one prompt that should route to the skill and one near-miss that should not.
+5. If the skill participates in a canonical workflow, update [`WORKFLOWS.md`](WORKFLOWS.md).
+6. If the skill produces a `docs/` artifact, add a row to the "Artifacts accumulate in `docs/`" table at the bottom of WORKFLOWS.md.

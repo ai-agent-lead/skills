@@ -1,6 +1,6 @@
 ---
 name: debug
-description: Disciplined reproduction, isolation, and hypothesis-testing for non-trivial bugs — runs BEFORE `tdd` when the failing assertion isn't yet known. Use when the user reports a bug whose root cause is not obvious from the symptom — triggered by phrases like "it's broken", "this is failing", "intermittent", "flaky", "regression", "not sure why", "production issue", "doesn't work in <env>". Skip for typos, clear stack traces with one-step fixes, or bugs whose fix is obvious from reading the message. Pairs with `tdd` (downstream — the failing test crystallises once the bug is reproduced) and `zoom-out` (upstream, when the area is unfamiliar).
+description: Reproduce, isolate, and hypothesis-test a bug whose root cause is not yet known, until the cause is named and the failing test is obvious. Use when the symptom does not point at the fix — intermittent or flaky failures, regressions with no obvious culprit, environment-specific breakage, "not sure why". Triggered by "flaky", "intermittent", "regression", "I don't know why it's failing", "works locally but not in <env>", "production issue". Not for bugs whose cause is clear from the message or stack trace → `tdd` directly; not for missing or unclear requirements → `feature-doc`.
 ---
 
 # Debug
@@ -52,7 +52,7 @@ If you cannot reproduce, **stop and say so.** "Can't reproduce" is a valid debug
 
 Don't read the whole codebase. Bisect.
 
-- **`git bisect`** for regressions. Find the commit that introduced the change.
+- **`git bisect`** for regressions. Find the commit that introduced the change. For one function, `git log -L :<Func>:<file>` shows every change and its why — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 - **Logs / tracing** — add structured logs at suspect boundaries; don't read code that hasn't been confirmed to execute.
 - **Diff your assumptions against the code.** If you believe path A executes, prove it. Print, log, breakpoint.
 - **Walk the data, not the code.** Trace one specific input through the system; see where the actual value diverges from the expected. The divergence point is the bug's region.
@@ -91,7 +91,9 @@ Run `tdd`: write a failing test that captures the reproduction, fix, refactor wi
 
 ## Optional artifact: bug research note
 
-For non-trivial bugs whose investigation produced real signal — bisected commits, environment-specific findings, surprising cross-module interactions — capture a research note at `docs/research/<bug-slug>.md` (use the `investigate` template's shape). The note reads as the post-mortem: what was symptom, what was root cause, why was it not caught earlier, what test would have caught it.
+For non-trivial bugs whose investigation produced real signal — bisected commits, environment-specific findings, surprising cross-module interactions — capture a research note at `docs/research/<bug-slug>.md` (in the domain's `research/` folder when the repo has domains) (use the `investigate` template's shape). The note reads as the post-mortem: what was symptom, what was root cause, why was it not caught earlier, what test would have caught it.
+
+Whether in chat or in the note, explain the bug as **what's wrong → why (a diagram of expected vs actual, failure marked ✗) → fix → trade-off** — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) §4.
 
 Skip for bugs with one-paragraph stories. Capture for bugs with real lessons.
 

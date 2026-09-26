@@ -1,6 +1,6 @@
 ---
 name: bench
-description: Performance benchmarking discipline. Measures latency, throughput, and records baseline environments. Triggered by phrases like "benchmark", "performance test", "measure latency".
+description: Measures performance — latency, throughput, memory — against a recorded baseline environment and writes `docs/features/<feature>/bench.md`. Use when a feature doc has performance ACs, when checking whether a refactor made things slower, or when profiling a hot path before optimizing. Triggered by "benchmark", "measure latency", "profile", "performance test", "p99". Not for functional bugs → `debug`; not for pre-tag checks against live vendor APIs → `verify-real-deps`.
 ---
 
 # Benchmark
@@ -17,6 +17,12 @@ Performance claims are often "vibes-based" or measured on a developer's machine 
 - Identifying regressions or improvements after a major refactor.
 - Profiling hot paths to guide optimization.
 
+## When to skip
+
+- Functional bugs (wrong output, crashes) — use [`debug`](../debug/SKILL.md).
+- No performance AC and no suspected slowdown — measuring without a question produces numbers nobody reads.
+- Pre-tag checks against live vendor APIs — use [`verify-real-deps`](../verify-real-deps/SKILL.md).
+
 ## Process
 
 ### 1. Establish Baseline
@@ -29,10 +35,16 @@ Run the same test against the changed code. Ensure identical environment conditi
 
 ### 3. Record Findings
 
-Create a report in `docs/benchmarks/<feature>.md` using the template.
+Create a report in `docs/features/<feature>/bench.md` using the template. Lead with the result in one sentence ("p99 dropped from 180ms to 140ms"); use a table for before/after numbers — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
 ## Done when
 
-- A benchmark report exists in `docs/benchmarks/`.
+- A benchmark report exists as the feature's `bench.md` — or `docs/research/bench-<topic>.md` when there is no feature ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1).
 - Baseline and current measurements are clearly compared.
 - The environment and load profile are documented.
+
+## Pairing with other skills
+
+- **`feature-doc`** — runs before. Performance ACs in the feature doc are what this skill verifies.
+- **`tdd`** — runs before. Behaviour is pinned green first; benchmark the correct code, not the draft.
+- **`prod-ready`** — runs after. A benchmark report showing a regression blocks the merge.

@@ -1,6 +1,6 @@
 ---
 name: system-design
-description: System-level architecture for greenfield work — name the modules, define responsibilities, set dependency direction, identify seams. Use when starting a new multi-module system or service from scratch, when defining topology before code lands, or when the user mentions "system architecture", "module boundaries", "service boundaries", "how should I structure this system", "draw the architecture", "topology". Skip for single-module work — use `design` instead. Skip for reorganizing an existing codebase — use `improve-codebase-architecture`. Pairs with `investigate` (comes before, surveying options) and `design` (comes after, shaping each module's interface).
+description: Lays out the module topology of a NEW multi-module system — which modules exist, their responsibilities, dependency direction, and seams — in `docs/architecture.md`. Use when starting a new system, service, or major subsystem from scratch, before any per-module design. Triggered by "system architecture", "how should I structure this system", "service boundaries", "draw the architecture". Pick by age and scope — new code in one module → `design`; a new multi-module system → `system-design`; existing code across modules → `improve-codebase-architecture`; existing code in one module → refactor inline, then `simplify`. Not for feature work inside an established topology → `feature-doc`.
 ---
 
 # System Design
@@ -31,7 +31,7 @@ Canonical definitions in [skills/LANGUAGE.md](../LANGUAGE.md). The terms this sk
 
 Before drawing anything, read what already exists:
 
-- `docs/CONTEXT.md` — the domain language. Module names should come from here.
+- `docs/CONTEXT.md` — the domain language (with several domains: `docs/CONTEXT-MAP.md` and each `docs/<domain>/CONTEXT.md`). Module names should come from here.
 - `docs/research/<topic>.md` — any prior `investigate` runs that constrain the design.
 - `docs/adr/` — decisions already taken.
 - The feature set — what the system has to do.
@@ -78,23 +78,14 @@ Each seam is a potential test boundary AND a potential failure point. Naming the
 
 ### 5. Draw the system map
 
-Output an ASCII diagram + a module table + a seam list. Save to `docs/architecture.md` (create lazily on first use).
+Output a Mermaid diagram + a module table + a seam list. Save to `docs/architecture.md` (create lazily on first use). When showing the map in chat, draw the same thing in ASCII — terminals don't render Mermaid. Format rules: [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
-```
-                 ┌──────────────┐
-                 │   HTTP API   │
-                 └──────┬───────┘
-                        │ commands / queries
-                        ▼
-   ┌──────────┐   ┌──────────────┐   ┌──────────────┐
-   │   Auth   │◄──┤   Ordering   │──►│   Billing    │
-   └──────────┘   └──────┬───────┘   └──────────────┘
-                         │ port
-                         ▼
-                  ┌──────────────┐
-                  │  Persistence │  ← adapter implements port
-                  │  (storage)   │
-                  └──────────────┘
+```mermaid
+flowchart TD
+    API[HTTP API] -->|commands / queries| Ordering
+    Ordering -->|checks| Auth
+    Ordering -->|emits events| Billing
+    Ordering -->|port| Persistence[Persistence<br/>adapter implements port]
 ```
 
 Module table:
@@ -127,7 +118,8 @@ Failures here are not "warnings" — they're "stop and rework". The system map i
 
 ## Done when
 
-- `docs/architecture.md` exists with: module table, dependency direction, seam list, ASCII map.
+- `docs/architecture.md` exists with: module table, dependency direction, seam list, Mermaid map.
+- When the modules are separate domains: `docs/CONTEXT-MAP.md` lists them, and each domain's code folder has a short `CLAUDE.md` / `AGENTS.md` pointing at `docs/<domain>/` ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §6).
 - Each module name comes from `CONTEXT.md` vocabulary (not framework conventions).
 - The dependency graph is acyclic and explicitly reviewed.
 - Every cross-module boundary has a named seam + adapter location.

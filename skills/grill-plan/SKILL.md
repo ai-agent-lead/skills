@@ -1,6 +1,6 @@
 ---
 name: grill-plan
-description: Grilling session that stress-tests a chosen plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use AFTER a direction has been picked (post-`investigate` or post-`feature-doc`), when the user wants to pressure-test the plan — triggered by phrases like "grill me on this", "stress-test this plan", "walk me through this", "is this consistent with our model". Skip if the direction is still being explored — use `investigate` instead.
+description: Interrogates an already-chosen plan against the project's domain model — sharpening terms and recording decisions in `docs/CONTEXT.md` and `docs/adr/` as they crystallise. Use when a direction is picked (after `investigate` or `feature-doc`) and the user wants it pressure-tested. Triggered by "grill me on this", "stress-test this plan", "poke holes in this plan", "is this consistent with our model". Not for choosing a direction → `investigate`; not for explaining existing code — just answer.
 ---
 
 ## When to use
@@ -29,33 +29,31 @@ During codebase exploration, also look for existing documentation:
 
 ### File structure
 
-Most repos have a single context:
+Paths follow [`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md). Most repos have a single context:
 
 ```
-/
+docs/
 ├── CONTEXT.md
-├── docs/
-│   └── adr/
-│       ├── 0001-event-sourced-orders.md
-│       └── 0002-postgres-for-write-model.md
-└── src/
+└── adr/
+    ├── 0001-event-sourced-orders.md
+    └── 0002-postgres-for-write-model.md
 ```
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+If `docs/CONTEXT-MAP.md` exists, the repo has several domains (bounded contexts). Each domain's docs sit in its own folder under `docs/`, named like its code folder:
 
 ```
-/
-├── CONTEXT-MAP.md
-├── docs/
-│   └── adr/                          ← system-wide decisions
-├── src/
-│   ├── ordering/
-│   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
-│   └── billing/
-│       ├── CONTEXT.md
-│       └── docs/adr/
+docs/
+├── CONTEXT-MAP.md          ← lists the domains and how they talk
+├── adr/                    ← cross-domain decisions
+├── ordering/
+│   ├── CONTEXT.md
+│   └── adr/                ← ordering-only decisions
+└── billing/
+    ├── CONTEXT.md
+    └── adr/
 ```
+
+ADR numbers are one sequence across all `adr/` folders.
 
 Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
 
@@ -91,7 +89,7 @@ Only offer to create an ADR when all three are true:
 2. **Surprising without context** — a future reader will wonder "why did they do it this way?"
 3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
 
-If any of the three is missing, skip the ADR. Use the format in [`../formats/ADR-FORMAT.md`](../formats/ADR-FORMAT.md).
+If any of the three is missing, skip the ADR. Use the format in [`../formats/ADR-FORMAT.md`](../formats/ADR-FORMAT.md) and write it per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) — decision first, plain words.
 
 ## Pairing with other skills
 

@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Use when the user asks for investigation, research, a proposal, or "options" before any code lands; or proactively for non-trivial structural decisions (new dependency, framework choice, API contract change, cross-cutting refactor). Triggered by phrases like "investigate X", "research Y", "give me a proposal", "what are our options", "how would we approach", "let's explore", "should we...". Produces a durable research note in `docs/research/<topic>.md`. Skip for tasks where one obvious approach exists (typo fixes, config tweaks, mechanical refactors). Pairs with `feature-doc` (captures *what* we're building once a direction is chosen) and `grill-plan` (stress-tests a chosen plan).
+description: Researches a non-trivial decision with more than one credible approach and writes a durable research note at `docs/research/<topic>.md`. Use when the user asks to investigate or research options before code lands, or proactively for hard-to-reverse structural decisions (new dependency, framework choice, API contract change, cross-cutting refactor). Triggered by "investigate", "research", "what are our options for", "compare approaches for". Not for questions answerable in chat (explaining a plan, a quick "should we rename this?"); not for work with one obvious approach; not for pressure-testing a chosen plan → `grill-plan`.
 ---
 
 # Investigation Workflow
@@ -9,7 +9,7 @@ Investigation is a separate phase from implementation. It produces a durable art
 
 ## When to use
 
-- The user explicitly asks for investigation, research, a proposal, options, or "how would we approach X".
+- The user explicitly asks to investigate or research the options for a decision before code lands.
 - A non-trivial structural decision is on the table: new dependency, new architectural pattern, framework choice, contract change, cross-cutting refactor.
 - The decision passes the same bar as an ADR: hard to reverse, surprising-without-context, or the result of a real trade-off.
 
@@ -18,6 +18,7 @@ Investigation is a separate phase from implementation. It produces a durable art
 - One obvious approach (typo fixes, config tweaks, mechanical refactors).
 - Pure execution of an already-decided plan.
 - Bug fixes that don't change architecture.
+- Questions answerable in chat — explaining a plan, weighing a quick naming choice. A research note is for decisions worth keeping.
 
 ## Phases
 
@@ -68,7 +69,7 @@ For high-stakes artifacts — specs, ADRs, anything load-bearing for cross-team 
 
 ## The artifact
 
-Save the research note to `docs/research/<short-topic>.md`. Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton. Create `docs/research/` lazily on first use.
+Save the research note to `docs/research/<short-topic>.md` — or `docs/<domain>/research/` when the answer changes one domain ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §1). Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton, written per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) — answer first, diagrams for flow, a table to compare options. Create `docs/research/` lazily on first use.
 
 The note must include:
 - **Context** with citations.
@@ -89,7 +90,7 @@ The note must include:
 
 Once the user picks an option:
 
-- Mark the research note **Decided** and bold the chosen option in the Recommendation section.
+- Set `status: decided` in the research note's frontmatter and bold the chosen option in the Recommendation section.
 - If the decision is hard-to-reverse / surprising-without-context / the result of a real tradeoff → write an ADR (use `grill-plan`, or write directly into `docs/adr/`). Link the ADR back from the research note.
 - If a concrete feature is now being built → run `feature-doc` next; link it from the research note.
 - If the chosen option requires later validation → leave the research note Open and add a "Follow-ups" section.

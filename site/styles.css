@@ -16,6 +16,7 @@
   --gate: #fb7185;
   --diag: #38bdf8;
   --util: #c084fc;
+  --ship: #a3e635;
 
   --maxw: 940px;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -58,7 +59,7 @@ code {
 .brand { font-weight: 700; font-size: 1.1rem; color: var(--text); display: inline-flex; align-items: center; gap: 7px; letter-spacing: -0.01em; }
 .brand-mark { color: var(--accent); }
 .brand-dim { color: var(--faint); font-weight: 500; }
-.nav-links { display: flex; gap: 26px; font-size: 0.92rem; }
+.nav-links { display: flex; gap: 22px; font-size: 0.92rem; }
 .nav-links a { color: var(--muted); transition: color 0.15s; }
 .nav-links a:hover { color: var(--text); }
 
@@ -90,7 +91,7 @@ code {
 .lg i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 .dot-doc { background: var(--doc); } .dot-shape { background: var(--shape); }
 .dot-build { background: var(--build); } .dot-gate { background: var(--gate); }
-.dot-diag { background: var(--diag); }
+.dot-diag { background: var(--diag); } .dot-ship { background: var(--ship); }
 
 /* Blocks */
 .block { padding: 66px 0; border-top: 1px solid var(--border-soft); }
@@ -129,6 +130,7 @@ section { scroll-margin-top: 72px; }
 .s-build { border-left-color: var(--build); }
 .s-gate { border-left-color: var(--gate); }
 .s-diag { border-left-color: var(--diag); }
+.s-ship { border-left-color: var(--ship); }
 .s-merge { background: linear-gradient(180deg, #8997ff, #5e6dff); border: none; }
 .s-merge b { color: #fff; }
 .s-next { border-left-color: var(--accent); border-style: dashed; }
@@ -143,6 +145,8 @@ section { scroll-margin-top: 72px; }
 .k-gate { color: var(--gate); background: rgba(251, 113, 133, 0.14); }
 .k-util { color: var(--util); background: rgba(192, 132, 252, 0.14); }
 .k-meas { color: var(--build); background: rgba(79, 214, 196, 0.14); }
+.k-diag { color: var(--diag); background: rgba(56, 189, 248, 0.14); }
+.k-rule { color: var(--accent); background: rgba(124, 140, 255, 0.14); }
 .cross p { margin: 0; color: var(--muted); font-size: 0.92rem; }
 
 /* Install */

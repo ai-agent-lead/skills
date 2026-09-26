@@ -12,8 +12,10 @@ Rules for how documentation and skills are structured in this repository.
 
 ## Documentation Artifacts
 
+- **Layout and upkeep**: Paths, status values, status owners, and the checker are in [`skills/formats/DOCS-LAYOUT.md`](../skills/formats/DOCS-LAYOUT.md) — the single source; see [ADR-0005](adr/0005-docs-layout-and-upkeep.md). `npm test` runs `check-docs.mjs` on this repo's `docs/`.
 - **Lazy Creation**: Directories like `docs/adr/` or `docs/features/` are created only when the first file is needed.
 - **Naming**: Use `kebab-case.md` for feature docs, research notes, and ADRs.
+- **Writing style**: Docs and explanations follow [`skills/formats/WRITING-STYLE.md`](../skills/formats/WRITING-STYLE.md) — answer first, plain words, and a diagram for anything with steps, order, states, or dependencies. Mermaid in `docs/`, ASCII in chat and code.
 - **Reference Docs**: Use `UPPERCASE.md` for internal reference documents within the `skills/` directory.
 - **OKF frontmatter**: Every produced doc under `docs/` opens with an OKF frontmatter block (required `type`, plus `title` / `description` / `tags` / `timestamp`) so that `docs/` is a consumable [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) bundle. The contract and the `type` vocabulary live in [`skills/formats/OKF.md`](../skills/formats/OKF.md); the decision is [ADR-0002](adr/0002-adopt-okf-for-produced-docs.md). `index.md` and `log.md` are reserved OKF filenames — `docs/index.md` is the bundle listing and the root `CHANGELOG.md` is its log.
 
@@ -27,17 +29,17 @@ Rules for how documentation and skills are structured in this repository.
 
 - Code lands on a feature branch (`feat/<short-name>`) or fix branch (`fix/<short-name>`); `main` receives merges, not commits.
 - `feature-doc`, `tdd`, and `tdd-rounds` refuse to start if `HEAD` is `main` / `master` — create the branch first.
-- The branch name should match the feature-doc filename (`docs/features/<short-name>.md` ↔ `feat/<short-name>`) so the contract and the diff are co-locatable.
+- The branch name should match the feature-doc filename (`docs/features/<short-name>/feature.md` ↔ `feat/<short-name>`) so the contract and the diff are co-locatable.
 
 ## Commits
 
-- Conventional Commits style: `feat(scope): …`, `docs(scope): …`, `fix(scope): …`.
+- Commit messages and PR descriptions follow [`skills/formats/COMMIT-FORMAT.md`](../skills/formats/COMMIT-FORMAT.md) — the single source.
 - In `tdd-rounds`, additionally prefix with `R<N>:` per [`skills/tdd-rounds/COMMITS.md`](../skills/tdd-rounds/COMMITS.md).
 - Co-author trailers are encouraged when the agent and a human collaborated on the change.
 
 ## Code Style
 
-- Comment discipline is anchored in [`skills/formats/STYLE-comments.md`](../skills/formats/STYLE-comments.md). Default: write **no** comment. Keep only why / invariant / trade-off / provenance comments — and only when the next reader would otherwise reattempt the rejected alternative.
+- Comments follow [`skills/formats/STYLE-comments.md`](../skills/formats/STYLE-comments.md) — the single source; see [ADR-0004](adr/0004-comment-style-single-source.md).
 
 ## Terminology
 
