@@ -32,9 +32,8 @@ Rules for how documentation and skills are structured in this repository.
 
 ## Commits
 
-- Conventional Commits style: `feat(scope): …`, `docs(scope): …`, `fix(scope): …`.
+- Commit messages and PR descriptions follow [`skills/formats/COMMIT-FORMAT.md`](../skills/formats/COMMIT-FORMAT.md) — the single source.
 - In `tdd-rounds`, additionally prefix with `R<N>:` per [`skills/tdd-rounds/COMMITS.md`](../skills/tdd-rounds/COMMITS.md).
-- The body says **why**, and a `Refs:` trailer links the feature doc / ADR / known-issues entry. This is where a change's story lives — not in code comments.
 - Co-author trailers are encouraged when the agent and a human collaborated on the change.
 
 ## Code Style

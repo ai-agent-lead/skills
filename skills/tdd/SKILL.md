@@ -71,7 +71,7 @@ One test → minimum code to pass → next test. Each cycle informs the next.
 - Remove duplication, improve names, extract functions.
 - Run tests after every change.
 - Do not add new behavior during refactor.
-- **Comments, while you're here:** follow [`STYLE-comments.md`](../formats/STYLE-comments.md) — headers state the contract, comments inside functions are tagged, and every comment in a function you changed is re-read. The reason for a change goes in the commit body, not a comment.
+- **Comments, while you're here:** follow [`STYLE-comments.md`](../formats/STYLE-comments.md) — headers state the contract, comments inside functions are tagged, and every comment in a function you changed is re-read. The reason for a change goes in the commit body, not a comment — commits follow [`COMMIT-FORMAT.md`](../formats/COMMIT-FORMAT.md).
 - **Never refactor while red.** Get to green first.
 
 ### 4. Simplify pass — end-of-round, after green

@@ -59,18 +59,13 @@ The commit message states what the commit actually does, not what you wished it 
 
 If a step you described in the brief didn't actually land, say so in `Deviations`. If a commit's diff doesn't match its message, fix the message before committing — or split into two commits if the message's intent really was two things.
 
-## Message body shape
+## Message shape
 
-The first line is the subject (~50–72 chars). The body explains:
+Subject, body, and footers follow [`formats/COMMIT-FORMAT.md`](../formats/COMMIT-FORMAT.md) — the one commit format for every skill. The round-specific parts:
 
-- **What** the commit does (one or two sentences).
-- **Why** the change was needed (the AC, the bug, the constraint).
-- **Tradeoff being accepted** if the change picked one path over another.
-- **`Refs:`** trailer linking the feature doc, ADR, or known-issues entry the change serves.
-
-This body is where the change's story lives. Round and AC ids (`R6`, `AC-3`) go in the commit, **never in code comments** — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
-
-Keep it short. Three short paragraphs > one long one. Bullets are fine.
+- `R<N>:` replaces the conventional `type(scope):` prefix.
+- The body names the ACs the commit covers. Round and AC ids live here, **never in code comments** ([`STYLE-comments.md`](../formats/STYLE-comments.md) §5).
+- A round commit that breaks callers still carries a `BREAKING CHANGE:` footer, so `release` picks the right version.
 
 Real example from R8:
 
@@ -87,27 +82,10 @@ Read commands precheck /v1/healthz; daemon-down surfaces the
 documented "Run gemini-proxy start first" remediation instead of a
 raw connection-refused stack.
 
---group_by uses snake_case to match the AC text. table-by-default,
---json for machine-readable; same data both formats.
+Refs: docs/features/cli.md
 ```
 
-Counter-example that fails the rules:
-
-```
-R8: stuff
-```
-
-(no scope, no why, no shape).
-
-## Footer
-
-Co-authored-by line for agent contributions:
-
-```
-Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
-```
-
-Use whatever model line matches the actual driver. Match exactly the convention the project's CLAUDE.md (or root agent doc) prescribes — don't invent variations.
+Counter-example that fails the rules: `R8: stuff` — no scope, no why, no shape.
 
 ## Anti-patterns
 

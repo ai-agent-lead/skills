@@ -37,6 +37,7 @@ The `code-hygiene` line-level lens is no longer a routable skill — it lives at
 | `tdd` | Implementing a feature or fixing a bug, test-first | Test-first code | [tdd/](./tdd/) |
 | `tdd-rounds` | Multi-round TDD orchestration via Builder sub-agents (≥10 ACs / multi-package) | Builder briefs + reports + `docs/STATE.md` | [tdd-rounds/](./tdd-rounds/) |
 | `simplify` | End-of-slice / end-of-round sweep — reuse, quality, efficiency, test relevance | Tightened diff + a separate `simplify` commit | [simplify/](./simplify/) |
+| `migrate` | Schema or stored-data change on a database with real data | Migration plan (feature-doc section) + one migration and deploy per step: expand → backfill → switch → contract | [migrate/](./migrate/) |
 
 ### Pre-merge gates & review
 
@@ -47,6 +48,13 @@ The `code-hygiene` line-level lens is no longer a routable skill — it lives at
 | `pr-review` | Reviewing someone else's PR (or self-reviewing before opening) | Structured review with severity-classified findings (blocker / suggestion / nit / question) | [pr-review/](./pr-review/) |
 | `verify-real-deps` | Pre-tag smoke test against real third-party APIs | `docs/known-issues.md` bug ledger; fix-rounds until clean | [verify-real-deps/](./verify-real-deps/) |
 
+### Maintenance & release
+
+| Skill | Trigger | Produces | Location |
+| --- | --- | --- | --- |
+| `upgrade` | Major version of a dependency, toolchain, or runtime | Breaking-change checklist + one verified commit per step | [upgrade/](./upgrade/) |
+| `release` | Merged changes ready to ship as a version | Semver bump, dated CHANGELOG section, release notes, tag, published artifact | [release/](./release/) |
+
 ## Index — by role
 
 Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; this one tells you *what kind of thing it is*.
@@ -54,8 +62,9 @@ Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; 
 | Role | Skills | What they have in common |
 | --- | --- | --- |
 | **Doc-producing** (writes a durable artifact under `docs/`) | `feature-doc`, `investigate`, `system-design`, `grill-plan`, `debug` (optional), `security-review` (optional), `verify-real-deps`, `bench`, `bootstrap` | Output survives the conversation. The discipline of writing it is the value. |
-| **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify` | Diff-producing. Always behind a contract (feature doc + ACs). |
+| **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify`, `migrate`, `upgrade` | Diff-producing. Always behind a contract — feature doc + ACs, a migration plan, or a breaking-change checklist. |
 | **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
+| **Ship** (turns merged work into a version) | `release` | Outward-facing and irreversible — asks before publishing. |
 | **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out` | Run *before* a build skill when the input isn't yet clear. |
 | **Shape** (decides module / topology) | `design`, `system-design`, `improve-codebase-architecture` | Greenfield-module / greenfield-system / brownfield. Same vocabulary ([`LANGUAGE.md`](./LANGUAGE.md)). |
 | **Lens** (applied during other skills, not invoked alone) | `caveman` skill; `code-hygiene` reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)) | Principles you carry into any turn to maintain quality or efficiency. The line-level lens is a shared reference, not a routable skill. |
@@ -96,6 +105,13 @@ The skill set + its dependencies. Lateral edges are vocabulary / lens; vertical 
    │       │   debug security-review                                  │
    │       │   (when bug)  (when surface)                             │
    │                                                                  │
+   │   ┌─────────────── MAINTENANCE & RELEASE ──────────┐             │
+   │   │  migrate -> schema steps inside tdd work:      │             │
+   │   │    expand → backfill → switch → contract       │             │
+   │   │  upgrade -> one major per commit → prod-ready  │             │
+   │   │  [merge] → verify-real-deps → release → tag    │             │
+   │   └────────────────────────────────────────────────┘             │
+   │                                                                  │
    │   ┌────────────── LENSES & UTILITIES ──────────────┐             │
    │   │  code-hygiene (formats/) -> line-level lens    │             │
    │   │  caveman -> token lens, any code reading       │             │
@@ -106,7 +122,7 @@ The skill set + its dependencies. Lateral edges are vocabulary / lens; vertical 
    └──────────────────────────────────────────────────────────────────┘
 ```
 
-**Six things the map shows:**
+**Seven things the map shows:**
 
 1. `caveman` and `zoom-out` are not nodes in any flow — they're a lens / utility applied across. The `code-hygiene` line-level lens is the same idea, now a shared reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)) rather than a routable skill.
 2. `grill-plan` is the only skill invoked from three upstreams (`investigate`, `feature-doc`, `improve-codebase-architecture`) — it's the shared pressure-test step.
@@ -114,11 +130,12 @@ The skill set + its dependencies. Lateral edges are vocabulary / lens; vertical 
 4. `pr-review` is the reviewer-side mirror of `prod-ready` — the Section 7 / §3e doc-drift audit is single-sourced in [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) (the former `sync-check` skill) and run from both sides.
 5. `system-design` and `improve-codebase-architecture` are duals — same [LANGUAGE.md](./LANGUAGE.md), greenfield vs brownfield.
 6. The shared substrate ([LANGUAGE.md](./LANGUAGE.md), [formats/](./formats/), [TRIGGERS.md](./TRIGGERS.md)) is referenced everywhere — never copy-paste the content into a skill.
+7. `release` is the only skill that publishes. It runs after `prod-ready` (and `verify-real-deps` when vendor APIs are involved), and asks before anything leaves the machine.
 
 
 ## Workflows
 
-The skills compose into canonical workflows (greenfield feature, large feature, investigation, refactor, bug fix, greenfield system) plus utilities (`zoom-out`, `pr-review`). See [WORKFLOWS.md](./WORKFLOWS.md) for the decision tree, ASCII flow diagrams, and cross-workflow patterns.
+The skills compose into canonical workflows (greenfield feature, large feature, investigation, refactor, bug fix, greenfield system, upgrade, release) plus utilities (`zoom-out`, `pr-review`). See [WORKFLOWS.md](./WORKFLOWS.md) for the decision tree, ASCII flow diagrams, and cross-workflow patterns.
 
 ## Trigger lookup
 
@@ -137,6 +154,7 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 - [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement). Applied during `simplify` and `pr-review` §3f.
 - [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) — the terminology / ADR / doc-map audit. Run from `prod-ready` §7 (author), `pr-review` §3e (reviewer), or standalone (the former `sync-check`).
 - [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the single source for code comments (headers as contracts, tagged comments, history in git), checked by [`scripts/check-comments.mjs`](./scripts/check-comments.mjs).
+- [`formats/COMMIT-FORMAT.md`](./formats/COMMIT-FORMAT.md) — the one format for commit messages and PR descriptions: why in the body, `Refs:` into `docs/`, `BREAKING CHANGE:` for `release`.
 - [`formats/WRITING-STYLE.md`](./formats/WRITING-STYLE.md) — how docs and chat explanations read: answer first, plain words, diagram first (Mermaid in `docs/`, ASCII in chat). Used by every doc-producing skill; [`snippets/writing-style.md`](../snippets/writing-style.md) is the always-on version for `CLAUDE.md` / `AGENTS.md`.
 
 Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investigate`, `simplify`, `prod-ready`, `pr-review`, and (lazily) `feature-doc`.

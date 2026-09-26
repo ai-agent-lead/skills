@@ -37,7 +37,7 @@ Hand-checked fixtures for skill routing. Each row is a realistic user prompt and
 | 27 | "Check this change" (a one-line edit just made) | none | ✗ `pr-review` ("check this change") | ✓ |
 | 28 | "We're about to deploy this branch to prod" | `prod-ready` | ✓ | ✓ |
 | 29 | "Before we tag v1.0, run it against the real Stripe API" | `verify-real-deps` | ✓ | ✓ |
-| 30 | "We're shipping v2.0 tomorrow and it talks to Twilio" | `prod-ready`, then `verify-real-deps` | ✗ `prod-ready` ("shipping") and `verify-real-deps` both claim it, no order given | ✓ |
+| 30 | "We're shipping v2.0 tomorrow and it talks to Twilio" | `prod-ready` → `verify-real-deps` → `release` | ✗ `prod-ready` ("shipping") and `verify-real-deps` both claim it, no order given | ✓ |
 | 31 | "Benchmark the search endpoint's p99 latency" | `bench` | ✓ | ✓ |
 | 32 | "Profile this hot loop" | `bench` | ✗ weak — "profile" only in TRIGGERS.md, not the description | ✓ |
 | 33 | "Start a new project for the invoicing service" | `bootstrap` | ✓ | ✓ |
@@ -45,12 +45,21 @@ Hand-checked fixtures for skill routing. Each row is a realistic user prompt and
 | 35 | "Be concise" | none (just answer briefly) | ✗ `caveman` ("be concise") | ✓ |
 | 36 | "Spec this out: users can export invoices" | `feature-doc` | ✓ | ✓ |
 | 37 | "The payments and ledger modules are too coupled — untangle them" | `improve-codebase-architecture` | ✓ | ✓ |
+| 38 | "Rename users.name to full_name — the table has 40M rows" | `migrate` | ✗ no skill (one checklist line in `prod-ready`) | ✓ |
+| 39 | "Make the existing users.email column unique" | `migrate` | ✗ no skill | ✓ |
+| 40 | "Write a SQL query that finds duplicate users" | none | ✓ | ✓ |
+| 41 | "Upgrade pgx from v4 to v5" | `upgrade` | ✗ no skill | ✓ |
+| 42 | "Update Node from 18 to 22 in CI and the Dockerfile" | `upgrade` | ✗ no skill | ✓ |
+| 43 | "Bump lodash from 4.17.20 to 4.17.21" | none | ✓ | ✓ |
+| 44 | "Move our API from Express to Fastify" | `investigate` | ✓ | ✓ |
+| 45 | "Cut a release for the CLI" | `release` | ✗ no skill | ✓ |
+| 46 | "Bump the version to 2.1.0 and publish to npm" | `release` | ✗ no skill | ✓ |
 
 ## Score
 
 | | Pass | Fail |
 | --- | --- | --- |
-| Baseline (1.4.0) | 17 / 37 | 20 |
-| After | 37 / 37 | 0 |
+| Baseline (1.4.0) | 20 / 46 | 26 |
+| After | 46 / 46 | 0 |
 
 The *After* column is a static trace against the rewritten descriptions, not a live model run. Re-score by hand whenever a `description:` changes, and add a row for every misroute seen in real use.

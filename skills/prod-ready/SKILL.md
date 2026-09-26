@@ -1,6 +1,6 @@
 ---
 name: prod-ready
-description: The author's pre-merge gate for their own change — operational, infrastructure, consistency, and doc-drift checks tests do not catch (timeouts, DB pragmas, error-shape consistency, secrets at rest). Use after tests are green, before opening a PR or merging to main, or after infra changes (new DB, deploy target, auth flow). Triggered by "ready to merge", "prod-ready", "production readiness", "before deploy". Not for reviewing someone else's PR → `pr-review`; for a tagged release that calls third-party APIs, run this and then `verify-real-deps`. Escalates to `security-review` when the change alters a trust boundary.
+description: The author's pre-merge gate for their own change — operational, infrastructure, consistency, and doc-drift checks tests do not catch (timeouts, DB pragmas, error-shape consistency, secrets at rest). Use after tests are green, before opening a PR or merging to main, or after infra changes (new DB, deploy target, auth flow). Triggered by "ready to merge", "prod-ready", "production readiness", "before deploy". Not for reviewing someone else's PR → `pr-review`; for a tagged release, run this, then `verify-real-deps` if vendor APIs are involved, then `release`. Escalates to `security-review` when the change alters a trust boundary.
 ---
 
 # Prod-Readiness Checklist
@@ -29,7 +29,7 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 - [ ] Referential integrity enforced — FK constraints on, or an equivalent invariant maintained explicitly with a comment naming where it lives.
 - [ ] Concurrency / isolation mode set deliberately, not left on the engine's default. Default isolation often allows write-write races your tests didn't see.
 - [ ] Indexes match the actual filter + sort shape of hot queries — read the slow-query log or `EXPLAIN` the top endpoints; don't guess.
-- [ ] Migrations are forward-only and idempotent — safe to re-run after a partial deploy.
+- [ ] Schema changes followed [`migrate`](../migrate/SKILL.md): each deploy step runs against the previous app version, and migrations are idempotent — safe to re-run after a partial deploy.
 
 ### 3. Auth / security defense-in-depth
 - [ ] Tokens (sign-in, session, API keys) are hashed at rest — a DB leak shouldn't grant live sessions.

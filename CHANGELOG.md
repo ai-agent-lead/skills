@@ -49,6 +49,20 @@ to the new version and a fresh `[Unreleased]` block is opened.
   rules, the tag list matches across source / snippet / checker, and no other
   file restates the rules. Checker tests in `tests/check-comments.test.mjs`.
 - ADR-0004 — comment style has one source.
+- `migrate` skill — schema and stored-data changes in safe deploy steps
+  (expand → backfill → switch → contract), a risky-operations table with the
+  safe way for each, a per-step migration plan, and Go / JS examples.
+- `upgrade` skill — major-version upgrades of dependencies, toolchains, and
+  runtimes: read breaking changes first, one step per commit, build / test /
+  lint / vulnerability check at every step. Covers Go `/vN` import paths.
+- `release` skill — semver bump from `[Unreleased]` and commit bodies,
+  release notes for users, annotated tag, publish only after asking, and an
+  install check of the published artifact. Fix forward; never move a tag.
+- `formats/COMMIT-FORMAT.md` — the one format for commit messages and PR
+  descriptions (why in the body, `Refs:`, `BREAKING CHANGE:`), shared by all
+  skills; `tdd-rounds/COMMITS.md` keeps only the round-specific rules.
+- Workflow 7 (upgrade) and Workflow 8 (release); 9 more routing cases
+  (baseline 20/46, now 46/46 by static trace).
 
 ### Changed
 
@@ -64,6 +78,8 @@ to the new version and a fresh `[Unreleased]` block is opened.
   `/code-review` command; `simplify` owns the over-engineered / YAGNI triggers
   formerly routed to `code-hygiene`.
 - `verify-real-deps` vs `prod-ready`: merge → `prod-ready`; tag with vendor APIs → both, in order.
+- `prod-ready`'s migration check points to `migrate`; its description, and
+  `verify-real-deps` and `tdd-rounds`, hand off to `release`.
 - `system-design` writes the `docs/architecture.md` map in Mermaid (was ASCII);
   ASCII stays for chat.
 - `STYLE-comments.md` rewritten as the single source, with Go and JS examples.

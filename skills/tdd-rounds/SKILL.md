@@ -93,5 +93,5 @@ When the final round completes:
 
 1. Run `verify-real-deps`. Capture surfaced bugs into `docs/known-issues.md`.
 2. Iterate fix-rounds until clean, or document deferrals to vN.1 with rationale.
-3. Tag and publish via whatever release / distribution channel applies.
+3. Tag and publish with [`release`](../release/SKILL.md).
 

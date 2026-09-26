@@ -12,7 +12,7 @@ For routing by trigger phrase, see [TRIGGERS.md](./TRIGGERS.md). For the cross-s
 Got a task? Pick by what you have in front of you:
 
 ┌─────────────────────────────────────┬──────────────────────────────────┐
-│ Typo / dep bump / one-liner config  │ just fix it — no skill needed    │
+│ Typo / patch bump / one-liner config│ just fix it — no skill needed    │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Bug fix — root cause obvious        │ /tdd  (Workflow 5a)              │
 ├─────────────────────────────────────┼──────────────────────────────────┤
@@ -23,6 +23,12 @@ Got a task? Pick by what you have in front of you:
 │ New feature in existing system      │ /feature-doc  (Workflow 1 or 2)  │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature, direction unclear      │ /investigate  (Workflow 3)       │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Schema change or data backfill      │ /migrate  (inside Workflow 1/2)  │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Major dependency / runtime upgrade  │ /upgrade  (Workflow 7)           │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Ship a version (tag / publish)      │ /release  (Workflow 8)           │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Refactor existing code              │ /improve-codebase-architecture   │
 │                                     │                  (Workflow 4)    │
@@ -304,6 +310,48 @@ This workflow runs **once per system**, not per feature. After it, each feature 
 
 ---
 
+## Workflow 7 — Upgrade a dependency or runtime
+
+For a major version bump. Patch and minor bumps with green tests need no skill.
+
+```
+   [major version behind / deprecated library / security advisory]
+            │
+            ├─── "which library instead?" ──► investigate
+            │
+            ▼
+        upgrade ─── 1. Inventory (go list -m -u all / npm outdated)
+            │       2. Read breaking changes → checklist for THIS code
+            │       3. Order: runtime → libraries → the rest
+            │       4. One step per commit; build + test + lint + vuln check each
+            │
+            ├─── vendor SDK? ──────────────► verify-real-deps
+            ├─── DB engine / ORM schema? ──► migrate
+            │
+            ▼
+        prod-ready ──► [PR]
+```
+
+## Workflow 8 — Release a version
+
+For libraries, CLIs, npm packages, Go modules, and services deployed by tag.
+
+```
+   [merged changes on main, CI green]
+            │
+            ├─── talks to third-party APIs? ──► verify-real-deps (clean first)
+            │
+            ▼
+        release ─── 1. Collect: [Unreleased] + git log since last tag
+            │       2. Pick version: breaking → major, feat → minor, fix → patch
+            │       3. Write: dated CHANGELOG section, version files, notes
+            │       4. Commit "chore(release): X.Y.Z" + annotated tag
+            │       5. Ask, then push + publish
+            │       6. Install the published version in a scratch dir
+            ▼
+       [vX.Y.Z]
+```
+
 ## Utility — `/zoom-out`
 
 ```
@@ -354,7 +402,9 @@ A few things that happen across all workflows:
 
 14. **`simplify` is the end-of-slice / end-of-round sweep.** Runs after every `tdd` slice goes green; in `tdd-rounds`, lands as its own commit per [`tdd-rounds/COMMITS.md` rule 4](./tdd-rounds/COMMITS.md). Applies the [`code-hygiene`](./formats/CODE-HYGIENE.md) lens to the changed files, plus a test-relevance and telemetry check. Distinct from the `code-hygiene` lens reference itself and from `improve-codebase-architecture` (the structural escalation when simplify finds bigger issues).
 
-15. **Artifacts accumulate in `docs/`:**
+15. **`migrate` is a sub-step, not a workflow.** When a feature in Workflow 1 or 2 changes a schema, `migrate` plans the deploy steps (expand → backfill → switch → contract) as a section of the feature doc, and `tdd` builds the app change for each step. Each step ships as its own PR.
+
+16. **Artifacts accumulate in `docs/`:**
 
     | Location | Produced by | Type |
     |---|---|---|
@@ -370,6 +420,6 @@ A few things that happen across all workflows:
     | `docs/security/<feature>.md` | `security-review` (high-stakes only) | One per surface-changing feature where a feature-doc section isn't enough |
     | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
     | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record); also holds follow-up tracking for accepted-but-unimplemented ADRs. |
-    | `CHANGELOG.md` | `prod-ready` Section 7 | One per repo; `[Unreleased]` accumulates between releases. |
+    | `CHANGELOG.md` | `prod-ready` Section 7, `release` | One per repo; `[Unreleased]` accumulates between releases, and `release` dates it. |
     All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.
 

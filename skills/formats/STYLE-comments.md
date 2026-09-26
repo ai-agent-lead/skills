@@ -121,7 +121,7 @@ No per-file or per-function changelogs in code. They grow forever, conflict on m
 | Why this line is like this | `git blame -L <from>,<to> <file>` → `git show <sha>` |
 | When a string appeared or went | `git log -S "<string>" --oneline` |
 
-That only works if commits carry the why:
+That only works if commits carry the why — format in [`COMMIT-FORMAT.md`](COMMIT-FORMAT.md):
 
 ```
 fix(payments): stop double charge on timeout      ← what changed
