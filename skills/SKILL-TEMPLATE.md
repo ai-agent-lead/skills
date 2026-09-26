@@ -109,6 +109,7 @@ YAML constraints (the description is a plain scalar): no `": "` (colon-space) an
 - **Body length matches role**, not importance. Teaching skills run long (debug, security-review, tdd). Orchestration / utility skills run short (tdd-rounds, simplify, caveman). Don't pad an orchestration skill to match a teaching skill — it adds noise.
 - **No hedging.** "Sometimes consider maybe doing X" is dead text. Pick a recommendation.
 - **No corporate voice.** Direct sentences. The reader is a fast-reading senior engineer or an LLM, not an executive.
+- **Produced docs follow [`formats/WRITING-STYLE.md`](formats/WRITING-STYLE.md).** A skill that writes a `docs/` artifact links it at the step where the doc is written.
 - **Cite paths**: `path:line` or `[link](relative/path.md)`. Don't say "see the auth module"; say `src/auth/session.go:42`.
 
 ## Vocabulary

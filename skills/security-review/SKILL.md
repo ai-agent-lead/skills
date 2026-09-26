@@ -51,7 +51,7 @@ Before reviewing controls, draw what's actually exposed. Most security holes hid
 - **Data flows**: for each entry point, trace the data — what's stored, what's logged, what's forwarded to a third party, what's reflected back to the caller.
 - **Trust boundaries**: where data crosses from a less-trusted zone to a more-trusted one. Every boundary is a place input must be validated, sanitised, or authorised.
 
-Output is a short artifact (3–10 lines is fine for most changes) — usually appended to the feature doc as a `## Security surface` section, or, for high-stakes changes, a dedicated `docs/security/<feature>.md`.
+Draw it: a small data-flow diagram with trust zones as boxes and each boundary crossing marked (Mermaid `flowchart` with a `subgraph` per trust zone in docs; ASCII in chat — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md)). Output is a short artifact (the diagram plus 3–10 lines is fine for most changes) — usually appended to the feature doc as a `## Security surface` section, or, for high-stakes changes, a dedicated `docs/security/<feature>.md`.
 
 ### 2. Enumerate threats
 
@@ -107,6 +107,8 @@ Most reviews produce a **`## Security review` section appended to the feature do
 ## Security review
 
 **Surface**: <one-line description — entry points + trust zones touched>
+
+<Mermaid data-flow diagram: one subgraph per trust zone, arrows labelled with the data that crosses>
 
 **Threats considered**:
 - <one-liner> — likelihood / impact — control: <where it lives, file:line>

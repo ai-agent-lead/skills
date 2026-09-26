@@ -35,7 +35,7 @@ Run the same test against the changed code. Ensure identical environment conditi
 
 ### 3. Record Findings
 
-Create a report in `docs/benchmarks/<feature>.md` using the template.
+Create a report in `docs/benchmarks/<feature>.md` using the template. Lead with the result in one sentence ("p99 dropped from 180ms to 140ms"); use a table for before/after numbers — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
 ## Done when
 

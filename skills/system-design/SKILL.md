@@ -78,23 +78,14 @@ Each seam is a potential test boundary AND a potential failure point. Naming the
 
 ### 5. Draw the system map
 
-Output an ASCII diagram + a module table + a seam list. Save to `docs/architecture.md` (create lazily on first use).
+Output a Mermaid diagram + a module table + a seam list. Save to `docs/architecture.md` (create lazily on first use). When showing the map in chat, draw the same thing in ASCII — terminals don't render Mermaid. Format rules: [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
-```
-                 ┌──────────────┐
-                 │   HTTP API   │
-                 └──────┬───────┘
-                        │ commands / queries
-                        ▼
-   ┌──────────┐   ┌──────────────┐   ┌──────────────┐
-   │   Auth   │◄──┤   Ordering   │──►│   Billing    │
-   └──────────┘   └──────┬───────┘   └──────────────┘
-                         │ port
-                         ▼
-                  ┌──────────────┐
-                  │  Persistence │  ← adapter implements port
-                  │  (storage)   │
-                  └──────────────┘
+```mermaid
+flowchart TD
+    API[HTTP API] -->|commands / queries| Ordering
+    Ordering -->|checks| Auth
+    Ordering -->|emits events| Billing
+    Ordering -->|port| Persistence[Persistence<br/>adapter implements port]
 ```
 
 Module table:
@@ -127,7 +118,7 @@ Failures here are not "warnings" — they're "stop and rework". The system map i
 
 ## Done when
 
-- `docs/architecture.md` exists with: module table, dependency direction, seam list, ASCII map.
+- `docs/architecture.md` exists with: module table, dependency direction, seam list, Mermaid map.
 - Each module name comes from `CONTEXT.md` vocabulary (not framework conventions).
 - The dependency graph is acyclic and explicitly reviewed.
 - Every cross-module boundary has a named seam + adapter location.

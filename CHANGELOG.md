@@ -26,6 +26,18 @@ to the new version and a fresh `[Unreleased]` block is opened.
   the rewritten ones trace to 37/37.
 - `TRIGGERS.md` "Retired phrases" list and an age × scope table for the Shape skills.
 - `bench`: *When to skip* and *Pairing* sections; `bootstrap`: *Pairing* section.
+- `formats/WRITING-STYLE.md` — how docs and chat explanations read: answer
+  first, plain words, diagram first (Mermaid in `docs/`, ASCII in chat and
+  code), and a four-part pattern for explaining a problem (what's wrong →
+  why → fix → trade-off). Linked from every doc-producing skill.
+- `snippets/writing-style.md` and installer `--style` flag (plus a y/N step in
+  the interactive wizard) — writes the always-on version of the style into
+  `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` between markers, so re-running
+  replaces it instead of duplicating it.
+- Diagram slots in templates: feature doc *How it works* (Mermaid flow),
+  research note *At a glance* table and per-option *Picture*, ADR optional
+  *Diagram*, `security-review` data-flow diagram with trust zones, `zoom-out`
+  map *Picture*, `debug` expected-vs-actual.
 
 ### Changed
 
@@ -41,6 +53,8 @@ to the new version and a fresh `[Unreleased]` block is opened.
   `/code-review` command; `simplify` owns the over-engineered / YAGNI triggers
   formerly routed to `code-hygiene`.
 - `verify-real-deps` vs `prod-ready`: merge → `prod-ready`; tag with vendor APIs → both, in order.
+- `system-design` writes the `docs/architecture.md` map in Mermaid (was ASCII);
+  ASCII stays for chat.
 
 ### Removed
 

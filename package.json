@@ -13,6 +13,7 @@
   "files": [
     "bin/",
     "skills/",
+    "snippets/",
     "README.md"
   ],
   "engines": {

@@ -54,7 +54,7 @@ Capture the **raw upstream response** for each — headers and body. Don't parap
 
 ### 3. Capture every surfaced surprise
 
-Anything that worked-in-tests but doesn't-work-now is a bug. For each, write an entry in `docs/known-issues.md` (create the file lazily on first use — copy the format from [`templates/known-issues.md`](templates/known-issues.md)). The fields:
+Anything that worked-in-tests but doesn't-work-now is a bug. For each, write an entry in `docs/known-issues.md` (create the file lazily on first use — copy the format from [`templates/known-issues.md`](templates/known-issues.md)). Describe each as what's wrong → why → fix, per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) §4. The fields:
 
 - **Severity** (high / medium / low — based on user impact, not difficulty).
 - **Status** (Open / Closed in R<N> with commit hash).

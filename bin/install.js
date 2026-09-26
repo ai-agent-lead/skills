@@ -27,6 +27,9 @@ const INFO_COLOR = `${CYAN}`;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SOURCE_SKILLS_DIR = path.resolve(__dirname, '../skills');
+const STYLE_SNIPPET_PATH = path.resolve(__dirname, '../snippets/writing-style.md');
+const STYLE_START = '<!-- ai-agent-lead/skills:writing-style:start -->';
+const STYLE_END = '<!-- ai-agent-lead/skills:writing-style:end -->';
 
 // --- Helper Functions ---
 function printBanner() {
@@ -55,6 +58,7 @@ function printHelp() {
   console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
+  console.log(`  ${CYAN}--style${RESET}             Also add the writing-style rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
   console.log(``);
   console.log(`${BOLD}Examples:${RESET}`);
@@ -96,6 +100,24 @@ function copyFolderSync(from, to, { force = false } = {}, stats = { copied: 0, s
   return stats;
 }
 
+// Writes the snippet between markers so re-running replaces it instead of appending a copy.
+function upsertStyleBlock(file, snippet) {
+  const block = `${STYLE_START}\n${snippet.trim()}\n${STYLE_END}`;
+  const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  const start = existing.indexOf(STYLE_START);
+  const end = existing.indexOf(STYLE_END);
+  let next;
+  if (start !== -1 && end > start) {
+    next = existing.slice(0, start) + block + existing.slice(end + STYLE_END.length);
+  } else {
+    next = existing ? `${existing.trimEnd()}\n\n${block}\n` : `${block}\n`;
+  }
+  if (next === existing) return 'unchanged';
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, next);
+  return existing ? 'updated' : 'created';
+}
+
 // --- Main Execution ---
 async function run() {
   const args = process.argv.slice(2);
@@ -109,6 +131,7 @@ async function run() {
     opencode: false,
     all: false,
     force: false,
+    style: false,
     help: false
   };
 
@@ -121,6 +144,7 @@ async function run() {
     else if (arg === '--opencode') flags.opencode = true;
     else if (arg === '--all') flags.all = true;
     else if (arg === '--force' || arg === '-f') flags.force = true;
+    else if (arg === '--style') flags.style = true;
     else if (arg === '--help' || arg === '-h') flags.help = true;
   }
 
@@ -179,6 +203,13 @@ async function run() {
       flags.opencode = true;
     }
     console.log(``);
+
+    console.log(`${BOLD}3. Writing style:${RESET}`);
+    console.log(`   Add answer-first, plain-language, diagram-first rules to each assistant's`);
+    console.log(`   instructions file (CLAUDE.md / AGENTS.md / GEMINI.md) so every answer follows them.`);
+    const styleAns = await askQuestion(`${BOLD}${CYAN}? Add writing-style rules [y/N]: ${RESET}`);
+    flags.style = /^y(es)?$/i.test(styleAns);
+    console.log(``);
   } else {
     // If not interactive and no flags specified, apply defaults
     const hasScopeFlag = flags.global || flags.local;
@@ -235,6 +266,22 @@ async function run() {
     }
   }
 
+  const instructionFiles = [];
+  const addInstructionFile = (name, file) => {
+    if (!instructionFiles.some((f) => f.path === file)) instructionFiles.push({ name, path: file });
+  };
+  if (flags.global) {
+    if (flags.claude) addInstructionFile('Claude Code (Global)', path.join(home, '.claude', 'CLAUDE.md'));
+    if (flags.codex) addInstructionFile('Codex (Global)', path.join(home, '.codex', 'AGENTS.md'));
+    if (flags.antigravity) addInstructionFile('Antigravity (Global)', path.join(home, '.gemini', 'GEMINI.md'));
+    if (flags.opencode) addInstructionFile('OpenCode (Global)', path.join(home, '.config', 'opencode', 'AGENTS.md'));
+  }
+  if (flags.local) {
+    if (flags.claude) addInstructionFile('Claude Code (Local)', path.join(cwd, 'CLAUDE.md'));
+    if (flags.codex || flags.opencode) addInstructionFile('Codex / OpenCode (Local)', path.join(cwd, 'AGENTS.md'));
+    if (flags.antigravity) addInstructionFile('Antigravity (Local)', path.join(cwd, 'GEMINI.md'));
+  }
+
   if (destinations.length === 0) {
     console.log(`${YELLOW}⚠ No destinations matching current selection.${RESET}`);
     return;
@@ -265,6 +312,20 @@ async function run() {
       successCount++;
     } catch (err) {
       console.error(`  ${RED}✗ Failed to install to ${dest.name}: ${err.message}${RESET}`);
+    }
+    console.log(``);
+  }
+
+  if (flags.style) {
+    const snippet = fs.readFileSync(STYLE_SNIPPET_PATH, 'utf8');
+    console.log(`${BOLD}Adding writing-style rules...${RESET}`);
+    for (const target of instructionFiles) {
+      try {
+        const result = upsertStyleBlock(target.path, snippet);
+        console.log(`  ${SUCCESS_COLOR}✔${RESET} ${target.name}: ${target.path.replace(home, '~')} ${GRAY}(${result})${RESET}`);
+      } catch (err) {
+        console.error(`  ${RED}✗ ${target.name}: ${err.message}${RESET}`);
+      }
     }
     console.log(``);
   }

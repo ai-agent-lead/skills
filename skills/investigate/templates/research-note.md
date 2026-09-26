@@ -27,7 +27,7 @@ Status values:
 
 ## Context
 
-What's true today. Each claim should be cite-able (file:line, ADR number, doc heading). Include:
+What's true today, answer first. Each claim should be cite-able (file:line, ADR number, doc heading). When the question is about flow or structure, open with a diagram of how it works today (Mermaid — see `skills/formats/WRITING-STYLE.md`). Include:
 - The problem or question that triggered the investigation.
 - Relevant code paths and what they do today.
 - Prior ADRs / feature docs / `CONTEXT.md` entries that constrain the space.
@@ -35,9 +35,17 @@ What's true today. Each claim should be cite-able (file:line, ADR number, doc he
 
 ## Options
 
+### At a glance
+
+| Option | Approach (one line) | Main cost | Fit with project |
+| --- | --- | --- | --- |
+| A — <name> | | | |
+| B — <name> | | | |
+
 ### Option A — <short name>
 
 - **Approach:** one or two sentences, concrete.
+- **Picture:** optional — a small diagram when the options differ in shape (where the new piece sits, how data moves).
 - **Pros:** what makes this attractive.
 - **Cons:** what hurts. Don't soft-pedal.
 - **Fit with project:** alignment with existing ADRs / conventions / team ceremony level.

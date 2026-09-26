@@ -32,7 +32,7 @@ The doc is short by design — one page. If it grows, the feature is too big.
 
 ## Steps
 
-1. Copy [`templates/feature-template.md`](templates/feature-template.md) to `docs/features/<short-name>.md`.
+1. Copy [`templates/feature-template.md`](templates/feature-template.md) to `docs/features/<short-name>.md`. Write it in plain words with a flow diagram per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 2. Fill in **Problem**, **User Story**, **Acceptance Criteria**, **Non-Goals**.
 3. Get one round of review on the doc **before** writing code.
 4. Update the doc if behavior changes during implementation — stale docs are worse than none.

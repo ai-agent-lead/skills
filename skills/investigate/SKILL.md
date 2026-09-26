@@ -69,7 +69,7 @@ For high-stakes artifacts — specs, ADRs, anything load-bearing for cross-team 
 
 ## The artifact
 
-Save the research note to `docs/research/<short-topic>.md`. Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton. Create `docs/research/` lazily on first use.
+Save the research note to `docs/research/<short-topic>.md`. Use [`templates/research-note.md`](./templates/research-note.md) as the skeleton, written per [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) — answer first, diagrams for flow, a table to compare options. Create `docs/research/` lazily on first use.
 
 The note must include:
 - **Context** with citations.

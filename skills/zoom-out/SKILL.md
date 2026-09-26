@@ -54,6 +54,9 @@ A short artifact, in chat (not on disk unless the user asks). Use the format bel
 
 **Responsibility**: <one sentence — what this area does>
 
+**Picture** (ASCII — this goes to chat):
+<callers ──►  area modules  ──► callees, arrows labelled with verbs, ≤ ~9 boxes>
+
 **Modules**:
 - `<path>` — <one-line responsibility, in CONTEXT.md vocabulary>
 - ...
@@ -78,7 +81,7 @@ A short artifact, in chat (not on disk unless the user asks). Use the format bel
 - <e.g. "shallow module at <path> — possibly worth deepening; not blocking your task">
 ```
 
-Keep it on one screen. If it doesn't fit, you over-zoomed — narrow the area.
+Keep it on one screen. If it doesn't fit, you over-zoomed — narrow the area. Picture first, lists after — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
 ## Anti-patterns
 

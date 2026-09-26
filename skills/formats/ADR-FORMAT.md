@@ -22,7 +22,7 @@ status: accepted
 
 **Status:** accepted
 
-{1-3 sentences: what's the context, what did we decide, and why.}
+{1-3 sentences, decision first: what we decided, why, and the context that forced it.}
 ```
 
 That's it. An ADR can be a single paragraph plus the frontmatter and the `Status` line. The value is in recording *that* a decision was made and *why* — not in filling out sections. The date lives in `timestamp`; don't also keep a `**Date:**` line.
@@ -33,6 +33,7 @@ Only include these when they add genuine value. Most ADRs won't need them. **Opt
 
 - **Status** values: `proposed | accepted | deprecated | superseded by ADR-NNNN`. Default to `accepted` on creation; flip to `deprecated` or `superseded` when revisited.
 - **Considered Options** — only when the rejected alternatives are worth remembering. One line per option, plus the reason for rejection.
+- **Diagram** — only when the decision changes shape: before → after, or where the new piece sits. One small Mermaid diagram per [`WRITING-STYLE.md`](WRITING-STYLE.md).
 - **Consequences** — only when non-obvious downstream effects need to be called out. Things the *code* will not make obvious.
 - **Related** — cross-link to the feature-doc or research-note that triggered this ADR (recommended when one exists), and to peer ADRs it interacts with.
 

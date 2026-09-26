@@ -26,11 +26,22 @@ Status values:
 
 ## Problem
 
-What user pain or business need does this solve? (2-3 sentences.)
+The pain in one sentence first, then at most two sentences of context. Plain words — see `skills/formats/WRITING-STYLE.md`.
 
 ## User Story
 
 As a <role>, I want <capability> so that <outcome>.
+
+## How it works
+
+One diagram of the flow the user goes through, or the parts involved. One idea per diagram; then at most 3 sentences on what to notice. Delete this section if the change has no flow.
+
+```mermaid
+flowchart LR
+    User -->|does something| Entry[Entry point]
+    Entry -->|calls| Module[Module that does the work]
+    Module -->|returns result| User
+```
 
 ## Acceptance Criteria
 

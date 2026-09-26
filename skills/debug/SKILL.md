@@ -93,6 +93,8 @@ Run `tdd`: write a failing test that captures the reproduction, fix, refactor wi
 
 For non-trivial bugs whose investigation produced real signal — bisected commits, environment-specific findings, surprising cross-module interactions — capture a research note at `docs/research/<bug-slug>.md` (use the `investigate` template's shape). The note reads as the post-mortem: what was symptom, what was root cause, why was it not caught earlier, what test would have caught it.
 
+Whether in chat or in the note, explain the bug as **what's wrong → why (a diagram of expected vs actual, failure marked ✗) → fix → trade-off** — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md) §4.
+
 Skip for bugs with one-paragraph stories. Capture for bugs with real lessons.
 
 ## Anti-patterns

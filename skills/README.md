@@ -137,6 +137,7 @@ The skills compose into canonical workflows (greenfield feature, large feature, 
 - [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) — the line-level lens (boring code, naming, YAGNI, rule of 3, locality, comments, constants placement). Applied during `simplify` and `pr-review` §3f.
 - [`formats/DOC-DRIFT-AUDIT.md`](./formats/DOC-DRIFT-AUDIT.md) — the terminology / ADR / doc-map audit. Run from `prod-ready` §7 (author), `pr-review` §3e (reviewer), or standalone (the former `sync-check`).
 - [`formats/OKF.md`](./formats/OKF.md) — frontmatter contract for produced `docs/` files. [`formats/STYLE-comments.md`](./formats/STYLE-comments.md) — the comment bar.
+- [`formats/WRITING-STYLE.md`](./formats/WRITING-STYLE.md) — how docs and chat explanations read: answer first, plain words, diagram first (Mermaid in `docs/`, ASCII in chat). Used by every doc-producing skill; [`snippets/writing-style.md`](../snippets/writing-style.md) is the always-on version for `CLAUDE.md` / `AGENTS.md`.
 
 Used by `grill-plan`, `improve-codebase-architecture`, `system-design`, `investigate`, `simplify`, `prod-ready`, `pr-review`, and (lazily) `feature-doc`.
 

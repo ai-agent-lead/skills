@@ -33,7 +33,7 @@ Create the standard directory structure:
 
 ### 2. Seed CONTEXT.md
 
-Ask the user for 3-7 core domain terms. Create `docs/CONTEXT.md` using the canonical format.
+Ask the user for 3-7 core domain terms. Create `docs/CONTEXT.md` using the canonical format. Every doc created from here on follows [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
 ### 3. Record ADR-0000
 

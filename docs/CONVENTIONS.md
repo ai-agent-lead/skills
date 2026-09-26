@@ -14,6 +14,7 @@ Rules for how documentation and skills are structured in this repository.
 
 - **Lazy Creation**: Directories like `docs/adr/` or `docs/features/` are created only when the first file is needed.
 - **Naming**: Use `kebab-case.md` for feature docs, research notes, and ADRs.
+- **Writing style**: Docs and explanations follow [`skills/formats/WRITING-STYLE.md`](../skills/formats/WRITING-STYLE.md) — answer first, plain words, and a diagram for anything with steps, order, states, or dependencies. Mermaid in `docs/`, ASCII in chat and code.
 - **Reference Docs**: Use `UPPERCASE.md` for internal reference documents within the `skills/` directory.
 - **OKF frontmatter**: Every produced doc under `docs/` opens with an OKF frontmatter block (required `type`, plus `title` / `description` / `tags` / `timestamp`) so that `docs/` is a consumable [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) bundle. The contract and the `type` vocabulary live in [`skills/formats/OKF.md`](../skills/formats/OKF.md); the decision is [ADR-0002](adr/0002-adopt-okf-for-produced-docs.md). `index.md` and `log.md` are reserved OKF filenames — `docs/index.md` is the bundle listing and the root `CHANGELOG.md` is its log.
 
