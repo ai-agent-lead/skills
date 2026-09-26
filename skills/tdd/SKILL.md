@@ -23,6 +23,7 @@ description: Test-first implementation via red-green-refactor. Use when implemen
 
 - **Current branch is not `main` / `master`.** If it is, stop and run `git checkout -b feat/<short-name>` (or `fix/...`) before writing the first test. Code lands on a feature branch; `main` receives merges, not commits.
 - A feature doc (`docs/features/<short-name>/feature.md`) exists with testable ACs — or a `debug` reproduction names the root cause. With the first failing test, set its `status: building` ([`DOCS-LAYOUT.md`](../formats/DOCS-LAYOUT.md) §2).
+- **Changing an existing exported or shared function?** Run [`impact`](../impact/SKILL.md) first: its entry points and tests say where the test goes and what else to re-run.
 - **Changing existing code that looks wrong or unclear, with no `WHY:`?** Read its history first (`git log -L :<Func>:<file>`) — see [`STYLE-comments.md`](../formats/STYLE-comments.md) §5.
 
 ## Philosophy

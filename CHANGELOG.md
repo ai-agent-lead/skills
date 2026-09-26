@@ -85,6 +85,16 @@ to the new version and a fresh `[Unreleased]` block is opened.
   block stopping while changed docs have problems.
 - `snippets/docs-upkeep.md` — the always-on docs rules, added by `--style`.
 - Feature docs list their code in a `code:` frontmatter field.
+- `impact` skill and `scripts/code-graph/` — a code graph for Go, JavaScript,
+  TypeScript/TSX, and Python built on demand with tree-sitter compiled to
+  WebAssembly (vendored, about 4 MB), so only Node is needed. `impact <target>`
+  walks callers up to entry points (routes, `main`, HTTP handlers, jobs,
+  `__main__`), marks tests on the path, finds string links (SQL tables, routes,
+  event topics, env keys), and lists feature docs whose `code:` covers the
+  files reached. Every edge is labelled likely, possible, or text. `deps`
+  prints package imports and cycles. Results are cached in `.git/`, keyed by
+  file content. `tdd`, `pr-review`, and `prod-ready` run it on changed shared
+  functions; `zoom-out` uses `deps` and `callers` for its map.
 
 ### Changed
 
@@ -101,6 +111,9 @@ to the new version and a fresh `[Unreleased]` block is opened.
   `DOCS-LAYOUT.md` for paths; the WORKFLOWS artifacts table does the same.
 - Templates (feature, research note, ADR) drop the `**Status:**` body line.
 - `docs/features/distributed-state.md` moved to `docs/features/distributed-state/feature.md`.
+- `zoom-out` no longer lists "what depends on what here"; what one change
+  affects routes to `impact`. Four more routing cases (50/50 by static trace).
+- `check-comments.mjs` skips vendored files (`vendor/`, `node_modules/`, minified JS).
 
 - Rewrote all 18 skill descriptions in one shape (template in
   `SKILL-TEMPLATE.md`). "Pairs with…" moved out of descriptions into bodies;

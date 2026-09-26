@@ -48,6 +48,7 @@ Walk each section. An item is OK to fail **only if** the feature doc's Notes / N
 
 ### 6. Deferred-by-design
 - [ ] Items in the feature doc's "Non-Goals" / "Known production gaps" still appear there — no silent regressions.
+- [ ] Changed exported or shared functions ran through [`impact`](../impact/SKILL.md); every entry point reached has a test on its path, or the gap is named in the PR.
 - [ ] New deferrals introduced this feature are linked to a tracking issue or follow-up doc.
 
 ### 7. Documentation (the doc-map)

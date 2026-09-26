@@ -30,7 +30,8 @@ All three Shape skills carry the same splitting rule — **pick by age and scope
 | "system architecture", "how should I structure this system", "service boundaries", "draw the architecture" | [`system-design`](system-design/SKILL.md) | New, many modules. |
 | "design this module", "how should I structure this module", "API design", "deep modules" | [`design`](design/SKILL.md) | New, one module or public API. |
 | "improve the architecture", "find refactoring opportunities", "these modules are too coupled", "make this codebase more testable" | [`improve-codebase-architecture`](improve-codebase-architecture/SKILL.md) | Existing, across modules. |
-| "I'm lost", "zoom out", "what depends on what here" | [`zoom-out`](zoom-out/SKILL.md) | User-invoked only (`disable-model-invocation`). |
+| "I'm lost", "zoom out" | [`zoom-out`](zoom-out/SKILL.md) | User-invoked only (`disable-model-invocation`). Maps an area. What one change affects → `impact`. |
+| "blast radius", "who calls", "impact of changing", "what breaks if", "what depends on" | [`impact`](impact/SKILL.md) | One change's reach: callers, entry points, tests, text links, docs. Mapping a whole area → `zoom-out`; why something fails → `debug`. |
 
 ## Implementation
 
@@ -76,6 +77,7 @@ Words that sit near more than one skill. Each description's *Not for* clause res
 - **"review"** — someone else's PR → `pr-review`; your own pre-merge → `prod-ready`; security only when asked or escalated → `security-review`; `/code-review` → the built-in command.
 - **"ship" / "release"** — merge → `prod-ready`; live vendor check before a tag → `verify-real-deps`; version, notes, tag, publish → `release`.
 - **"bump"** — a patch / minor dependency bump → no skill; a major dependency or runtime → `upgrade`; your own package's version → `release`.
+- **"depends on" / "callers"** — what one function or type reaches → `impact`; a map of an unfamiliar area → `zoom-out`.
 - **"migrate" / "migration"** — database schema or stored data → `migrate`; moving to a new library or framework version → `upgrade`; choosing a new library → `investigate`.
 
 ## Retired phrases

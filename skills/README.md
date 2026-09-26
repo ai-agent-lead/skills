@@ -26,6 +26,7 @@ Grouped by role. Trigger phrases are in each skill's `description` frontmatter.
 | `design` | Designing a module or public API before implementation | Guidance only — optional `docs/features/<feature>/design.md` for non-trivial shapes | [design/](./design/) |
 | `improve-codebase-architecture` | Finding deepening opportunities — turning shallow modules into deep ones | Numbered candidate list, optional ADR / CONTEXT.md updates | [improve-codebase-architecture/](./improve-codebase-architecture/) |
 | `zoom-out` | User-invoked: ask for higher-level context when unfamiliar with an area | Map of relevant modules and callers in `CONTEXT.md` vocabulary | [zoom-out/](./zoom-out/) |
+| `impact` | Before changing a function or type: what reaches it | Callers up to entry points, tests on the path, text links, docs to re-check — from a tree-sitter code graph (Go, JS, TS, Python), no toolchain needed | [impact/](./impact/) |
 
 The `code-hygiene` line-level lens is no longer a routable skill — it lives at [`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md) and is applied during `simplify` and `pr-review` §3f.
 
@@ -65,7 +66,7 @@ Orthogonal axis. The trigger-phrase index above tells you *when* a skill fires; 
 | **Build** (writes code) | `tdd`, `tdd-rounds`, `simplify`, `migrate`, `upgrade` | Diff-producing. Always behind a contract — feature doc + ACs, a migration plan, or a breaking-change checklist. |
 | **Gate** (verifies before merge / tag) | `prod-ready`, `security-review`, `pr-review`, `verify-real-deps` | Pre-merge or pre-tag — refuse to advance until the checklist passes. |
 | **Ship** (turns merged work into a version) | `release` | Outward-facing and irreversible — asks before publishing. |
-| **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out` | Run *before* a build skill when the input isn't yet clear. |
+| **Diagnose** (no code, no doc — just analysis) | `debug`, `zoom-out`, `impact` | Run *before* a build skill when the input isn't yet clear. |
 | **Shape** (decides module / topology) | `design`, `system-design`, `improve-codebase-architecture` | Greenfield-module / greenfield-system / brownfield. Same vocabulary ([`LANGUAGE.md`](./LANGUAGE.md)). |
 | **Lens** (applied during other skills, not invoked alone) | `caveman` skill; `code-hygiene` reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)) | Principles you carry into any turn to maintain quality or efficiency. The line-level lens is a shared reference, not a routable skill. |
 
@@ -118,6 +119,8 @@ The skill set + its dependencies. Lateral edges are vocabulary / lens; vertical 
    │   │                                                │             │
    │   │  zoom-out -> interrupts any workflow,          │             │
    │   │              maps unfamiliar areas             │             │
+   │   │  impact -> before a change: callers, entry     │             │
+   │   │            points, tests (code graph)          │             │
    │   └────────────────────────────────────────────────┘             │
    └──────────────────────────────────────────────────────────────────┘
 ```

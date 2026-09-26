@@ -1,6 +1,6 @@
 ---
 name: zoom-out
-description: Maps an unfamiliar area one abstraction level up — relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary — then hands back to the current workflow. User-invoked only (`/zoom-out`). Use when the user is lost in unfamiliar code. Triggered by "I'm lost", "zoom out", "what depends on what here". Not when the user already has the map and just needs to read code.
+description: Maps an unfamiliar area one abstraction level up — relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary — then hands back to the current workflow. User-invoked only (`/zoom-out`). Use when the user is lost in unfamiliar code. Triggered by "I'm lost", "zoom out". Not when the user already has the map and just needs to read code; not for what one change affects → `impact`.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ This skill **does not change the workflow** the user is in. It runs once, produc
 
 ## When to use
 
-- User says "I'm lost", "zoom out", "give me higher-level context", "what depends on what here", "I don't know this area".
+- User says "I'm lost", "zoom out", "give me higher-level context", "I don't know this area".
 - User invokes the slash command (`/zoom-out`).
 - A related skill (`debug`, `improve-codebase-architecture`, Workflow 4 / 5b) suggests zooming out before continuing.
 
@@ -38,7 +38,14 @@ If `CONTEXT.md` doesn't exist yet (greenfield repo), name modules by their file 
 
 ### 3. Walk the dependency graph for the area
 
-Use the Agent tool with `subagent_type=Explore` if the area is broad. Capture:
+Start with the code graph (Go, JS, TS, Python — see [`impact`](../impact/SKILL.md)):
+
+```
+node <skills-dir>/scripts/code-graph/code-graph.mjs deps <area-dir>        # package → package imports, cycles
+node <skills-dir>/scripts/code-graph/code-graph.mjs callers <Function>     # who calls into the area
+```
+
+Then read the files the graph points at. For other languages, search by hand. Capture:
 
 - **Modules involved** — which directories / packages / files implement the responsibility.
 - **Callers** — what calls into this area, from where.

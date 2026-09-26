@@ -13,6 +13,9 @@ import { pathToFileURL } from 'url';
 
 export const TAGS = ['WHY:', 'WORKAROUND:', 'SAFETY:', 'TODO('];
 
+// WHY: third-party code keeps its own comments; they are not ours to review.
+const VENDORED = /(^|\/)(vendor|node_modules|third_party)\/|\.min\.[cm]?js$/;
+
 const SLASH_EXT = new Set(['.go', '.js', '.mjs', '.cjs', '.jsx', '.ts', '.tsx', '.java', '.kt', '.swift', '.rs', '.c', '.h', '.cc', '.cpp', '.cs', '.scala', '.dart', '.php']);
 const HASH_EXT = new Set(['.py', '.rb', '.sh', '.bash', '.zsh', '.yaml', '.yml', '.toml', '.pl', '.r', '.ex', '.exs']);
 
@@ -161,7 +164,7 @@ export function check({ cwd = process.cwd(), base } = {}) {
 
   for (const hunk of hunks) {
     const style = styleOf(hunk.file);
-    if (!style) continue;
+    if (!style || VENDORED.test(hunk.file)) continue;
     removed += countRemoved(hunk, style);
     for (const unit of commentUnits(hunk, style)) {
       const first = unit.lines[0];

@@ -54,12 +54,16 @@ Hand-checked fixtures for skill routing. Each row is a realistic user prompt and
 | 44 | "Move our API from Express to Fastify" | `investigate` | ✓ | ✓ |
 | 45 | "Cut a release for the CLI" | `release` | ✗ no skill | ✓ |
 | 46 | "Bump the version to 2.1.0 and publish to npm" | `release` | ✗ no skill | ✓ |
+| 47 | "What breaks if I change the signature of Charge?" | `impact` | ✗ no skill | ✓ |
+| 48 | "Who calls handleCheckout?" | `impact` | ✗ no skill | ✓ |
+| 49 | "What's the blast radius of renaming the payments table?" | `impact` (then `migrate`) | ✗ no skill | ✓ |
+| 50 | "I'm lost in the billing package" | `zoom-out` (user-invoked) | ✓ | ✓ |
 
 ## Score
 
 | | Pass | Fail |
 | --- | --- | --- |
-| Baseline (1.4.0) | 20 / 46 | 26 |
-| After | 46 / 46 | 0 |
+| Baseline (1.4.0) | 21 / 50 | 29 |
+| After | 50 / 50 | 0 |
 
 The *After* column is a static trace against the rewritten descriptions, not a live model run. Re-score by hand whenever a `description:` changes, and add a row for every misroute seen in real use.

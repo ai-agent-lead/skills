@@ -67,6 +67,7 @@ In this order — biggest-impact first:
 - Are new modules deep, or shallow? (Apply the deletion test from [skills/LANGUAGE.md](../LANGUAGE.md).)
 - Are new public types / functions / endpoints named consistently with `CONTEXT.md`?
 - Does anything contradict an ADR without superseding it explicitly?
+- For each changed exported or shared function, run [`impact`](../impact/SKILL.md): are the entry points it reaches covered by the PR's tests and named in its description? Untested paths are findings.
 
 #### 3b. Test review
 

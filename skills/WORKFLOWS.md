@@ -41,6 +41,9 @@ Got a task? Pick by what you have in front of you:
 │ Audit terminology or ADR compliance │ /pr-review §3e (DOC-DRIFT-AUDIT) │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Lost in unfamiliar area, mid-task   │ /zoom-out  (utility, anytime)    │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ About to change a shared function / │ impact (utility, before tdd or   │
+│   "what breaks if I change X?"      │ in pr-review / prod-ready)       │
 └─────────────────────────────────────┴──────────────────────────────────┘
 ```
 
