@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AgentLead's Skills — Engineering discipline for Claude Code</title>
-  <meta name="description" content="AgentLead's Skills — pick by what you have in front of you. Each path is a flow of skills that fire automatically." />
+  <meta name="description" content="AgentLead's Skills — pick by what you have in front of you. Each path is a flow of skills that fire automatically, from feature doc to tested code to a tagged release." />
   <link rel="canonical" href="https://AgentLead.Dev/" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,6 +19,7 @@
         <a href="#start">Where to start</a>
         <a href="#flows">Flows</a>
         <a href="#cross">Lenses &amp; gates</a>
+        <a href="#rules">Always-on rules</a>
         <a href="#install">Install</a>
         <a href="https://github.com/ai-agent-lead/skills" target="_blank" rel="noopener">GitHub ↗</a>
       </nav>
@@ -35,7 +36,7 @@
           AgentLead's Skills encode engineering discipline so Claude follows it by default. You don't
           choose a skill — you describe the task and the right <strong>flow</strong> fires:
           investigate before building, design the interface first, test-first, review at the
-          boundary, verify before merge.
+          boundary, verify before merge, release with honest notes.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href="#start">Where to start</a>
@@ -48,6 +49,7 @@
         <span class="lg"><i class="dot-build"></i>build — writes code</span>
         <span class="lg"><i class="dot-gate"></i>gate — verifies before merge</span>
         <span class="lg"><i class="dot-diag"></i>diagnose — analyses first</span>
+        <span class="lg"><i class="dot-ship"></i>ship — cuts a version</span>
       </div>
     </section>
 
@@ -93,13 +95,33 @@
             <span class="entry"><code>system-design</code></span>
             <span class="goto">Greenfield system →</span>
           </a>
+          <a class="start-row" href="#flow-schema">
+            <span class="situation">Schema change on a database with real data</span>
+            <span class="entry"><code>migrate</code></span>
+            <span class="goto">Schema change →</span>
+          </a>
+          <a class="start-row" href="#flow-upgrade">
+            <span class="situation">Major version upgrade — Go, Node, a framework, an SDK</span>
+            <span class="entry"><code>upgrade</code></span>
+            <span class="goto">Upgrade →</span>
+          </a>
+          <a class="start-row" href="#flow-release">
+            <span class="situation">Merged work ready to ship as a version</span>
+            <span class="entry"><code>release</code></span>
+            <span class="goto">Release →</span>
+          </a>
+          <a class="start-row" href="#impact">
+            <span class="situation">About to change shared code — what does it reach?</span>
+            <span class="entry"><code>impact</code></span>
+            <span class="goto">Impact →</span>
+          </a>
           <a class="start-row" href="#flow-review">
             <span class="situation">Reviewing someone else's PR</span>
             <span class="entry"><code>pr-review</code></span>
             <span class="goto">Review →</span>
           </a>
           <div class="start-row plain">
-            <span class="situation">Typo, dep bump, one-line config</span>
+            <span class="situation">Typo, patch or minor dep bump, one-line config</span>
             <span class="entry">just fix it</span>
             <span class="goto">no skill needed</span>
           </div>
@@ -139,9 +161,11 @@
             <span class="arrow">→</span>
             <span class="step s-build"><b>tdd-rounds</b><i>design·tdd·simplify per round</i></span>
             <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b><i>final round</i></span>
+            <span class="arrow">→</span>
             <span class="step s-gate"><b>verify-real-deps</b><i>real upstreams</i></span>
             <span class="arrow">→</span>
-            <span class="step s-merge"><b>tag vN.0</b></span>
+            <span class="step s-ship"><b>release</b><i>version · notes · tag</i></span>
           </div>
         </article>
 
@@ -163,6 +187,8 @@
           <div class="flow-head"><h3>Bug fix — cause obvious</h3><span class="badge">clear trace</span></div>
           <p class="flow-desc">The symptom and stack trace point straight at the bug.</p>
           <div class="chain">
+            <span class="step s-diag"><b>impact</b><i>if shared code</i></span>
+            <span class="arrow">→</span>
             <span class="step s-build"><b>tdd</b><i>failing test → fix</i></span>
             <span class="arrow">→</span>
             <span class="step s-gate"><b>prod-ready</b><i>if infra / auth / DB</i></span>
@@ -217,11 +243,57 @@
           </div>
         </article>
 
+        <article id="flow-schema" class="flow-card">
+          <div class="flow-head"><h3>Schema change</h3><span class="badge">one deploy per step</span></div>
+          <p class="flow-desc">Rename, retype, or constrain a live table without locks, broken deploys, or lost data. Each step is its own PR.</p>
+          <div class="chain">
+            <span class="step s-doc"><b>feature-doc</b><i>migration plan</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>migrate</b><i>expand · backfill · switch · contract</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-build"><b>tdd</b><i>app change per step</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>PR</b></span>
+          </div>
+        </article>
+
+        <article id="flow-upgrade" class="flow-card">
+          <div class="flow-head"><h3>Upgrade a dependency or runtime</h3><span class="badge">major versions</span></div>
+          <p class="flow-desc">Read the breaking changes first, then move one package per commit, with build, tests, lint, and a vulnerability check at every step.</p>
+          <div class="chain">
+            <span class="step s-build"><b>upgrade</b><i>checklist · one step per commit</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>verify-real-deps</b><i>if a vendor SDK</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>prod-ready</b></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>PR</b></span>
+          </div>
+        </article>
+
+        <article id="flow-release" class="flow-card">
+          <div class="flow-head"><h3>Release</h3><span class="badge">ask before publishing</span></div>
+          <p class="flow-desc">The version comes from what changed, the notes are written for users with breaking changes first, and the published artifact is installed to check it. Fix forward; never move a tag.</p>
+          <div class="chain">
+            <span class="step s-gate"><b>prod-ready</b><i>per change</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-gate"><b>verify-real-deps</b><i>if vendor APIs</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-ship"><b>release</b><i>semver · notes · tag</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-merge"><b>vX.Y.Z</b></span>
+          </div>
+        </article>
+
         <article id="flow-review" class="flow-card">
           <div class="flow-head"><h3>Review someone else's PR</h3><span class="badge">utility</span></div>
           <p class="flow-desc">Runs whenever you read a diff — classifies findings by severity.</p>
           <div class="chain">
-            <span class="step s-diag"><b>doc-drift audit</b><i>terminology · ADRs, optional</i></span>
+            <span class="step s-diag"><b>impact</b><i>shared code changed</i></span>
+            <span class="arrow">→</span>
+            <span class="step s-diag"><b>doc-drift audit</b><i>terms · ADRs · statuses</i></span>
             <span class="arrow">→</span>
             <span class="step s-gate"><b>pr-review</b><i>blocker · suggestion · nit</i></span>
           </div>
@@ -241,15 +313,45 @@
           </div>
           <div class="cross">
             <h4>security-review <span class="kind k-gate">gate</span></h4>
-            <p>Fires on surface-changing work — new entry points, identity flows, authz, sensitive data, external deps. Runs alongside <code>tdd</code>.</p>
+            <p>Threat model for surface-changing work — new entry points, identity flows, authz, sensitive data. Runs when you ask, or when <code>feature-doc</code>, <code>prod-ready</code>, or <code>pr-review</code> escalates.</p>
           </div>
           <div class="cross">
             <h4>zoom-out <span class="kind k-util">utility</span></h4>
             <p>Interrupts any flow when you're lost in unfamiliar code. Maps the relevant modules and callers, then hands back.</p>
           </div>
+          <div class="cross" id="impact">
+            <h4>impact <span class="kind k-diag">diagnose</span></h4>
+            <p>Before you change a function: callers up to routes and <code>main</code>, the tests on those paths, SQL tables and topics that link by name, and the docs to re-check. A code graph for Go, JS, TS, and Python — no toolchain needed.</p>
+          </div>
           <div class="cross">
             <h4>bench <span class="kind k-meas">measure</span></h4>
             <p>Performance benchmarking discipline — measures latency and throughput when a flow carries a performance AC.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALWAYS-ON RULES -->
+    <section id="rules" class="block">
+      <div class="wrap">
+        <h2 class="block-title">Always-on rules</h2>
+        <p class="block-sub">Skills load when they fire. These rules apply on every turn — install them with <code>--style</code>, and keep docs honest with <code>--hooks</code>.</p>
+        <div class="cross-grid">
+          <div class="cross">
+            <h4>Writing <span class="kind k-rule">style</span></h4>
+            <p>Answer first. Plain words, short sentences. A diagram for anything with steps or parts — Mermaid in docs, ASCII in chat. A problem is explained as what's wrong → why → fix → trade-off.</p>
+          </div>
+          <div class="cross">
+            <h4>Code comments <span class="kind k-rule">style</span></h4>
+            <p>No comment by default. Headers state the caller's contract; comments inside a function are tagged <code>WHY:</code>, <code>WORKAROUND:</code>, <code>SAFETY:</code>, <code>TODO(owner):</code>. History lives in git, not in the code. A checker reviews each diff.</p>
+          </div>
+          <div class="cross">
+            <h4>Docs layout <span class="kind k-rule">structure</span></h4>
+            <p>Scope decides the folder — <code>docs/&lt;domain&gt;/</code>, one folder per feature, <code>docs/releases/</code> checklists and a roadmap. Status lives in frontmatter, and each status change has one owner skill.</p>
+          </div>
+          <div class="cross">
+            <h4>Docs upkeep <span class="kind k-gate">hooks</span></h4>
+            <p>Claude Code hooks list the docs in flight at session start, name the docs covering each file you edit, and block finishing while a changed doc has a broken link, a wrong status, or a stale index.</p>
           </div>
         </div>
       </div>
@@ -269,12 +371,17 @@
 <span class="prompt">$</span> npx @ai-agent-lead/skills
 
 <span class="comment"># everything, no prompts</span>
-<span class="prompt">$</span> npx @ai-agent-lead/skills --all --force</code></pre>
+<span class="prompt">$</span> npx @ai-agent-lead/skills --all --force
+
+<span class="comment"># plus the always-on rules and the docs hooks</span>
+<span class="prompt">$</span> npx @ai-agent-lead/skills --global --claude --style --hooks</code></pre>
         </div>
         <p class="install-note">
           Scope it with <code>--global</code> (<code>~/.claude/skills</code>) or <code>--local</code>
           (<code>./.claude/skills</code>); target one assistant with <code>--claude</code>,
-          <code>--codex</code>, <code>--antigravity</code>, or <code>--opencode</code>.
+          <code>--codex</code>, <code>--antigravity</code>, or <code>--opencode</code>. <code>--style</code> adds
+          the writing, comment, and docs rules to <code>CLAUDE.md</code> / <code>AGENTS.md</code> /
+          <code>GEMINI.md</code>; <code>--hooks</code> adds the Claude Code docs hooks. Re-running never duplicates either.
         </p>
       </div>
     </section>

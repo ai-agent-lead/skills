@@ -15,7 +15,8 @@ The tension people feel is with *defensive* typing — casts, assertions, valida
 
 ## Example 1 — Optional fields that should move together
 
-WEAK
+**Weak:**
+
 ```ts
 type User = {
   email: string;
@@ -33,7 +34,8 @@ This permits four combinations but only three are valid:
 | email + verifiedAt only | ✓ verified |
 | email + token + verifiedAt | ✗ incoherent |
 
-STRONG
+**Strong:**
+
 ```ts
 type User =
   | { kind: "unverified"; email: string }
@@ -62,14 +64,18 @@ function persist(input: Sanitized<RawInput>): void { ... }
 
 ## Example 3 — Non-empty collections
 
+**Weak** — runtime check forever, easy to forget:
+
 ```ts
-// WEAK — runtime check forever, easy to forget
 function firstUser(users: User[]): User {
   if (users.length === 0) throw new Error("empty");
   return users[0];
 }
+```
 
-// STRONG — the type enforces non-emptiness
+**Strong** — the type enforces non-emptiness:
+
+```ts
 type NonEmpty<T> = [T, ...T[]];
 function firstUser(users: NonEmpty<User>): User {
   return users[0]; // type-safe, no check needed

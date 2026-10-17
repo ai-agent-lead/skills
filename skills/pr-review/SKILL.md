@@ -1,6 +1,6 @@
 ---
 name: pr-review
-description: Discipline for reviewing someone else's pull request — the inverse of `prod-ready` (which is the author's pre-merge gate). Use when the user asks to "review this PR", "look over the diff", "check this change", "give feedback on", or invokes a code-review slash command. Reviews against the linked feature doc / ADRs / domain vocabulary, classifies findings by severity (blocker / suggestion / nit), and returns a structured report. Skip for trivial PRs (typo, dep bump, lint-only) — approve directly. Pairs with `prod-ready` (the author's checklist; the reviewer verifies it landed honestly), `security-review` (escalation when the diff is surface-changing), and the `code-hygiene` lens (`formats/CODE-HYGIENE.md`, applied line-level during the read).
+description: Reviews a pull request against its feature doc, ADRs, and domain vocabulary — including terminology drift — and returns findings classed blocker / suggestion / nit / question. Use when asked to review someone else's PR, a Builder's round in `tdd-rounds`, or your own branch as a last self-check after `prod-ready`. Triggered by "review this PR", "review their diff", "audit terminology in this PR". Not for the author's pre-merge checklist → `prod-ready`; not for the `/code-review` command, which runs its own flow; not for typo, lint-only, or dependency-bump PRs — approve directly. Escalates to `security-review` when the diff changes a trust boundary.
 ---
 
 # PR Review
@@ -19,13 +19,16 @@ This skill produces a **prioritised** review where blockers are unambiguous, sug
 
 ## When to use
 
-- The user asks for a PR review (any phrasing).
+- The user asks for a PR review of someone else's change.
+- A terminology / ADR audit of a diff — [`DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md), run from §3e.
 - Reviewing a Builder's round in `tdd-rounds` (the parent's verification ritual borrows from this skill).
 - Reviewing your own work before opening the PR — last self-check after `prod-ready`.
 
 ## When to skip
 
 - Typo / lint-only / formatter-only diffs. Approve.
+- The user invoked the `/code-review` command — that command runs its own flow.
+- The author's own pre-merge checklist — that is [`prod-ready`](../prod-ready/SKILL.md).
 - Dependency bumps with no API change (still: scan changelog for security advisories before approving).
 - Trivial config tweaks with no behavioural change.
 - PRs that are explicitly draft / WIP — give early feedback, but skip the formal severity classification until the author flags ready.
@@ -37,7 +40,7 @@ This skill produces a **prioritised** review where blockers are unambiguous, sug
 Before opening the diff, read what the PR claims to do:
 
 - **PR description / title** — what's the change? Why?
-- **Linked feature doc** (`docs/features/<name>.md`) — what's the contract? Which ACs?
+- **Linked feature doc** (`docs/features/<name>/feature.md`) — what's the contract? Which ACs?
 - **Linked ADRs** — what decisions does this change rely on or supersede?
 - **Linked research note / known-issues entry** — for fix-rounds, the bug ledger entry doubles as the brief.
 
@@ -64,6 +67,7 @@ In this order — biggest-impact first:
 - Are new modules deep, or shallow? (Apply the deletion test from [skills/LANGUAGE.md](../LANGUAGE.md).)
 - Are new public types / functions / endpoints named consistently with `CONTEXT.md`?
 - Does anything contradict an ADR without superseding it explicitly?
+- For each changed exported or shared function, run [`impact`](../impact/SKILL.md): are the entry points it reaches covered by the PR's tests and named in its description? Untested paths are findings.
 
 #### 3b. Test review
 
@@ -85,13 +89,13 @@ For non-surface-changing diffs: walk `prod-ready` Section 3 (defense-in-depth) b
 
 #### 3e. Doc-drift audit
 
-Walk the six checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) against the diff — **reviewer lens**. This is the second line of defense for `prod-ready` Section 7: the author may have missed it; you catch what's left. Any check that resolves to "no" without `n/a + reason` is a finding, at the severity that reference defines — **Blocker** for load-bearing drift (a missing ADR for a hard-to-reverse decision, a `CONTEXT.md` entry for a term other PRs will use, AC drift hiding behavior, a direct ADR contradiction), **Suggestion** when the diff is self-explanatory in isolation.
+Walk the seven checks in [`skills/formats/DOC-DRIFT-AUDIT.md`](../formats/DOC-DRIFT-AUDIT.md) against the diff — **reviewer lens**. This is the second line of defense for `prod-ready` Section 7: the author may have missed it; you catch what's left. Any check that resolves to "no" without `n/a + reason` is a finding, at the severity that reference defines — **Blocker** for load-bearing drift (a missing ADR for a hard-to-reverse decision, a `CONTEXT.md` entry for a term other PRs will use, AC drift hiding behavior, a direct ADR contradiction), **Suggestion** when the diff is self-explanatory in isolation.
 
 #### 3f. Hygiene (line level)
 
 Apply the [`code-hygiene`](../formats/CODE-HYGIENE.md) lens here, not as a primary phase:
 
-- **Comment noise**: new WHAT-comments, docstrings on exports whose contract is obvious from the signature, in-function section headers (`// validate`, `// build response`), stale "used by X" references, citation grammar that doesn't match the repo's comment style doc ([`skills/formats/STYLE-comments.md`](../formats/STYLE-comments.md)). Flag as **nits by default**; promote to a suggestion only when cumulative comment noise obscures the diff (signal the author skipped `simplify`).
+- **Comments** against [`STYLE-comments.md`](../formats/STYLE-comments.md) — run `node <skills-dir>/scripts/check-comments.mjs <base>` on the PR branch. Added-comment *problems* are **nits**, promoted to a **suggestion** when they pile up (the author skipped `simplify`). A *re-check* item that is now false — a header or `WHY:` the diff made untrue — is a **suggestion**: a stale comment misleads the next agent.
 - Names that mislead (boolean returning non-bool, `getX` that mutates, `Manager`/`Helper` suffixes hiding what the thing is).
 - Cleverness that earns its cost? Or could be boring?
 - YAGNI — "in case we need it" parameters / interfaces / classes? Strip.

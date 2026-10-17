@@ -1,6 +1,6 @@
 ---
 name: zoom-out
-description: User-invoked utility — pulls the agent up an abstraction layer when the user is lost in unfamiliar code. Produces a map of relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary. Use when the user says "I'm lost", "zoom out", "give me higher-level context", "I don't know this area", "what depends on what here", or invokes the slash command. Does not change which workflow the user is in — interrupts to orient, then hands back. Skip when the user already has the map and just needs to read code.
+description: Maps an unfamiliar area one abstraction level up — relevant modules, callers, and seams in `docs/CONTEXT.md` vocabulary — then hands back to the current workflow. User-invoked only (`/zoom-out`). Use when the user is lost in unfamiliar code. Triggered by "I'm lost", "zoom out". Not when the user already has the map and just needs to read code; not for what one change affects → `impact`.
 disable-model-invocation: true
 ---
 
@@ -12,7 +12,7 @@ This skill **does not change the workflow** the user is in. It runs once, produc
 
 ## When to use
 
-- User says "I'm lost", "zoom out", "give me higher-level context", "what depends on what here", "I don't know this area".
+- User says "I'm lost", "zoom out", "give me higher-level context", "I don't know this area".
 - User invokes the slash command (`/zoom-out`).
 - A related skill (`debug`, `improve-codebase-architecture`, Workflow 4 / 5b) suggests zooming out before continuing.
 
@@ -30,7 +30,7 @@ Ask the user (or infer from context) what they're trying to do. The map is scope
 
 ### 2. Read the project's vocabulary first
 
-- [`docs/CONTEXT.md`](../../docs/CONTEXT.md) — the domain glossary. Module names should come from here.
+- [`docs/CONTEXT.md`](../../docs/CONTEXT.md) — the domain glossary; with several domains, `docs/CONTEXT-MAP.md` and the area's `docs/<domain>/CONTEXT.md`. Module names should come from here.
 - [`docs/architecture.md`](../../docs/architecture.md) — the system map, if it exists.
 - Any ADRs in [`docs/adr/`](../../docs/adr/) that constrain the area.
 
@@ -38,7 +38,14 @@ If `CONTEXT.md` doesn't exist yet (greenfield repo), name modules by their file 
 
 ### 3. Walk the dependency graph for the area
 
-Use the Agent tool with `subagent_type=Explore` if the area is broad. Capture:
+Start with the code graph (Go, JS, TS, Python — see [`impact`](../impact/SKILL.md)):
+
+```
+node <skills-dir>/scripts/code-graph/code-graph.mjs deps <area-dir>        # package → package imports, cycles
+node <skills-dir>/scripts/code-graph/code-graph.mjs callers <Function>     # who calls into the area
+```
+
+Then read the files the graph points at. For other languages, search by hand. Capture:
 
 - **Modules involved** — which directories / packages / files implement the responsibility.
 - **Callers** — what calls into this area, from where.
@@ -53,6 +60,9 @@ A short artifact, in chat (not on disk unless the user asks). Use the format bel
 ## Map: <area>
 
 **Responsibility**: <one sentence — what this area does>
+
+**Picture** (ASCII — this goes to chat):
+<callers ──►  area modules  ──► callees, arrows labelled with verbs, ≤ ~9 boxes>
 
 **Modules**:
 - `<path>` — <one-line responsibility, in CONTEXT.md vocabulary>
@@ -78,7 +88,7 @@ A short artifact, in chat (not on disk unless the user asks). Use the format bel
 - <e.g. "shallow module at <path> — possibly worth deepening; not blocking your task">
 ```
 
-Keep it on one screen. If it doesn't fit, you over-zoomed — narrow the area.
+Keep it on one screen. If it doesn't fit, you over-zoomed — narrow the area. Picture first, lists after — see [`WRITING-STYLE.md`](../formats/WRITING-STYLE.md).
 
 ## Anti-patterns
 

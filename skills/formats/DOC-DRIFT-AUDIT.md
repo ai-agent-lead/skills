@@ -8,18 +8,19 @@ This is a **shared reference**, run from three places with the same checks but a
 - [`pr-review`](../pr-review/SKILL.md) §3e — **reviewer lens.** Second line of defense; what the author missed, classified by severity.
 - **Standalone** — the old `sync-check` role. Run mid-stream after a significant refactor, or when a name feels "off", to surface terminology and ADR drift before it calcifies. Produces a numbered findings list (see "Standalone report" below).
 
-Files don't need to pre-exist — `docs/adr/`, `CONTEXT.md`, design notes are created lazily when the first relevant change appears. If a doc type isn't relevant to this work, write `n/a` — explicit beats implicit.
+Files don't need to pre-exist — `docs/adr/`, `CONTEXT.md`, design notes are created lazily when the first relevant change appears, at the paths in [`DOCS-LAYOUT.md`](DOCS-LAYOUT.md). If a doc type isn't relevant to this work, write `n/a` — explicit beats implicit.
 
-## The six checks
+## The seven checks
 
 One question per doc type: *did this work change X? Then update Y.*
 
 1. **New decision with viable alternatives** → an ADR exists in `docs/adr/`, names what it supersedes (if anything), and is referenced from code where the decision is load-bearing. See [`ADR-FORMAT.md`](ADR-FORMAT.md).
-2. **New or changed domain term** → [`docs/CONTEXT.md`](../../docs/CONTEXT.md) entry created or updated, including `_Avoid_:` aliases if the term risks being confused with an existing one. A new term that collides with an existing `_Avoid_:` alias (e.g. "Account" where the glossary says "Customer") is the highest-signal finding here.
-3. **New/removed package, changed public interface, or shifted module boundary** → the feature's design note (`docs/features/<feature>.design.md`) is updated: module map, file layout, public-interface signatures, test boundaries.
+2. **New or changed domain term** → [`docs/CONTEXT.md`](../../docs/CONTEXT.md) (or the domain's `docs/<domain>/CONTEXT.md`) entry created or updated, including `_Avoid_:` aliases if the term risks being confused with an existing one. A new term that collides with an existing `_Avoid_:` alias (e.g. "Account" where the glossary says "Customer") is the highest-signal finding here.
+3. **New/removed package, changed public interface, or shifted module boundary** → the feature's design note (`docs/features/<feature>/design.md`) is updated: module map, file layout, public-interface signatures, test boundaries.
 4. **Changed acceptance criteria** → the feature doc reflects what was actually built. Silently-dropped or silently-added behavior is the most common drift class — fix here, don't kick to a follow-up.
 5. **User-visible change** → `CHANGELOG.md` has an entry under `[Unreleased]`, grouped by `Added / Changed / Fixed / Removed`. Skip only for formatter-only / lint-only / test-only / internal-refactor-with-no-behavior-change / dep-bump-with-no-runtime-impact diffs. (Overlaps but is **not identical** to `feature-doc`'s skip list, which also waives the *doc* for typo fixes and one-line config tweaks. A typo fix can still merit a one-liner here.)
-6. **New or changed produced doc under `docs/`** → it opens with OKF frontmatter carrying a non-empty `type` from [`OKF.md`](OKF.md) §2. A produced doc with no `type` breaks bundle conformance.
+6. **New or changed produced doc under `docs/`** → it opens with OKF frontmatter carrying a non-empty `type` from [`OKF.md`](OKF.md) §2, at a path from [`DOCS-LAYOUT.md`](DOCS-LAYOUT.md) §1. A produced doc with no `type` breaks bundle conformance.
+7. **Status and links** → the feature's `status` matches where the work is ([`DOCS-LAYOUT.md`](DOCS-LAYOUT.md) §2), and `node <skills-dir>/scripts/check-docs.mjs` shows no problems: statuses, broken links, `code:` paths, release boxes, and a current `index.md`. Its re-check items (code changed under a feature whose doc didn't) are this audit's leads for check 4.
 
 ## ADR consistency (read alongside check 1)
 

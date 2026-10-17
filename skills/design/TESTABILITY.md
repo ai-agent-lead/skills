@@ -6,14 +6,18 @@ Three rules that make code testable without sacrificing clarity.
 
 ## 1. Accept dependencies, don't create them
 
+**Hard to test** — gateway is hardcoded:
+
 ```ts
-// HARD TO TEST — gateway is hardcoded
 function processOrder(order: Order) {
   const gateway = new StripeGateway(process.env.STRIPE_KEY);
   return gateway.charge(order.total);
 }
+```
 
-// EASY TO TEST — gateway is passed in
+**Easy to test** — gateway is passed in:
+
+```ts
 function processOrder(order: Order, gateway: PaymentGateway) {
   return gateway.charge(order.total);
 }
@@ -23,13 +27,17 @@ In tests, pass a fake or stub gateway. In production, pass the real one. No mock
 
 ## 2. Return results, don't produce side effects
 
+**Hard to test** — mutates the cart, returns nothing:
+
 ```ts
-// HARD TO TEST — mutates the cart, returns nothing
 function applyDiscount(cart: Cart): void {
   cart.total -= computeDiscount(cart);
 }
+```
 
-// EASY TO TEST — pure function
+**Easy to test** — pure function:
+
+```ts
 function calculateDiscount(cart: Cart): Discount {
   return { amount: computeDiscount(cart) };
 }
@@ -58,14 +66,18 @@ Mock only at **system boundaries**:
 
 When wrapping an external API, prefer named methods over one generic call:
 
+**Good** — each call is independently mockable, type-safe per endpoint:
+
 ```ts
-// GOOD — each call is independently mockable, type-safe per endpoint
 const api = {
   getUser: (id: string) => fetch(`/users/${id}`),
   createOrder: (data: OrderInput) => fetch("/orders", { method: "POST", body: data }),
 };
+```
 
-// BAD — mocking requires conditional logic in the mock
+**Bad** — mocking requires conditional logic in the mock:
+
+```ts
 const api = {
   call: (endpoint: string, options?: object) => fetch(endpoint, options),
 };

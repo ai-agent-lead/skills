@@ -6,10 +6,14 @@
   "bin": {
     "install-skills": "bin/install.js"
   },
+  "scripts": {
+    "test": "node scripts/lint-triggers.js && node scripts/lint-style.js && node skills/scripts/check-docs.mjs && node --test tests/*.test.mjs"
+  },
   "type": "module",
   "files": [
     "bin/",
     "skills/",
+    "snippets/",
     "README.md"
   ],
   "engines": {

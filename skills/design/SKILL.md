@@ -1,6 +1,6 @@
 ---
 name: design
-description: Module and interface design principles — deep modules and testable interfaces. Use when designing a NEW module, class, or public API; deciding what to expose vs hide; reviewing an interface before implementation; or when the user asks "how should I structure this", mentions "deep modules", "testability", or "API design". Use for NEW code shape; for finding deepening opportunities in EXISTING code, use `improve-codebase-architecture`. Skip for trivial glue, getters/setters, or single-call wrappers. Pairs with the tdd skill — good design is what makes TDD pleasant.
+description: Shapes ONE new module, class, or public API before it is written — what to expose vs hide, deep modules, testable interfaces. Use when about to write a new module or API, or when a new interface is proving hard to test. Triggered by "design this module", "how should I structure this module", "API design", "deep modules". Pick by age and scope — new code in one module → `design`; a new multi-module system → `system-design`; existing code across modules → `improve-codebase-architecture`; existing code in one module → refactor inline, then `simplify`. Not for trivial glue, getters/setters, or single-call wrappers.
 ---
 
 # Module and Interface Design
@@ -15,9 +15,8 @@ Principles that make code easier to understand, change, and test.
 ## When to use
 
 - Before writing a new module, class, or public function.
-- When refactoring something that's painful to test.
-- When reviewing an API surface (PRs, design docs).
-- When a test is hard to write — usually the design is wrong, not the test.
+- When a module you are writing is painful to test — the interface is usually wrong.
+- When reviewing a proposed API surface before it is implemented (design docs). Reviewing a PR → [`pr-review`](../pr-review/SKILL.md).
 
 ## When to skip
 
@@ -134,4 +133,4 @@ Most of the time `design` is guidance only — the shape lives in the code that 
 - The interface decisions are load-bearing for downstream rounds of `tdd-rounds`.
 - A `prod-ready` reviewer will need to verify "module map / public-interface signatures / test boundaries" against something explicit (per [prod-ready Section 7](../prod-ready/SKILL.md)).
 
-When captured, save as a sibling to the feature doc: `docs/features/<feature>.design.md`, opening with OKF frontmatter (`type: design`) per [`skills/formats/OKF.md`](../formats/OKF.md). Skip when the interface is small enough that the code is the design.
+When captured, save as a sibling to the feature doc: `docs/features/<feature>/design.md`, opening with OKF frontmatter (`type: design`) per [`skills/formats/OKF.md`](../formats/OKF.md). Skip when the interface is small enough that the code is the design.

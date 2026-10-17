@@ -2,7 +2,11 @@
 
 The line-level and function-level lens this skill set carries into any turn that writes or reads code. Smaller in scope than [`design`](../design/SKILL.md) (which shapes module interfaces) — these are the day-to-day habits that keep a codebase readable, navigable, and easy to change.
 
-This is a **shared reference**, not a standalone skill. It is the lens applied *while writing*, during the [`simplify`](../simplify/SKILL.md) sweep after `tdd` reaches green, and during [`pr-review`](../pr-review/SKILL.md) (§3f). Read it once; apply it many times.
+This is a **shared reference**, not a standalone skill. Read it once; apply it many times:
+
+- **While writing:** the [`tdd`](../tdd/SKILL.md) green step (YAGNI, boring code) and refactor step (all seven); every [`tdd-rounds`](../tdd-rounds/SKILL.md) Builder round.
+- **After green:** the [`simplify`](../simplify/SKILL.md) sweep over the whole diff.
+- **At review:** the `tdd-rounds` parent's check of each round, and [`pr-review`](../pr-review/SKILL.md) §3f.
 
 Seven principles.
 
@@ -11,7 +15,7 @@ Seven principles.
 3. **YAGNI** — don't build for hypothetical futures.
 4. **Rule of 3 before extracting** — duplicate twice; extract on the third occurrence, not the second.
 5. **Locality of behavior** — related code lives together; don't split by category.
-6. **Comments earn their keep** — default NONE; keep only why-comments tied to an invariant, trade-off, or provenance the next reader would otherwise miss.
+6. **Comments earn their keep** — the rules live in one place: [`STYLE-comments.md`](STYLE-comments.md).
 7. **Constants live where they're used** — narrowest honest scope; no `constants.ts` dumping ground.
 
 ## Principle 1: Boring code beats clever code
@@ -61,11 +65,7 @@ Related code lives close together. Don't split a system by *type of code* (`cont
 
 ## Principle 6: Comments earn their keep
 
-**The bar:** [`STYLE-comments.md`](STYLE-comments.md). Apply it *while writing*, not only during the `simplify` sweep.
-
-**Default: NONE.** If you're unsure whether a comment earns its line, delete it. Keep only WHY-comments: a constraint, an invariant, a trade-off, or a provenance link to an ADR / round / snapshot — and only if the next reader would otherwise reattempt the rejected alternative.
-
-**Delete on sight**: WHAT-comments, "used by X" / "added for Y" caller references, banner dividers, commented-out code, in-function section headers (`// validate`, `// build response`), and docstrings on exports whose contract is obvious from the signature.
+All comment rules live in [`STYLE-comments.md`](STYLE-comments.md). Apply them *while writing*, not only during the `simplify` sweep.
 
 ## Principle 7: Constants live where they're used
 
@@ -85,7 +85,7 @@ A constant belongs at the **narrowest honest scope** — next to the code that u
 - No "in case we need it" parameters, classes, or interfaces remain.
 - Duplications either survived the 2-occurrence test (left as-is) or proved themselves at the 3rd occurrence (extracted).
 - Related code lives near related code.
-- Every surviving comment names a why, an invariant, a trade-off, or a provenance link. None restates the code.
+- Comments pass [`STYLE-comments.md`](STYLE-comments.md) — its *Done when* list.
 - Constants sit at their narrowest honest scope — no unrelated-constants dumping ground; env-varying values come from config, not source literals.
 
 ## Scope boundaries

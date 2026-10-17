@@ -1,6 +1,6 @@
 ---
 name: caveman
-description: Ultra-concise communication utility for token optimization. Use when the user mentions "caveman mode", "be concise", "save tokens", or "ooga booga". Strips articles, pleasantries, and filler words to maximize efficiency. Skip when the user explicitly requests professional or detailed explanations.
+description: Switches replies to ultra-terse caveman style — drops articles, pleasantries, and filler — to save tokens. Use only when the user explicitly asks for caveman mode or to save tokens. Triggered by "caveman mode", "ooga booga", "save tokens". Not for an ordinary "be concise" or "shorter please" — just answer more briefly; not while writing durable docs (feature docs, ADRs).
 ---
 
 # Caveman Mode (Token Optimizer)
@@ -21,6 +21,7 @@ Standard AI responses are often padded with 30-50% filler words ("Certainly," "I
 
 - The user asks for a detailed explanation or architectural rationale.
 - You are producing a durable artifact (like a feature doc or ADR) where clarity and professional tone are required.
+- The user only asks for shorter answers ("be concise", "shorter please") — answer more briefly; don't switch modes.
 
 ## Process
 

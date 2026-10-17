@@ -27,8 +27,12 @@ const INFO_COLOR = `${CYAN}`;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SOURCE_SKILLS_DIR = path.resolve(__dirname, '../skills');
+const SNIPPETS_DIR = path.resolve(__dirname, '../snippets');
+const SNIPPETS = ['writing-style.md', 'comment-style.md', 'code-hygiene.md', 'docs-upkeep.md'];
+const HOOK_SCRIPT = 'check-docs.mjs';
+const STYLE_START = '<!-- ai-agent-lead/skills:style:start -->';
+const STYLE_END = '<!-- ai-agent-lead/skills:style:end -->';
 
-// --- Helper Functions ---
 function printBanner() {
   console.log(`
 ${BRAND_COLOR}   _    ___     _     ___  ___  _  _  _____   _     ___   _    ___
@@ -55,6 +59,8 @@ function printHelp() {
   console.log(`  ${CYAN}--opencode${RESET}          Install skills only for OpenCode`);
   console.log(`  ${CYAN}--all${RESET}               Install skills for all supported assistants (default)`);
   console.log(`  ${CYAN}--force, -f${RESET}         Overwrite files without confirmation`);
+  console.log(`  ${CYAN}--style${RESET}             Also add the writing, comment, code hygiene, and docs rules to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md)`);
+  console.log(`  ${CYAN}--hooks${RESET}             Also add Claude Code hooks that keep docs/ accurate (settings.json): list docs in flight at session start, name the docs covering each edited file, block stopping while changed docs have problems`);
   console.log(`  ${CYAN}--help, -h${RESET}          Show this help menu`);
   console.log(``);
   console.log(`${BOLD}Examples:${RESET}`);
@@ -96,7 +102,47 @@ function copyFolderSync(from, to, { force = false } = {}, stats = { copied: 0, s
   return stats;
 }
 
-// --- Main Execution ---
+// Writes the snippet between markers so re-running replaces it instead of appending a copy.
+function upsertStyleBlock(file, snippet) {
+  const block = `${STYLE_START}\n${snippet.trim()}\n${STYLE_END}`;
+  const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  const start = existing.indexOf(STYLE_START);
+  const end = existing.indexOf(STYLE_END);
+  let next;
+  if (start !== -1 && end > start) {
+    next = existing.slice(0, start) + block + existing.slice(end + STYLE_END.length);
+  } else {
+    next = existing ? `${existing.trimEnd()}\n\n${block}\n` : `${block}\n`;
+  }
+  if (next === existing) return 'unchanged';
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, next);
+  return existing ? 'updated' : 'created';
+}
+
+// Replaces our hook entries in settings.json and keeps every other setting and hook.
+function upsertHooks(file, command) {
+  const existing = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+  const settings = existing.trim() ? JSON.parse(existing) : {};
+  const ours = {
+    SessionStart: { hooks: [{ type: 'command', command: `${command} --hook session` }] },
+    PostToolUse: { matcher: 'Edit|Write|MultiEdit', hooks: [{ type: 'command', command: `${command} --hook edit` }] },
+    Stop: { hooks: [{ type: 'command', command: `${command} --hook stop` }] },
+  };
+  settings.hooks = settings.hooks || {};
+  for (const [event, group] of Object.entries(ours)) {
+    const others = (settings.hooks[event] || [])
+      .map((g) => ({ ...g, hooks: (g.hooks || []).filter((h) => !String(h.command || '').includes(HOOK_SCRIPT)) }))
+      .filter((g) => g.hooks.length);
+    settings.hooks[event] = [...others, group];
+  }
+  const next = `${JSON.stringify(settings, null, 2)}\n`;
+  if (next === existing) return 'unchanged';
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, next);
+  return existing ? 'updated' : 'created';
+}
+
 async function run() {
   const args = process.argv.slice(2);
   
@@ -109,6 +155,8 @@ async function run() {
     opencode: false,
     all: false,
     force: false,
+    style: false,
+    hooks: false,
     help: false
   };
 
@@ -121,6 +169,8 @@ async function run() {
     else if (arg === '--opencode') flags.opencode = true;
     else if (arg === '--all') flags.all = true;
     else if (arg === '--force' || arg === '-f') flags.force = true;
+    else if (arg === '--style') flags.style = true;
+    else if (arg === '--hooks') flags.hooks = true;
     else if (arg === '--help' || arg === '-h') flags.help = true;
   }
 
@@ -129,13 +179,11 @@ async function run() {
     return;
   }
 
-  // Check if source skills folder exists in the package
   if (!fs.existsSync(SOURCE_SKILLS_DIR)) {
     console.error(`${RED}✗ Error: Source skills folder not found at: ${SOURCE_SKILLS_DIR}${RESET}`);
     process.exit(1);
   }
 
-  // Interactive Mode
   if (args.length === 0 && process.stdout.isTTY) {
     printBanner();
     console.log(`${INFO_COLOR}No options provided. Running interactive setup...${RESET}\n`);
@@ -179,11 +227,29 @@ async function run() {
       flags.opencode = true;
     }
     console.log(``);
+
+    console.log(`${BOLD}3. Style rules:${RESET}`);
+    console.log(`   Add the writing style (answer first, plain words, diagrams), comment style`);
+    console.log(`   (contract headers, tagged comments, history in git), code hygiene (boring code,`);
+    console.log(`   naming, YAGNI, rule of 3), and docs upkeep rules`);
+    console.log(`   to each assistant's instructions file (CLAUDE.md / AGENTS.md / GEMINI.md).`);
+    const styleAns = await askQuestion(`${BOLD}${CYAN}? Add style rules [y/N]: ${RESET}`);
+    flags.style = /^y(es)?$/i.test(styleAns);
+    console.log(``);
+
+    if (flags.claude) {
+      console.log(`${BOLD}4. Docs hooks (Claude Code):${RESET}`);
+      console.log(`   At session start, list the docs in flight. After each edit, name the docs`);
+      console.log(`   that cover the file. Block stopping while changed docs have problems.`);
+      console.log(`   Silent in projects without docs/.`);
+      const hooksAns = await askQuestion(`${BOLD}${CYAN}? Add docs hooks [y/N]: ${RESET}`);
+      flags.hooks = /^y(es)?$/i.test(hooksAns);
+      console.log(``);
+    }
   } else {
-    // If not interactive and no flags specified, apply defaults
     const hasScopeFlag = flags.global || flags.local;
     if (!hasScopeFlag) {
-      flags.global = true; // Default to global
+      flags.global = true;
     }
 
     const hasAssistantFlag = flags.claude || flags.codex || flags.antigravity || flags.opencode;
@@ -195,7 +261,6 @@ async function run() {
     }
   }
 
-  // Setup Paths
   const home = os.homedir();
   const cwd = process.cwd();
 
@@ -235,6 +300,22 @@ async function run() {
     }
   }
 
+  const instructionFiles = [];
+  const addInstructionFile = (name, file) => {
+    if (!instructionFiles.some((f) => f.path === file)) instructionFiles.push({ name, path: file });
+  };
+  if (flags.global) {
+    if (flags.claude) addInstructionFile('Claude Code (Global)', path.join(home, '.claude', 'CLAUDE.md'));
+    if (flags.codex) addInstructionFile('Codex (Global)', path.join(home, '.codex', 'AGENTS.md'));
+    if (flags.antigravity) addInstructionFile('Antigravity (Global)', path.join(home, '.gemini', 'GEMINI.md'));
+    if (flags.opencode) addInstructionFile('OpenCode (Global)', path.join(home, '.config', 'opencode', 'AGENTS.md'));
+  }
+  if (flags.local) {
+    if (flags.claude) addInstructionFile('Claude Code (Local)', path.join(cwd, 'CLAUDE.md'));
+    if (flags.codex || flags.opencode) addInstructionFile('Codex / OpenCode (Local)', path.join(cwd, 'AGENTS.md'));
+    if (flags.antigravity) addInstructionFile('Antigravity (Local)', path.join(cwd, 'GEMINI.md'));
+  }
+
   if (destinations.length === 0) {
     console.log(`${YELLOW}⚠ No destinations matching current selection.${RESET}`);
     return;
@@ -251,11 +332,9 @@ async function run() {
   for (const dest of destinations) {
     console.log(`${INFO_COLOR}➜ Installing to ${BOLD}${dest.name}${RESET}${GRAY}...${RESET}`);
     try {
-      // Resolve absolute paths nicely for output display
       const displayPath = dest.path.replace(home, '~');
       console.log(`  ${GRAY}Path: ${displayPath}${RESET}`);
       
-      // Perform directory copy
       const result = copyFolderSync(SOURCE_SKILLS_DIR, dest.path, { force: flags.force });
 
       const summary = result.skipped > 0
@@ -265,6 +344,43 @@ async function run() {
       successCount++;
     } catch (err) {
       console.error(`  ${RED}✗ Failed to install to ${dest.name}: ${err.message}${RESET}`);
+    }
+    console.log(``);
+  }
+
+  if (flags.style) {
+    const snippet = SNIPPETS
+      .map((name) => fs.readFileSync(path.join(SNIPPETS_DIR, name), 'utf8').trim())
+      .join('\n\n');
+    console.log(`${BOLD}Adding style rules...${RESET}`);
+    for (const target of instructionFiles) {
+      try {
+        const result = upsertStyleBlock(target.path, snippet);
+        console.log(`  ${SUCCESS_COLOR}✔${RESET} ${target.name}: ${target.path.replace(home, '~')} ${GRAY}(${result})${RESET}`);
+      } catch (err) {
+        console.error(`  ${RED}✗ ${target.name}: ${err.message}${RESET}`);
+      }
+    }
+    console.log(``);
+  }
+
+  if (flags.hooks) {
+    const hookTargets = [];
+    if (flags.claude && flags.global) {
+      hookTargets.push({ name: 'Claude Code (Global)', file: path.join(home, '.claude', 'settings.json'), command: `node "${path.join(home, '.claude', 'skills', 'scripts', HOOK_SCRIPT)}"` });
+    }
+    if (flags.claude && flags.local) {
+      hookTargets.push({ name: 'Claude Code (Local)', file: path.join(cwd, '.claude', 'settings.json'), command: `node "$CLAUDE_PROJECT_DIR/.claude/skills/scripts/${HOOK_SCRIPT}"` });
+    }
+    console.log(`${BOLD}Adding docs hooks...${RESET}`);
+    if (!hookTargets.length) console.log(`  ${YELLOW}⚠ Hooks are Claude Code only; select Claude to add them.${RESET}`);
+    for (const target of hookTargets) {
+      try {
+        const result = upsertHooks(target.file, target.command);
+        console.log(`  ${SUCCESS_COLOR}✔${RESET} ${target.name}: ${target.file.replace(home, '~')} ${GRAY}(${result})${RESET}`);
+      } catch (err) {
+        console.error(`  ${RED}✗ ${target.name}: ${err.message} — settings.json left unchanged${RESET}`);
+      }
     }
     console.log(``);
   }

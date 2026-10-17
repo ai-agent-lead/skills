@@ -12,7 +12,7 @@ For routing by trigger phrase, see [TRIGGERS.md](./TRIGGERS.md). For the cross-s
 Got a task? Pick by what you have in front of you:
 
 ┌─────────────────────────────────────┬──────────────────────────────────┐
-│ Typo / dep bump / one-liner config  │ just fix it — no skill needed    │
+│ Typo / patch bump / one-liner config│ just fix it — no skill needed    │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Bug fix — root cause obvious        │ /tdd  (Workflow 5a)              │
 ├─────────────────────────────────────┼──────────────────────────────────┤
@@ -24,17 +24,26 @@ Got a task? Pick by what you have in front of you:
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ New feature, direction unclear      │ /investigate  (Workflow 3)       │
 ├─────────────────────────────────────┼──────────────────────────────────┤
+│ Schema change or data backfill      │ /migrate  (inside Workflow 1/2)  │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Major dependency / runtime upgrade  │ /upgrade  (Workflow 7)           │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ Ship a version (tag / publish)      │ /release  (Workflow 8)           │
+├─────────────────────────────────────┼──────────────────────────────────┤
 │ Refactor existing code              │ /improve-codebase-architecture   │
 │                                     │                  (Workflow 4)    │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Reviewing someone else's PR         │ /pr-review  (utility)            │
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Surface-changing work (auth, public │ /security-review (gate, runs     │
-│   API, sensitive data, new entry pt)│  alongside Workflow 1/2/6)       │
+│ Surface-changing work (auth, public │ /security-review (escalated by   │
+│   API, sensitive data, new entry pt)│ feature-doc/prod-ready/pr-review)│
 ├─────────────────────────────────────┼──────────────────────────────────┤
-│ Audit terminology or ADR compliance │ doc-drift audit (DOC-DRIFT-AUDIT)│
+│ Audit terminology or ADR compliance │ /pr-review §3e (DOC-DRIFT-AUDIT) │
 ├─────────────────────────────────────┼──────────────────────────────────┤
 │ Lost in unfamiliar area, mid-task   │ /zoom-out  (utility, anytime)    │
+├─────────────────────────────────────┼──────────────────────────────────┤
+│ About to change a shared function / │ impact (utility, before tdd or   │
+│   "what breaks if I change X?"      │ in pr-review / prod-ready)       │
 └─────────────────────────────────────┴──────────────────────────────────┘
 ```
 
@@ -48,7 +57,7 @@ For a single-package feature with a manageable acceptance-criteria count.
    [user has a clear idea]
             │
             ▼
-       feature-doc  ──── produces: docs/features/<name>.md
+       feature-doc  ──── produces: docs/features/<name>/feature.md
             │             (Problem, User Story, ACs, Non-Goals)
             │
             ▼
@@ -58,11 +67,11 @@ For a single-package feature with a manageable acceptance-criteria count.
             │     authz, sensitive data, external dep)
             │       └─► security-review  ──── runs alongside design/tdd;
             │             produces: feature-doc Security section
-            │             or docs/security/<feature>.md
+            │             or docs/features/<feature>/security.md
             │
             ▼
        (optional) design ──── new module shape; optional sibling
-            │                 docs/features/<name>.design.md if non-trivial
+            │                 docs/features/<name>/design.md if non-trivial
             │
             ▼
           tdd  ──── red → green → refactor, per AC
@@ -304,6 +313,48 @@ This workflow runs **once per system**, not per feature. After it, each feature 
 
 ---
 
+## Workflow 7 — Upgrade a dependency or runtime
+
+For a major version bump. Patch and minor bumps with green tests need no skill.
+
+```
+   [major version behind / deprecated library / security advisory]
+            │
+            ├─── "which library instead?" ──► investigate
+            │
+            ▼
+        upgrade ─── 1. Inventory (go list -m -u all / npm outdated)
+            │       2. Read breaking changes → checklist for THIS code
+            │       3. Order: runtime → libraries → the rest
+            │       4. One step per commit; build + test + lint + vuln check each
+            │
+            ├─── vendor SDK? ──────────────► verify-real-deps
+            ├─── DB engine / ORM schema? ──► migrate
+            │
+            ▼
+        prod-ready ──► [PR]
+```
+
+## Workflow 8 — Release a version
+
+For libraries, CLIs, npm packages, Go modules, and services deployed by tag.
+
+```
+   [merged changes on main, CI green]
+            │
+            ├─── talks to third-party APIs? ──► verify-real-deps (clean first)
+            │
+            ▼
+        release ─── 1. Collect: [Unreleased] + git log since last tag
+            │       2. Pick version: breaking → major, feat → minor, fix → patch
+            │       3. Write: dated CHANGELOG section, version files, notes
+            │       4. Commit "chore(release): X.Y.Z" + annotated tag
+            │       5. Ask, then push + publish
+            │       6. Install the published version in a scratch dir
+            ▼
+       [vX.Y.Z]
+```
+
 ## Utility — `/zoom-out`
 
 ```
@@ -330,7 +381,7 @@ A few things that happen across all workflows:
 
 2. **`grill-plan` is reusable as a sub-step.** Workflow 3 calls it explicitly; Workflow 4's grilling loop borrows the same discipline. It's also valid as a standalone skill if the user has a plan they want to stress-test. Has a **bootstrap mode** for greenfield repos with no `CONTEXT.md` / ADRs yet — the session creates them lazily.
 
-3. **`design` doesn't have a workflow of its own** — it's a sub-step inside Workflow 1, 2, and 4. Always paired with `tdd` (or implicitly with `tdd-rounds`). Optional sibling artifact `docs/features/<name>.design.md` when the module shape is non-trivial.
+3. **`design` doesn't have a workflow of its own** — it's a sub-step inside Workflow 1, 2, and 4. Always paired with `tdd` (or implicitly with `tdd-rounds`). Optional sibling artifact `docs/features/<name>/design.md` when the module shape is non-trivial.
 
 4. **`code-hygiene` is a lens, not a phase** — and now a shared reference ([`formats/CODE-HYGIENE.md`](./formats/CODE-HYGIENE.md)), not a routable skill. Apply it during the simplify sweep that follows TDD green, during `pr-review` §3f, or whenever you re-read code and pause to understand it. Especially relevant in Workflows 1, 2, 4, and 5.
 
@@ -338,7 +389,7 @@ A few things that happen across all workflows:
 
 6. **`debug` runs *before* `tdd` for non-trivial bugs.** Workflow 5b makes this explicit. The reproduction from `debug` becomes the failing test for `tdd`. Skip for bugs whose root cause is obvious from the trace (Workflow 5a).
 
-7. **`security-review` is a gate, not a workflow.** Fires when a change is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
+7. **`security-review` is a gate, not a workflow.** Fires on an explicit request ("security review", "threat model"), or when `feature-doc`, `prod-ready`, or `pr-review` escalates a change that is **surface-changing** — new entry point, identity / session / token flow, authorization logic, sensitive-data path, new external dependency, secrets handling. Runs alongside `design` and `tdd` in Workflows 1, 2, 4, 5a, 5b, 6 whenever those criteria hit. Not a substitute for `prod-ready` Section 3 — both run when the surface changes.
 
 8. **`pr-review` is a utility workflow.** Runs when reviewing someone else's PR. Also runs (lighter form) as a self-check before opening the PR. The `tdd-rounds` parent's per-round verification borrows from it.
 
@@ -354,22 +405,17 @@ A few things that happen across all workflows:
 
 14. **`simplify` is the end-of-slice / end-of-round sweep.** Runs after every `tdd` slice goes green; in `tdd-rounds`, lands as its own commit per [`tdd-rounds/COMMITS.md` rule 4](./tdd-rounds/COMMITS.md). Applies the [`code-hygiene`](./formats/CODE-HYGIENE.md) lens to the changed files, plus a test-relevance and telemetry check. Distinct from the `code-hygiene` lens reference itself and from `improve-codebase-architecture` (the structural escalation when simplify finds bigger issues).
 
-15. **Artifacts accumulate in `docs/`:**
+15. **`migrate` is a sub-step, not a workflow.** When a feature in Workflow 1 or 2 changes a schema, `migrate` plans the deploy steps (expand → backfill → switch → contract) as a section of the feature doc, and `tdd` builds the app change for each step. Each step ships as its own PR.
 
-    | Location | Produced by | Type |
-    |---|---|---|
-    | `docs/features/<name>.md` | `feature-doc` | One per feature |
-    | `docs/features/<name>.design.md` | `design` (optional) | One per feature with non-trivial module shape |
-    | `docs/research/<topic>.md` | `investigate`, `debug` (optional) | One per investigation or non-trivial bug |
-    | `docs/adr/<n>-<topic>.md` | `grill-plan`, `improve-codebase-architecture` | One per architectural decision |
-    | `docs/CONTEXT.md` | `grill-plan`, `improve-codebase-architecture` (inline updates) | One per repo / context |
-    | `docs/architecture.md` | `system-design` | One per system (the system map) |
-    | `docs/features/<name>/state/snapshot.md` | `tdd-rounds` parent | Living snapshot per feature (target end-state per ADR-0001; not yet wired through `tdd-rounds` skill text) |
-    | `docs/features/<name>/state/rounds/*.md` | `tdd-rounds` Builder | Immutable round logs (target end-state per ADR-0001) |
-    | `docs/STATE.md` | `tdd-rounds` parent | Currently the single running summary; ADR-0001 demotes it to a global manifest after migration. |
-    | `docs/security/<feature>.md` | `security-review` (high-stakes only) | One per surface-changing feature where a feature-doc section isn't enough |
-    | `docs/benchmarks/<feature>.md` | `bench` | One per performance-critical feature |
-    | `docs/known-issues.md` | `verify-real-deps` | One per repo (post-mortem record); also holds follow-up tracking for accepted-but-unimplemented ADRs. |
-    | `CHANGELOG.md` | `prod-ready` Section 7 | One per repo; `[Unreleased]` accumulates between releases. |
+16. **Artifacts accumulate in `docs/`**, at the paths in [`formats/DOCS-LAYOUT.md`](formats/DOCS-LAYOUT.md) — the single source for where each doc lives, which skill writes it, and which skill changes its status. In short:
+
+    ```
+    feature-doc ─► features/<name>/feature.md   draft → approved
+    design, migrate, security-review, bench ─► features/<name>/*.md
+    tdd ─► status: building     prod-ready ─► done
+    release ─► shipped, ticks releases/<version>.md, dates CHANGELOG.md
+    ```
+
+    `CHANGELOG.md` sits at the repo root: `prod-ready` adds to `[Unreleased]`; `release` dates it.
     All `docs/` files are created **lazily** — they don't have to pre-exist for a workflow to run. The skill creates them on first use.
 
